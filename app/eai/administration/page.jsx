@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDown, Plus, User, Clock } from 'lucide-react';
 import {
   LineChart, Line, XAxis, YAxis,
@@ -16,11 +16,12 @@ import QuickActionsMenu from '@/components/eai/widgets/QuickActionsMenu';
 import DetailDrawer, { DrawerStatRow, DrawerPill } from '@/components/eai/widgets/DetailDrawer';
 
 import {
-  KPIS, USER_ACTIVITY, USERS_BY_ROLE,
-  SYSTEM_HEALTH, RECENT_ACTIVITY, RECENT_USERS,
-  SYSTEM_RESOURCE_USAGE, SECURITY_OVERVIEW,
-  AUDIT_LOGS, STORAGE_OVERVIEW,
-  SUPPORT_TICKETS, LICENSES_USAGE,
+  KPIS as mockKPIS, USER_ACTIVITY,
+  USERS_BY_ROLE as mockUSERS_BY_ROLE,
+  SYSTEM_HEALTH as mockSYSTEM_HEALTH, RECENT_ACTIVITY as mockRECENT_ACTIVITY, RECENT_USERS as mockRECENT_USERS,
+  SYSTEM_RESOURCE_USAGE as mockSYSTEM_RESOURCE_USAGE, SECURITY_OVERVIEW as mockSECURITY_OVERVIEW,
+  AUDIT_LOGS as mockAUDIT_LOGS, STORAGE_OVERVIEW as mockSTORAGE_OVERVIEW,
+  SUPPORT_TICKETS as mockSUPPORT_TICKETS, LICENSES_USAGE as mockLICENSES_USAGE,
 } from '@/data/eaiAdminMock';
 
 // ─── Shared card styles ────────────────────────────────────────────────────────
@@ -120,6 +121,31 @@ export default function AdministrationPage() {
   const [drawer, setDrawer] = useState(null); // { kind: 'user'|'audit', data }
   const closeDrawer = () => setDrawer(null);
 
+  // Live data uploaded via /eai/administration/data-import (Users + System
+  // Health/Resource/Security/Audit/Storage/Tickets/Licenses sheets). Falls
+  // back to the bundled demo dataset until the user has uploaded Users rows.
+  const [liveData, setLiveData] = useState(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/eai/administration')
+      .then(res => (res.ok ? res.json() : null))
+      .then(json => { if (!cancelled && json?.live) setLiveData(json.data); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+  const isLive = !!liveData;
+  const KPIS               = liveData?.kpis ?? mockKPIS;
+  const USERS_BY_ROLE       = liveData?.usersByRole ?? mockUSERS_BY_ROLE;
+  const SYSTEM_HEALTH       = liveData?.systemHealth ?? mockSYSTEM_HEALTH;
+  const RECENT_ACTIVITY     = liveData?.recentActivity ?? mockRECENT_ACTIVITY;
+  const RECENT_USERS        = liveData?.recentUsers ?? mockRECENT_USERS;
+  const SYSTEM_RESOURCE_USAGE = liveData?.systemResourceUsage ?? mockSYSTEM_RESOURCE_USAGE;
+  const SECURITY_OVERVIEW   = liveData?.securityOverview ?? mockSECURITY_OVERVIEW;
+  const AUDIT_LOGS          = liveData?.auditLogs ?? mockAUDIT_LOGS;
+  const STORAGE_OVERVIEW    = liveData?.storageOverview ?? mockSTORAGE_OVERVIEW;
+  const SUPPORT_TICKETS     = liveData?.supportTickets ?? mockSUPPORT_TICKETS;
+  const LICENSES_USAGE      = liveData?.licensesUsage ?? mockLICENSES_USAGE;
+
   // StatRowList item arrays built from mock data
   const healthItems = SYSTEM_HEALTH.map(h => ({
     label:      h.label,
@@ -194,7 +220,23 @@ export default function AdministrationPage() {
           flexShrink: 0, background: '#F4F6F9',
         }}>
           <div>
-            <h1 style={{ fontSize: 16, fontWeight: 800, color: '#1A1F36', letterSpacing: '-0.02em', lineHeight: 1.2 }}>Administration</h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <h1 style={{ fontSize: 16, fontWeight: 800, color: '#1A1F36', letterSpacing: '-0.02em', lineHeight: 1.2 }}>Administration</h1>
+              <span
+                title={isLive ? 'Showing data from your uploaded master template' : 'Showing bundled demo data — upload a master template to see your own data here'}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em',
+                  padding: '3px 7px', borderRadius: 5,
+                  color: isLive ? '#00A36C' : '#9CA3AF',
+                  background: isLive ? 'rgba(0,163,108,0.12)' : '#F1F5F9',
+                  border: `1px solid ${isLive ? 'rgba(0,163,108,0.3)' : '#E2E8F0'}`,
+                }}
+              >
+                <span style={{ width: 5, height: 5, borderRadius: '50%', background: isLive ? '#00A36C' : '#9CA3AF', flexShrink: 0 }} />
+                {isLive ? 'Live Data' : 'Demo Data'}
+              </span>
+            </div>
             <p style={{ fontSize: 10, color: '#6B7280', marginTop: 2 }}>Manage users, roles, system settings and platform governance</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
