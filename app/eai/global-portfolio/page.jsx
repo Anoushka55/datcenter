@@ -25,11 +25,11 @@ import { formatDatacenterForAI } from '@/lib/datacenter-data';
 import { resolveEaiFacilityToDatacenter } from '@/lib/eaiFacilityResolver';
 
 import {
-  eaiKpis, eaiCapacityByRegion, eaiAiBriefing,
-  eaiUtilizationTrend, eaiPueTrend, eaiRenewableByRegion, eaiAssetStatus,
+  eaiKpis as mockEaiKpis, eaiCapacityByRegion as mockEaiCapacityByRegion, eaiAiBriefing,
+  eaiUtilizationTrend, eaiPueTrend, eaiRenewableByRegion as mockEaiRenewableByRegion, eaiAssetStatus as mockEaiAssetStatus,
   eaiCriticalAlerts, eaiRecentNews, eaiUpcomingMaintenance,
-  eaiDemandPlanning, eaiEsgMetrics, eaiMapClusters,
-  eaiFacilities, eaiUtilizationByRegion, eaiClusterIdsForRegion,
+  eaiDemandPlanning, eaiEsgMetrics, eaiMapClusters as mockEaiMapClusters,
+  eaiFacilities as mockEaiFacilities, eaiUtilizationByRegion as mockEaiUtilizationByRegion,
 } from '@/data/eaiMockData';
 
 // Same dynamic-import pattern as app/asset-portfolio/global-cockpit/page.jsx
@@ -166,8 +166,8 @@ function paramToDrawer(param) {
   const kind = param.slice(0, sep);
   const id = decodeURIComponent(param.slice(sep + 1));
   switch (kind) {
-    case 'kpi':        { const kpi = eaiKpis.find(k => k.key === id); return kpi ? { kind: 'kpi', kpi } : null; }
-    case 'cluster':    { const cluster = eaiMapClusters.find(c => c.id === id); return cluster ? { kind: 'cluster', cluster } : null; }
+    case 'kpi':        { const kpi = mockEaiKpis.find(k => k.key === id); return kpi ? { kind: 'kpi', kpi } : null; }
+    case 'cluster':    { const cluster = mockEaiMapClusters.find(c => c.id === id); return cluster ? { kind: 'cluster', cluster } : null; }
     case 'alert':      { const item = eaiCriticalAlerts.find(a => a.id === id); return item ? { kind: 'alert', item } : null; }
     case 'news':       { const item = eaiRecentNews.find(n => n.id === id); return item ? { kind: 'news', item } : null; }
     case 'maintenance':{ const item = eaiUpcomingMaintenance.find(m => m.id === id); return item ? { kind: 'maintenance', item } : null; }
@@ -478,6 +478,29 @@ function GlobalPortfolioInner() {
   const { showToast, ToastHost } = useToast();
   const dashboardRef = useRef(null);
 
+  // Live data uploaded via /eai/administration/data-import (Facilities + IT
+  // Assets + Alerts & Activity Feed sheets), fetched once on mount. Stays
+  // null — and every eai* binding below falls back to the bundled demo
+  // dataset (data/eaiMockData.js) — until the user has uploaded at least one
+  // Facilities row. See /api/eai/global-portfolio.
+  const [liveData, setLiveData] = useState(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/eai/global-portfolio')
+      .then(res => (res.ok ? res.json() : null))
+      .then(json => { if (!cancelled && json?.live) setLiveData(json.data); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+  const isLive = !!liveData;
+  const eaiKpis = liveData?.kpis ?? mockEaiKpis;
+  const eaiFacilities = liveData?.facilities ?? mockEaiFacilities;
+  const eaiCapacityByRegion = liveData?.capacityByRegion ?? mockEaiCapacityByRegion;
+  const eaiUtilizationByRegion = liveData?.utilizationByRegion ?? mockEaiUtilizationByRegion;
+  const eaiRenewableByRegion = liveData?.renewableByRegion ?? mockEaiRenewableByRegion;
+  const eaiAssetStatus = liveData?.assetStatus ?? mockEaiAssetStatus;
+  const eaiMapClusters = liveData?.mapClusters ?? mockEaiMapClusters;
+
   // { kind, ...payload } | null — everything the DetailDrawer currently shows
   const [drawer, setDrawerState] = useState(() => paramToDrawer(searchParams.get('drawer')));
 
@@ -555,7 +578,7 @@ function GlobalPortfolioInner() {
   }
 
   const highlightedClusterIds = highlight?.source === 'region'
-    ? eaiClusterIdsForRegion(highlight.value)
+    ? [...new Set(eaiFacilities.filter(f => f.region === highlight.value).map(f => f.mapClusterId))]
     : highlight?.source === 'cluster'
       ? [highlight.value]
       : [];
@@ -590,7 +613,7 @@ function GlobalPortfolioInner() {
   const FILTER_GROUPS = useMemo(() => [
     { key: 'region', label: 'Region',          options: eaiCapacityByRegion.map(r => r.name) },
     { key: 'status', label: 'Facility Status', options: Object.keys(STATUS_COLOR) },
-  ], []);
+  ], [eaiCapacityByRegion]);
   const filterSelected = { region: filters.region, status: filters.status };
   const filtersActive = filters.region.length > 0 || filters.status.length > 0 || utilMin > 0;
   const activeFilterCount = filters.region.length + filters.status.length + (utilMin > 0 ? 1 : 0);
@@ -625,7 +648,7 @@ function GlobalPortfolioInner() {
       if (utilMin > 0 && f.utilizationPct < utilMin) return false;
       return true;
     });
-  }, [filters, utilMin, filtersActive]);
+  }, [eaiFacilities, filters, utilMin, filtersActive]);
 
   // Compose filters with the existing region/cluster highlight rather than overriding it:
   // if both are active, only show clusters that satisfy both; if only one is active, use it.
@@ -671,7 +694,7 @@ function GlobalPortfolioInner() {
       });
     }
     return kpis;
-  }, [filtersActive, filteredFacilities, rangeIsDefault, filteredUtilTrend, filteredPueTrend, range]);
+  }, [eaiKpis, filtersActive, filteredFacilities, rangeIsDefault, filteredUtilTrend, filteredPueTrend, range]);
 
   // ── Capacity by Region: metric switcher + filter-aware aggregation ──────
   const regionMetricData = useMemo(() => {
@@ -690,7 +713,7 @@ function GlobalPortfolioInner() {
         utilization: avgUtil,
       };
     });
-  }, [filtersActive, filteredFacilities]);
+  }, [filtersActive, filteredFacilities, eaiFacilities, eaiCapacityByRegion, eaiUtilizationByRegion]);
 
   const donutData = useMemo(() => {
     const total = regionMetricData.reduce((s, r) => s + r[metric], 0) || 1;
@@ -790,7 +813,23 @@ function GlobalPortfolioInner() {
             <ChevronRight size={8} />
             <span style={{ color: '#6B7280' }}>Dashboard</span>
           </div>
-          <h1 style={{ fontSize: 18, fontWeight: 700, color: '#1A1F36', margin: 0, lineHeight: 1 }}>Global Portfolio Dashboard</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <h1 style={{ fontSize: 18, fontWeight: 700, color: '#1A1F36', margin: 0, lineHeight: 1 }}>Global Portfolio Dashboard</h1>
+            <span
+              title={isLive ? 'Showing data from your uploaded master template' : 'Showing bundled demo data — upload a master template to see your own data here'}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 4,
+                fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em',
+                padding: '3px 7px', borderRadius: 5,
+                color: isLive ? '#00A36C' : '#9CA3AF',
+                background: isLive ? 'rgba(0,163,108,0.12)' : '#F1F5F9',
+                border: `1px solid ${isLive ? 'rgba(0,163,108,0.3)' : '#E2E8F0'}`,
+              }}
+            >
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: isLive ? '#00A36C' : '#9CA3AF', flexShrink: 0 }} />
+              {isLive ? 'Live Data' : 'Demo Data'}
+            </span>
+          </div>
           <p style={{ fontSize: 10, color: '#6B7280', marginTop: 3 }}>Real-time overview of your global asset portfolio</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -1182,7 +1221,12 @@ function GlobalPortfolioInner() {
       </div>
 
       {/* ── Detail Drawer — the one shared "show me more" pattern ────────── */}
-      <DrawerRouter drawer={drawer} onClose={closeDrawer} onOpen={setDrawer} />
+      <DrawerRouter
+        drawer={drawer} onClose={closeDrawer} onOpen={setDrawer}
+        facilities={eaiFacilities} assetStatus={eaiAssetStatus}
+        capacityByRegion={eaiCapacityByRegion} utilizationByRegion={eaiUtilizationByRegion}
+        renewableByRegion={eaiRenewableByRegion}
+      />
 
       {/* ── 3D Globe expand modal ─────────────────────────────────────────── */}
       <GlobeModal
@@ -1215,7 +1259,7 @@ export default function GlobalPortfolioPage() {
 // for each interaction built in this pass. Kept local to this page for now —
 // once a second EAI page needs the same "kpi" / "facility" content shapes,
 // this is the piece to lift into a shared helper.
-function DrawerRouter({ drawer, onClose, onOpen }) {
+function DrawerRouter({ drawer, onClose, onOpen, facilities, assetStatus, capacityByRegion, utilizationByRegion, renewableByRegion }) {
   if (!drawer) return <DetailDrawer open={false} onClose={onClose} />;
 
   const goToOperationsFooter = (
@@ -1230,18 +1274,21 @@ function DrawerRouter({ drawer, onClose, onOpen }) {
       const Icon = KPI_ICONS[kpi.iconKey] ?? Building2;
       return (
         <DetailDrawer open title={kpi.label} subtitle={kpi.sublabel} icon={<Icon size={16} color={kpi.color} />} accentColor={kpi.color} onClose={onClose}>
-          <KpiDrawerBody kpi={kpi} onOpen={onOpen} />
+          <KpiDrawerBody
+            kpi={kpi} onOpen={onOpen} facilities={facilities} assetStatus={assetStatus}
+            capacityByRegion={capacityByRegion} utilizationByRegion={utilizationByRegion} renewableByRegion={renewableByRegion}
+          />
         </DetailDrawer>
       );
     }
 
     case 'cluster': {
       const cluster = drawer.cluster;
-      const facilities = eaiFacilities.filter(f => f.mapClusterId === cluster.id);
+      const clusterFacilities = facilities.filter(f => f.mapClusterId === cluster.id);
       const color = STATUS_COLOR[cluster.status] ?? '#6B7280';
       return (
-        <DetailDrawer open title={cluster.label} subtitle={`${facilities.length} facilities in this region`} icon={<MapPin size={16} color={color} />} accentColor={color} onClose={onClose}>
-          <FacilityTable facilities={facilities} />
+        <DetailDrawer open title={cluster.label} subtitle={`${clusterFacilities.length} facilities in this region`} icon={<MapPin size={16} color={color} />} accentColor={color} onClose={onClose}>
+          <FacilityTable facilities={clusterFacilities} />
         </DetailDrawer>
       );
     }
@@ -1361,17 +1408,17 @@ function FacilityTable({ facilities }) {
   );
 }
 
-function KpiDrawerBody({ kpi, onOpen }) {
+function KpiDrawerBody({ kpi, onOpen, facilities, assetStatus, capacityByRegion, utilizationByRegion, renewableByRegion }) {
   switch (kpi.key) {
     case 'facilities':
       return (
         <>
           <DrawerStatRow items={[
-            { label: 'Total Facilities', value: eaiFacilities.length },
-            { label: 'Countries', value: new Set(eaiFacilities.map(f => f.country)).size },
-            { label: 'Total Capacity', value: `${eaiFacilities.reduce((s, f) => s + f.capacityMW, 0).toLocaleString()} MW` },
+            { label: 'Total Facilities', value: facilities.length },
+            { label: 'Countries', value: new Set(facilities.map(f => f.country)).size },
+            { label: 'Total Capacity', value: `${facilities.reduce((s, f) => s + f.capacityMW, 0).toLocaleString()} MW` },
           ]} />
-          <FacilityTable facilities={eaiFacilities} />
+          <FacilityTable facilities={facilities} />
         </>
       );
 
@@ -1384,7 +1431,7 @@ function KpiDrawerBody({ kpi, onOpen }) {
             { key: 'value', label: 'Assets', align: 'right', render: row => row.value.toLocaleString() },
             { key: 'pct', label: '% of Total', align: 'right', render: row => `${row.pct}%` },
           ]}
-          rows={eaiAssetStatus}
+          rows={assetStatus}
         />
       );
 
@@ -1397,7 +1444,7 @@ function KpiDrawerBody({ kpi, onOpen }) {
             { key: 'mw', label: 'MW', align: 'right', render: row => row.mw.toLocaleString() },
             { key: 'pct', label: '% of Total', align: 'right', render: row => `${row.pct}%` },
           ]}
-          rows={eaiCapacityByRegion}
+          rows={capacityByRegion}
         />
       );
 
@@ -1409,19 +1456,19 @@ function KpiDrawerBody({ kpi, onOpen }) {
             { key: 'name', label: 'Region' },
             { key: 'value', label: 'Utilization', align: 'right', render: row => `${row.value}%` },
           ]}
-          rows={eaiUtilizationByRegion}
+          rows={utilizationByRegion}
         />
       );
 
     case 'health': {
-      const sorted = [...eaiFacilities].sort((a, b) => a.healthScore - b.healthScore);
-      const avg = Math.round(eaiFacilities.reduce((s, f) => s + f.healthScore, 0) / eaiFacilities.length);
+      const sorted = [...facilities].sort((a, b) => a.healthScore - b.healthScore);
+      const avg = Math.round(facilities.reduce((s, f) => s + f.healthScore, 0) / facilities.length);
       return (
         <>
           <DrawerStatRow items={[
             { label: 'Portfolio Avg', value: avg, color: '#00A36C' },
             { label: 'Lowest Score', value: sorted[0].healthScore, color: '#DC2626' },
-            { label: 'At Risk (<70)', value: eaiFacilities.filter(f => f.healthScore < 70).length, color: '#D4A017' },
+            { label: 'At Risk (<70)', value: facilities.filter(f => f.healthScore < 70).length, color: '#D4A017' },
           ]} />
           <p style={{ fontSize: 9, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>Lowest-scoring facilities</p>
           <DrawerTable
@@ -1457,7 +1504,7 @@ function KpiDrawerBody({ kpi, onOpen }) {
             { key: 'name', label: 'Region' },
             { key: 'value', label: 'Renewable %', align: 'right', render: row => `${row.value}%` },
           ]}
-          rows={eaiRenewableByRegion}
+          rows={renewableByRegion}
         />
       );
 
