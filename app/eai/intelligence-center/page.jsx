@@ -196,10 +196,10 @@ export default function IntelligenceCenterPage() {
           </div>
 
           {/* ── AI Insights Summary | AI Assistant ── */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1.9fr 1fr', gap: 14, minHeight: 360 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.9fr 1fr', gap: 14, height: 480 }}>
 
             {/* AI Insights Summary */}
-            <div style={CARD}>
+            <div style={{ ...CARD, height: '100%', minHeight: 0 }}>
               <div style={{ ...CARD_HDR, flexWrap: 'wrap', gap: 6 }}>
                 <span style={CARD_TITLE}>AI Insights Summary</span>
               </div>
@@ -229,7 +229,7 @@ export default function IntelligenceCenterPage() {
               </div>
 
               {/* Insight rows */}
-              <div style={{ flex: 1, overflowY: 'auto' }}>
+              <div style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
                 {filteredInsights.map((insight, i) => {
                   const s = SEV[insight.severity] ?? SEV.Info;
                   return (
@@ -272,7 +272,7 @@ export default function IntelligenceCenterPage() {
             </div>
 
             {/* AI Assistant */}
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
               <AIChatPanel
                 title="AI Assistant"
                 systemContext={AI_SYSTEM_CONTEXT}
