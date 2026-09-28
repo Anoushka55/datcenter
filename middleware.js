@@ -32,10 +32,17 @@ export async function middleware(request) {
     }
   );
 
-  // A Supabase outage or network blip must not turn every request — including
-  // /api/* — into a 500 HTML page. Degrade to an unrefreshed session instead.
+  // A Supabase outage, network blip, or hung connection must not turn every
+  // request — including /api/* — into a 500 or a Vercel middleware timeout.
+  // Race against a timeout so a stalled call degrades to an unrefreshed
+  // session instead of hanging until the platform kills the invocation.
   try {
-    await supabase.auth.getUser();
+    await Promise.race([
+      supabase.auth.getUser(),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Supabase auth timed out')), 5000)
+      ),
+    ]);
   } catch (err) {
     console.error('[middleware] Supabase session refresh failed:', err);
     return NextResponse.next({ request });
