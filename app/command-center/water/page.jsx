@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Scale, CalendarClock, Droplets } from 'lucide-react';
 import CCLayout from '@/components/command-center/CCLayout';
 import WueChart from '@/components/nexus/WueChart';
-import { portfolioWater } from '@/lib/nexus/water-engine';
+import { portfolioWater, waterImpactOfChange } from '@/lib/nexus/water-engine';
 import { narrateWater } from '@/lib/nexus/water-brief';
 import { cohortFor } from '@/lib/nexus/benchmark-engine';
 import { fmtNumber, fmtUpTo } from '@/lib/nexus/format';
@@ -51,12 +51,14 @@ function Brief({ data, offline }) {
 export default function WaterPage() {
   const [offline, setOffline] = useState(null);
   const [selected, setSelected] = useState('CHN-1');
+  const [addKw, setAddKw] = useState(1000);
   useEffect(() => { setOffline(new URLSearchParams(window.location.search).get('demo') === '1'); }, []);
   const data = useMemo(() => portfolioWater(), []);
   const t = data.totals;
   const live = data.sites.filter((s) => s.ytd);
   const site = data.sites.find((s) => s.id === selected);
   const median = cohortFor('WUE (L/kWh)', 'Tier III').p50_median;
+  const impact = useMemo(() => waterImpactOfChange({ facilityId: selected, additionalLoadKw: Math.max(0, Number(addKw) || 0) }), [selected, addKw]);
 
   return (
     <CCLayout title="Water Intelligence">
@@ -101,6 +103,20 @@ export default function WaterPage() {
             ) : (
               <p className="text-xs text-[#64748B]">Under construction; not yet drawing water. Design WUE {site.targetWue} L per IT kWh — {site.benchmark.rank} against {site.benchmark.cohort} peers.</p>
             )}
+            <div className="rounded-lg border border-[#D6E4F2] bg-[#F7FAFD] p-2.5">
+              <label className="flex items-center gap-2 text-[11px] font-semibold text-[#334155]">
+                What if we add
+                <input type="number" min="0" step="100" value={addKw} onChange={(e) => setAddKw(e.target.value)} aria-label="Additional IT load in kW"
+                  className="w-20 rounded-md border border-[#CBD5E1] bg-white px-2 py-0.5 text-xs" style={MONO} />
+                kW of IT load?
+              </label>
+              <p className="text-xs text-[#1A1F36] mt-1.5">
+                <strong style={MONO}>+{fmtNumber(impact.additionalLitresPerYear / 1e6, 2)} ML</strong> a year
+                {impact.increasePct !== null && <> (+{impact.increasePct}% on today's run-rate)</>}, of which {fmtNumber(impact.additionalFreshLitresPerYear / 1e6, 2)} ML fresh. WUE stays {impact.wue} L/kWh.
+              </p>
+              <p className="text-[11px] text-[#64748B] mt-0.5">{impact.stressContextNote}. {impact.reportableUnderPolicy ? 'The change is reportable under a water obligation at this site.' : 'No water-specific obligation applies at this site.'}</p>
+              <p className="text-[10px] text-[#94A3B8] mt-0.5">Added load at the dataset's 47% average utilisation, at the site's reported WUE — the cascade engine's basis.</p>
+            </div>
             <div>
               <p className="flex items-center gap-1.5 text-[11px] font-semibold text-[#334155] mb-1.5"><Scale size={12} /> Reporting obligations</p>
               <ul className="space-y-1.5">

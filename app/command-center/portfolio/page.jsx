@@ -9,9 +9,10 @@ import { FileDown, X, ArrowUpRight } from 'lucide-react';
 import CCLayout from '@/components/command-center/CCLayout';
 import GIIHeader from '@/modules/global-infrastructure/components/GIIHeader';
 import SourceSwitch from '@/modules/global-infrastructure/components/SourceSwitch';
-import MapLegend from '@/modules/global-infrastructure/components/map/MapLegend';
 import { SkeletonBlock } from '@/modules/global-infrastructure/components/Skeleton';
 import { fetchNexusFacilities } from '@/modules/global-infrastructure/services/nexusFacilityService';
+import { HEALTH_COLORS } from '@/modules/global-infrastructure/components/map/healthColors';
+import { facilityWater } from '@/lib/nexus/water-engine';
 import { narratePortfolio } from '@/lib/nexus/portfolio-brief';
 import { portfolioSummary } from '@/lib/nexus/portfolio';
 import { exportPanelPdf } from '@/lib/export';
@@ -31,6 +32,22 @@ const STATUS = {
 };
 const BAND = { critical: 'Critical', high: 'High', elevated: 'Elevated', low: 'Low' };
 const INDIA = { latitude: 21.5, longitude: 78.6, zoom: 5, key: 'india' };
+
+// The map's three marker colours, re-used for each overlay with its own legend.
+const OVERLAYS = {
+  status: { label: 'Status', legend: [['healthy', 'Healthy'], ['warning', 'Serious or warning'], ['critical', 'Critical'], ['commissioning', 'Under construction']] },
+  risk: { label: 'Site risk', legend: [['healthy', 'Low or elevated'], ['warning', 'High'], ['critical', 'Critical'], ['commissioning', 'No score']] },
+  water: { label: 'Water stress', legend: [['healthy', 'Below high'], ['warning', 'High'], ['critical', 'Extremely high'], ['commissioning', 'Not drawing water']] },
+};
+function overlayHealth(f, mode) {
+  if (mode === 'risk') return { critical: 'critical', high: 'warning', elevated: 'healthy', low: 'healthy' }[f.riskBand];
+  if (mode === 'water') {
+    const w = facilityWater(f.id);
+    if (!w.stress) return 'commissioning';
+    return w.stress.label === 'Extremely high' ? 'critical' : w.stress.label === 'High' ? 'warning' : 'healthy';
+  }
+  return f.health;
+}
 
 const COLUMNS = [
   { key: 'name', label: 'Facility', sort: (f) => f.name },
@@ -126,6 +143,8 @@ export default function NexusPortfolioPage() {
   useEffect(() => { setOffline(new URLSearchParams(window.location.search).get('demo') === '1'); }, []);
 
   const facilities = useMemo(() => fetchNexusFacilities(), []);
+  const [overlay, setOverlay] = useState('status');
+  const mapped = useMemo(() => facilities.map((f) => ({ ...f, health: overlayHealth(f, overlay) })), [facilities, overlay]);
   const summary = useMemo(() => portfolioSummary(), []);
   const t = summary.totals;
   const rows = useMemo(() => {
@@ -170,13 +189,24 @@ export default function NexusPortfolioPage() {
 
           <div className="flex flex-col lg:flex-row gap-4" data-html2canvas-ignore>
             <div className="w-full lg:w-[68%] relative h-[420px] lg:h-[520px]">
-              <WorldMap facilities={facilities} selectedFacilityId={selected?.id} onMarkerClick={setSelected} flyToTarget={INDIA} mode="light" />
-              <MapLegend mode="light" />
+              <WorldMap facilities={mapped} selectedFacilityId={selected?.id} onMarkerClick={(f) => setSelected(facilities.find((x) => x.id === f.id))} flyToTarget={INDIA} mode="light" />
+              <div className="absolute top-3 right-3 z-[500] bg-white/95 border border-[#E2E8F0] rounded-lg shadow-sm p-2 text-[11px]">
+                <label className="flex items-center gap-2 font-semibold text-[#334155]">Colour by
+                  <select value={overlay} onChange={(e) => setOverlay(e.target.value)} className="rounded border border-[#CBD5E1] px-1.5 py-0.5 text-[11px]">
+                    {Object.entries(OVERLAYS).map(([id, o]) => <option key={id} value={id}>{o.label}</option>)}
+                  </select>
+                </label>
+                <ul className="mt-1.5 space-y-0.5">
+                  {OVERLAYS[overlay].legend.map(([k, label]) => (
+                    <li key={k} className="flex items-center gap-1.5 text-[#475569]"><span className="w-2.5 h-2.5 rounded-full" style={{ background: HEALTH_COLORS[k] }} />{label}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
             <div className="w-full lg:w-[32%]">
               {selected ? <Drilldown f={selected} onClose={() => setSelected(null)} /> : (
                 <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4 h-full text-xs text-[#64748B]">
-                  Select a facility on the map or in the table to see its figures and open its views. Marker colour follows the worst open alert at the site.
+                  Select a facility on the map or in the table to see its figures and open its views. Marker colour follows the overlay chosen on the map.
                 </div>
               )}
             </div>
