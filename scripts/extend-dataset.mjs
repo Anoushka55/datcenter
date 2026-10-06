@@ -263,9 +263,10 @@ energy.eachRow((row) => { if (row.getCell(1).value === reuseNote) hasNote = true
 if (!hasNote) energy.addRow([reuseNote]).getCell(1).style = noteStyle;
 
 // ── reconcile the monthly ledgers ───────────────────────────────────────────
-// 22_timeseries is the authority for monthly IT load, PUE and WUE ("24 months
-// to September 2026"). Its labels repeated 2024-10 and stopped at 2026-08, so
-// rows are relabelled in order. 13_energy and 14_water are then restated from
+// 22_timeseries is the authority for monthly IT load, PUE and WUE. Its first
+// label repeated 2024-10 and the series stopped at 2026-08 while the ledgers
+// run to 2026-09, so the first row is relabelled and September 2026 added
+// (below). 13_energy and 14_water are then restated from
 // it so that every view of the same month agrees:
 //   IT kWh       = it_load_kw × hours in the month
 //   total_kwh    = IT kWh × PUE                  (renewable share, tariff unchanged)
@@ -291,20 +292,59 @@ const hoursIn = (month) => {
 };
 const round = (v, dp = 0) => Math.round(v * 10 ** dp) / 10 ** dp;
 
+// The original labels were right from the second row on (2024-10 … 2026-08,
+// with the pre-monsoon PUE bump in April–June and the MUM-1 drift flagged from
+// May 2026); only the first row repeated 2024-10 and is September 2024.
 const tsSheet = wb.getWorksheet('22_timeseries');
 const ts = cellsByHeader(tsSheet);
+const tsHeader = tsSheet.getRow(1).values.slice(1);
+const labelFor = (k) => (k === 0 ? '2024-09' : addMonths('2024-10', k - 1));
 const seen = new Map();
 const series = new Map();
+const rowsByFacility = new Map();
 for (const row of dataRows(tsSheet)) {
   const id = ts(row, 'facility_id').value;
   const k = seen.get(id) ?? 0;
   seen.set(id, k + 1);
-  const month = addMonths('2024-10', k);
+  const month = labelFor(k);
   ts(row, 'month').value = month;
-  series.set(`${id}:${month}`, {
-    it: ts(row, 'it_load_kw').value, pue: ts(row, 'pue').value, wue: ts(row, 'wue_l_per_kwh').value,
-  });
+  const rec = Object.fromEntries(tsHeader.map((h) => [h, ts(row, h).value]));
+  if (!rowsByFacility.has(id)) rowsByFacility.set(id, new Map());
+  rowsByFacility.get(id).set(month, rec);
+  series.set(`${id}:${month}`, { it: rec.it_load_kw, pue: rec.pue, wue: rec.wue_l_per_kwh });
 }
+
+// September 2026 (month to date at the as-of date) continues each site's own
+// trajectory: last September's PUE and WUE plus the site's mean year-on-year
+// change over June–August, and IT load grown at its March–August monthly rate.
+const SEPT = '2026-09';
+const designById = new Map(json('facilities').map((f) => [f.facility_id, f.design_it_kw]));
+for (const [id, m] of rowsByFacility) {
+  if (m.has(SEPT)) continue;
+  const yoy = (field) => ['2026-06', '2026-07', '2026-08'].reduce((s, x) => s + (m.get(x)[field] - m.get(addMonths(x, -12))[field]), 0) / 3;
+  const aug = m.get('2026-08');
+  const mar = m.get('2026-03');
+  const it = round(aug.it_load_kw * (aug.it_load_kw / mar.it_load_kw) ** (1 / 5));
+  const pue = round(m.get('2025-09').pue + yoy('pue'), 3);
+  const wue = round(m.get('2025-09').wue_l_per_kwh + yoy('wue_l_per_kwh'), 3);
+  const last12 = [...m.values()].slice(-12);
+  const rec = {
+    facility_id: id, month: SEPT, it_load_kw: it, facility_load_kw: round(it * pue), pue, wue_l_per_kwh: wue,
+    utilisation_pct: round((it / designById.get(id)) * 100, 1),
+    uptime_pct: round(last12.reduce((s, r) => s + r.uptime_pct, 0) / last12.length, 4),
+    flag: aug.flag ?? null,
+  };
+  // Insert after the last data row, ahead of the sheet's note rows.
+  const last = dataRows(tsSheet).at(-1).number;
+  tsSheet.insertRow(last + 1, tsHeader.map((h) => rec[h]), 'i');
+  m.set(SEPT, rec);
+  series.set(`${id}:${SEPT}`, { it, pue, wue });
+}
+tsSheet.eachRow((row) => {
+  if (row.getCell(1).value === '24 months to September 2026.') {
+    row.getCell(1).value = '25 months, September 2024 to September 2026. September 2026 is month to date at 29 September.';
+  }
+});
 
 const facilityById = new Map(json('facilities').map((f) => [f.facility_id, f]));
 

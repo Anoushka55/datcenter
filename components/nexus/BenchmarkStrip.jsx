@@ -98,7 +98,9 @@ export default function BenchmarkStrip({ facilityId, compact = false }) {
                 </p>
                 <p className="text-[#64748B] mt-0.5">
                   {m.value === null ? m.basis : `${m.basis}.${peerLine(m)}`}
+                  {m.measured && ` ${m.measured.basis}: ${fmt(m.measured.value, m.dp)}.`}
                 </p>
+                <p className="text-[#94A3B8] mt-0.5">Cohort basis: {m.cohortBasis}</p>
               </div>
             )}
           </div>
