@@ -3,9 +3,9 @@
 // water, each with its formula and source cells, downloadable as an
 // audit-ready PDF pack or a workbook.
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { FileDown, Sheet, AlertCircle, Info } from 'lucide-react';
+import { FileDown, Sheet, AlertCircle, Info, Braces } from 'lucide-react';
 import CCLayout from '@/components/command-center/CCLayout';
-import { buildDisclosure, ledgerRows, ENERGY_MONTHS, FRAMEWORKS } from '@/lib/nexus/esg-engine';
+import { buildDisclosure, ledgerRows, ENERGY_MONTHS, FRAMEWORKS, scopeOf } from '@/lib/nexus/esg-engine';
 import { narrateEsg } from '@/lib/nexus/esg-brief';
 import { buildDisclosurePdf } from '@/lib/nexus/pdf-pack';
 import { exportWorkbook } from '@/lib/export';
@@ -13,7 +13,7 @@ import { fmtNumber, fmtUpTo } from '@/lib/nexus/format';
 import { monthLabel } from '@/lib/nexus/time';
 
 const MONO = { fontFamily: "'JetBrains Mono', monospace" };
-const valueText = (l) => (l.value === null ? null : `${l.unit === '' ? fmtUpTo(l.value, 3) : fmtNumber(l.value, Number.isInteger(l.value) ? 0 : 1)}`);
+const valueText = (l) => (l.value === null ? null : `${l.unit === '' || l.unit.includes('/') ? fmtUpTo(l.value, 3) : fmtNumber(l.value, Number.isInteger(l.value) ? 0 : 1)}`);
 
 function Summary({ disclosure, offline, onText }) {
   const [state, setState] = useState({ text: '', narrating: true, source: null });
@@ -44,12 +44,22 @@ export default function EsgPage() {
   const [to, setTo] = useState(ENERGY_MONTHS.at(-1));
   const [summary, setSummary] = useState('');
   const [busy, setBusy] = useState(null);
+  const [site, setSite] = useState('all');
   useEffect(() => { setOffline(new URLSearchParams(window.location.search).get('demo') === '1'); }, []);
 
-  const disclosure = useMemo(() => buildDisclosure({ framework, from, to }), [framework, from, to]);
+  const scopeSites = useMemo(() => scopeOf(framework).facilities, [framework]);
+  useEffect(() => { setSite('all'); }, [framework]);
+  const disclosure = useMemo(() => buildDisclosure({ framework, from, to, ...(site !== 'all' ? { facilityIds: [site] } : {}) }), [framework, from, to, site]);
   const onText = useMemo(() => (t) => setSummary(t), []);
   const metered = disclosure.facilities.filter((f) => f.metered).map((f) => f.id);
-  const fileBase = `nexus-${framework.toLowerCase()}-${from}-to-${to}`;
+  const fileBase = `nexus-${framework.toLowerCase()}-${site === 'all' ? 'portfolio' : site.toLowerCase()}-${from}-to-${to}`;
+  const downloadJson = () => {
+    const payload = { framework: disclosure.framework.name, period: disclosure.period, facilities: disclosure.facilities, readinessScore: disclosure.readinessScore, metrics: disclosure.lines, gaps: disclosure.gaps, pending: disclosure.pending, summary };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `${fileBase}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+  };
 
   const downloadPdf = async () => {
     setBusy('pdf');
@@ -76,11 +86,18 @@ export default function EsgPage() {
               {Object.values(FRAMEWORKS).map((f) => (
                 <button key={f.id} onClick={() => setFramework(f.id)}
                   className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${framework === f.id ? 'bg-[#00338D] text-white' : 'text-[#6B7280] hover:text-[#1A1F36]'}`}>
-                  {f.id === 'KA' ? 'Karnataka' : f.id === 'EED' ? 'EU EED' : 'SEBI BRSR'}
+                  {f.id === 'KA' ? 'Karnataka' : f.id === 'EED' ? 'EU EED' : f.id === 'GRESB' ? 'GRESB' : 'SEBI BRSR'}
                 </button>
               ))}
             </div>
           </div>
+          <label className="text-xs">
+            <span className="block text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-1">Scope</span>
+            <select value={site} onChange={(e) => setSite(e.target.value)} className="text-xs text-[#334155] bg-[#F4F6F9] border border-[#E2E8F0] rounded-lg px-3 py-1.5">
+              <option value="all">All sites in scope ({scopeSites.length})</option>
+              {scopeSites.map((id) => <option key={id} value={id}>{id}</option>)}
+            </select>
+          </label>
           {[['From', from, setFrom], ['To', to, setTo]].map(([label, val, set]) => (
             <label key={label} className="text-xs">
               <span className="block text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-1">{label}</span>
@@ -101,6 +118,10 @@ export default function EsgPage() {
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold border border-[#CBD5E1] text-[#334155] hover:bg-[#F8FAFC] disabled:opacity-50">
               <Sheet size={13} /> {busy === 'xlsx' ? 'Building…' : 'Workbook (XLSX)'}
             </button>
+            <button onClick={downloadJson} disabled={!summary}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold border border-[#CBD5E1] text-[#334155] hover:bg-[#F8FAFC] disabled:opacity-50">
+              <Braces size={13} /> JSON
+            </button>
           </div>
         </section>
 
@@ -113,7 +134,10 @@ export default function EsgPage() {
         {offline !== null && <Summary disclosure={disclosure} offline={offline} onText={onText} />}
 
         <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
-          <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] mb-3">{disclosure.framework.name} · {monthLabel(from)} to {monthLabel(to)}</h2>
+          <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+            <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">{disclosure.framework.name} · {monthLabel(from)} to {monthLabel(to)}</h2>
+            <span className="text-xs text-[#334155]">Readiness <strong style={MONO}>{disclosure.readinessScore}%</strong> <span className="text-[#94A3B8]">of required items disclosable from operating data</span></span>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full text-xs min-w-[680px]">
               <thead>
@@ -133,7 +157,7 @@ export default function EsgPage() {
                         : <span className="font-semibold text-[#1A1F36]" style={MONO}>{valueText(l)} <span className="text-[10px] text-[#94A3B8]">{l.unit}</span></span>}
                     </td>
                     <td className="py-2 pl-4 text-[11px] text-[#64748B]">
-                      {l.formula ? <><span style={MONO}>{l.formula}</span><span className="block text-[10px] text-[#94A3B8]">{l.source.sheet} · {l.source.rows} rows</span></> : l.gap}
+                      {l.formula ? <><span style={MONO}>{l.formula}</span><span className="block text-[10px] text-[#94A3B8]">{l.source.sheet} rows {l.source.rowRanges} · <span className={l.confidence === 'measured' ? 'text-[#00704A]' : 'text-[#8A6508]'}>{l.confidence}</span> — {l.confidenceNote}</span></> : l.gap}
                     </td>
                   </tr>
                 ))}
