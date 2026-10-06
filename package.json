@@ -10,7 +10,7 @@
     "import:dataset": "node scripts/import-dataset.mjs",
     "extend:dataset": "node scripts/extend-dataset.mjs",
     "vendor:fonts": "node scripts/vendor-fonts.mjs",
-    "test:nexus": "node --import ./scripts/json-loader.mjs --test \"lib/nexus/*.test.mjs\""
+    "test:nexus": "node --import ./scripts/json-loader.mjs --test \"lib/nexus/*.test.mjs\" \"lib/cockpit/*.test.mjs\""
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.96.0",

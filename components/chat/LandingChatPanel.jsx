@@ -12,6 +12,9 @@ import { callClaude } from '@/lib/claude-api';
 import { writeToWiki } from '@/lib/wiki';
 import { researchClientLight } from '@/lib/research';
 import DecisionQuickStarts from '@/components/decision-cockpit/DecisionQuickStarts';
+import TransitionOverlay from '@/components/cockpit/TransitionOverlay';
+import { matchCockpit, isCockpitShortcut } from '@/lib/cockpit/trigger';
+import { COCKPITS, DEFAULT_COCKPIT, cockpitPath } from '@/data/cockpit';
 
 // ── Stage directory ──────────────────────────────────────────────────────────
 const STAGE_DIRECTORY = [
@@ -276,6 +279,10 @@ export default function LandingChatPanel() {
   const inputRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const shouldScrollRef = useRef(false);
+  // Presentation cockpit launched from the Guide (static, no model call).
+  const [cockpitLaunch, setCockpitLaunch] = useState(null);
+  // Prefetch the route so launching makes no requests.
+  useEffect(() => { router.prefetch(cockpitPath(DEFAULT_COCKPIT)); }, [router]);
 
   const isIdle = messages.length <= 1 && botPhase === 'chat' && !loading;
 
@@ -349,7 +356,19 @@ export default function LandingChatPanel() {
   // sendMessage accepts optional overrideText (from quick-start chips)
   const sendMessage = async (overrideText) => {
     const trimmed = (overrideText ?? input).trim();
-    if (!trimmed || loading) return;
+    if (!trimmed || loading || cockpitLaunch) return;
+
+    // Presentation cockpits answer before any model call: '/cockpit' goes straight
+    // there; a matching client brief plays the analysing beat, then routes.
+    if (isCockpitShortcut(trimmed)) { setInput(''); router.push(cockpitPath(DEFAULT_COCKPIT), { scroll: false }); return; }
+    const cockpit = matchCockpit(trimmed);
+    if (cockpit) {
+      shouldScrollRef.current = true;
+      setMessages(prev => [...prev, { role: 'user', text: trimmed }]);
+      setInput('');
+      setCockpitLaunch(cockpit);
+      return;
+    }
 
     const fileContext = buildFileContext(attachedFiles, fileTexts);
     const userMsg = { role: 'user', text: trimmed + (attachedFiles.length ? ` [${attachedFiles.length} file(s) attached]` : '') };
@@ -434,6 +453,12 @@ export default function LandingChatPanel() {
       onDragLeave={() => setIsDraggingFile(false)}
       onDrop={handleFileDrop}
     >
+      {cockpitLaunch && (
+        <TransitionOverlay
+          lines={COCKPITS[cockpitLaunch].trigger.analysing}
+          onDone={() => router.push(cockpitPath(cockpitLaunch), { scroll: false })}
+        />
+      )}
       {/* ── Header ── */}
       <div className="px-5 py-4 border-b border-[#F0F2F5] flex-shrink-0">
         <div className="flex items-center gap-3 mb-4">
@@ -653,6 +678,7 @@ export default function LandingChatPanel() {
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
+                disabled={!!cockpitLaunch}
                 placeholder="Describe your goal or ask a question…"
                 rows={1}
                 className="flex-1 bg-transparent text-xs text-[#1A1F36] placeholder-[#9CA3AF] outline-none resize-none leading-5"
