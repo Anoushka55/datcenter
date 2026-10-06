@@ -42,3 +42,12 @@ Server errors (`instrumentation.js`), client errors (`app/error.jsx`) and sample
 ## Secrets
 
 `.env.example` lists every variable. Values belong in the hosting platform's secret store; `.env.local` is ignored by git.
+
+## Knowledge graph
+
+- **Storage.** Pages live in Supabase `wiki_pages` (pgvector) and fall back to a folder outside the repository: `WIKI_PATH`, default `~/.k-nexus/wiki`. The repository no longer holds wiki content.
+- **One node per idea.** Every write is normalised through `lib/wiki/ontology.js`: known ideas resolve to one canonical path whatever the writer called them, and the extractor is shown the existing pages so it reuses them. Add aliases there when a new duplicate appears.
+- **Migration and dedupe.** `node scripts/wiki-migrate.mjs` prints the plan (dry run). `--apply` writes it to `WIKI_PATH`; add `--supabase` (with `SUPABASE_SERVICE_ROLE_KEY`) to load `wiki_pages`. `--source=<dir>` dedupes another folder, in place if it is the target. Merges are deterministic: the longest page is kept whole and new sections from the others are appended.
+- **Embeddings on write.** `voyage-3-lite` (512 dimensions) when `VOYAGE_API_KEY` is set, otherwise a deterministic lexical embedding. If you switch methods, re-run the migration with `--source` pointing at `WIKI_PATH` to re-embed.
+- **Retrieval into agents.** Capacity, site-risk, incident and risk briefs fetch the three closest concept, pattern and market pages as background. Engagement pages are never retrieved; client names and every figure are stripped first, so retrieved text cannot introduce a number into a brief.
+- **Confidentiality.** The graph shows engagements as Client A, B, … and redacts client names from every label and preview; client folder names never leave the server.

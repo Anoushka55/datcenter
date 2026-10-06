@@ -81,6 +81,22 @@ export default function DCKnowledgeGraph({ activeCategory = 'all', nodes: srcNod
     return { nodes, links };
   }, [activeCategory, srcNodes, srcEdges]);
 
+  // Weak pull toward the centre so nodes without links stay with the graph
+  // instead of drifting to the edge of the canvas.
+  useEffect(() => {
+    const fg = fgRef.current;
+    if (!fg) return;
+    let simNodes = [];
+    const gravity = (alpha) => {
+      for (const n of simNodes) {
+        n.vx -= (n.x ?? 0) * 0.03 * alpha;
+        n.vy -= (n.y ?? 0) * 0.03 * alpha;
+      }
+    };
+    gravity.initialize = (ns) => { simNodes = ns; };
+    fg.d3Force('gravity', gravity);
+  }, [mounted, graphData]);
+
   const neighborSet = useMemo(() => {
     if (!selectedNode) return new Set();
     return buildNeighborSet(selectedNode.id, graphData.links);
@@ -186,7 +202,8 @@ export default function DCKnowledgeGraph({ activeCategory = 'all', nodes: srcNod
   const activeNode = selectedNode ?? hoveredNode;
 
   return (
-    <div ref={containerRef} className="relative w-full h-full bg-white">
+    <div className="relative w-full h-full bg-white p-3">
+    <div ref={containerRef} className="relative w-full h-full">
       {mounted && ForceGraph2D && (
         <ForceGraph2D
           ref={fgRef}
@@ -270,6 +287,7 @@ export default function DCKnowledgeGraph({ activeCategory = 'all', nodes: srcNod
           Drag to explore · Scroll to zoom · Click a node to highlight connections
         </div>
       )}
+    </div>
     </div>
   );
 }

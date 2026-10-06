@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -7,6 +7,9 @@ import dynamic from 'next/dynamic';
 import { X, Network } from 'lucide-react';
 import { CATEGORIES as MARKET_CATEGORIES, NODES as MARKET_NODES, EDGES as MARKET_EDGES } from '@/data/dcKnowledgeGraph';
 import { buildPatternGraph, PATTERN_CATEGORIES } from '@/lib/nexus/pattern-graph';
+import { KNOWLEDGE_CATEGORIES } from '@/lib/wiki/categories';
+
+const POLL_MS = 30_000;
 
 const DCKnowledgeGraph = dynamic(
   () => import('@/components/wiki/DCKnowledgeGraph'),
@@ -28,12 +31,29 @@ export default function KnowledgeGraphPage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [mode, setMode] = useState('market');
   const [selected, setSelected] = useState(null);
-  useEffect(() => { if (new URLSearchParams(window.location.search).get('mode') === 'patterns') setMode('patterns'); }, []);
+  useEffect(() => { const m = new URLSearchParams(window.location.search).get('mode'); if (m === 'patterns' || m === 'knowledge') setMode(m); }, []);
+  // The firm's knowledge store. Polled, but the graph only re-renders when the
+  // node or edge count changes, so the layout does not reset under the reader.
+  const [knowledge, setKnowledge] = useState({ nodes: [], edges: [], loaded: false });
+  const shapeRef = useRef('');
+  useEffect(() => {
+    if (mode !== 'knowledge') return undefined;
+    let alive = true;
+    const load = () => fetch('/api/wiki/graph').then((r) => (r.ok ? r.json() : null)).then((d) => {
+      if (!alive || !d?.nodes) return;
+      const shape = `${d.nodes.length}:${d.edges.length}`;
+      if (shape !== shapeRef.current) { shapeRef.current = shape; setKnowledge({ nodes: d.nodes, edges: d.edges, loaded: true }); }
+      else setKnowledge((k) => (k.loaded ? k : { ...k, loaded: true }));
+    }).catch(() => {});
+    load();
+    const t = setInterval(load, POLL_MS);
+    return () => { alive = false; clearInterval(t); };
+  }, [mode]);
   useEffect(() => { setActiveCategory('all'); setSelected(null); }, [mode]);
   const patternGraph = useMemo(() => buildPatternGraph(), []);
-  const NODES = mode === 'patterns' ? patternGraph.nodes : MARKET_NODES;
-  const EDGES = mode === 'patterns' ? patternGraph.edges : MARKET_EDGES;
-  const CATEGORIES = mode === 'patterns' ? PATTERN_CATEGORIES : MARKET_CATEGORIES;
+  const NODES = mode === 'patterns' ? patternGraph.nodes : mode === 'knowledge' ? knowledge.nodes : MARKET_NODES;
+  const EDGES = mode === 'patterns' ? patternGraph.edges : mode === 'knowledge' ? knowledge.edges : MARKET_EDGES;
+  const CATEGORIES = mode === 'patterns' ? PATTERN_CATEGORIES : mode === 'knowledge' ? KNOWLEDGE_CATEGORIES : MARKET_CATEGORIES;
   const selectedLink = selected?.kind === 'alert' ? `/incidents?alert=${selected.ref}`
     : selected?.kind === 'incident' ? `/incidents?incident=${selected.ref}`
       : selected?.kind === 'advisory' ? '/command-center/predictive'
@@ -42,7 +62,7 @@ export default function KnowledgeGraphPage() {
   const stats = [
     { label: 'Nodes',      value: NODES.length,      color: '#2563eb' },
     { label: 'Edges',      value: EDGES.filter(e => e.source && e.target).length, color: '#7c3aed' },
-    { label: mode === 'patterns' ? 'Patterns' : 'Domains', value: mode === 'patterns' ? NODES.filter(n => n.category === 'pattern').length : CATEGORIES.length, color: '#0d9488' },
+    { label: mode === 'market' ? 'Domains' : 'Patterns', value: mode === 'market' ? CATEGORIES.length : NODES.filter(n => n.category === 'pattern').length, color: '#0d9488' },
   ];
 
   return (
@@ -84,7 +104,7 @@ export default function KnowledgeGraphPage() {
         {/* Right: mode switch + stat chips */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <div className="flex bg-grey-bg border border-grey-border rounded-lg p-0.5 gap-0.5 mr-2" role="tablist" aria-label="Graph">
-            {[['market', 'Market knowledge'], ['patterns', 'Nexus pattern memory']].map(([id, label]) => (
+            {[['market', 'Market knowledge'], ['knowledge', 'Firm knowledge'], ['patterns', 'Nexus pattern memory']].map(([id, label]) => (
               <button key={id} role="tab" aria-selected={mode === id} onClick={() => setMode(id)}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors ${mode === id ? 'bg-white text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'}`}>{label}</button>
             ))}
@@ -115,7 +135,7 @@ export default function KnowledgeGraphPage() {
         >
           <div className="p-3">
             <p className="text-[9px] font-bold text-text-muted uppercase tracking-widest mb-2.5 px-1">
-              {mode === 'patterns' ? 'Node types' : 'Domains'}
+              {mode === 'market' ? 'Domains' : 'Node types'}
             </p>
 
             {/* All domains button */}
@@ -128,7 +148,7 @@ export default function KnowledgeGraphPage() {
               }`}
             >
               <div className="w-2 h-2 rounded-full bg-text-muted flex-shrink-0" />
-              <span className="truncate">{mode === 'patterns' ? 'Everything' : 'All Domains'}</span>
+              <span className="truncate">{mode === 'market' ? 'All Domains' : 'Everything'}</span>
               <span className="ml-auto text-[9px] opacity-50">{NODES.length}</span>
             </button>
 
@@ -169,17 +189,20 @@ export default function KnowledgeGraphPage() {
             })}
           </div>
 
-          {mode === 'patterns' && (
+          {mode !== 'market' && (
             <div className="p-3 border-t border-grey-border">
               <p className="text-[9px] font-bold text-text-muted uppercase tracking-widest mb-1.5">Selected</p>
               {selected ? (
                 <>
                   <p className="text-[11px] font-semibold text-text-primary leading-snug">{selected.label}</p>
                   <p className="text-[10px] text-text-secondary leading-relaxed mt-1">{selected.description}</p>
+                  {selected.updated && <p className="text-[9px] text-text-muted mt-1">Updated {selected.updated}</p>}
                   {selectedLink && <Link href={selectedLink} className="inline-block mt-1.5 text-[10px] font-semibold text-[#0077C8] hover:underline">Open →</Link>}
                 </>
               ) : (
-                <p className="text-[10px] text-text-secondary leading-relaxed">Every incident, open alert and maintenance advisory, linked to the failure pattern it shares and the site it happened at. Click a pattern to see everywhere it has occurred.</p>
+                <p className="text-[10px] text-text-secondary leading-relaxed">{mode === 'patterns'
+                  ? 'Every incident, open alert and maintenance advisory, linked to the failure pattern it shares and the site it happened at. Click a pattern to see everywhere it has occurred.'
+                  : 'Concepts, patterns and market notes learned across engagements, one node per idea. Engagements are shown without client names. Briefs draw on this as context.'}</p>
               )}
             </div>
           )}
@@ -194,7 +217,11 @@ export default function KnowledgeGraphPage() {
 
         {/* Graph canvas */}
         <div className="flex-1 relative overflow-hidden">
-          <DCKnowledgeGraph activeCategory={activeCategory} nodes={NODES} edges={EDGES} categories={CATEGORIES} onSelect={setSelected} />
+          {mode === 'knowledge' && knowledge.loaded && NODES.length === 0 ? (
+            <div className="w-full h-full flex items-center justify-center text-xs text-text-muted">No knowledge recorded yet. Pages appear here as briefs and assessments are completed.</div>
+          ) : (
+            <DCKnowledgeGraph activeCategory={activeCategory} nodes={NODES} edges={EDGES} categories={CATEGORIES} onSelect={setSelected} />
+          )}
         </div>
 
       </div>

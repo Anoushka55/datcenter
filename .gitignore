@@ -6,3 +6,6 @@ out/
 build/
 *.log
 .DS_Store
+
+# Knowledge graph content lives outside the repository (WIKI_PATH, default ~/.k-nexus/wiki)
+/wiki/
