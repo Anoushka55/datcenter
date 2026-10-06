@@ -7,7 +7,7 @@ import {
   LayoutDashboard, Building2, Server, Cpu, Users, Leaf, Brain,
   AlertTriangle, Wrench, FileText, Settings, Bell, ChevronLeft,
   ChevronRight, Search, Sparkles, Layers, Home,
-  Package, Shield, Plug, Globe, Gauge, Radar, Droplets, ShieldAlert,
+  Package, Shield, Plug, Globe, Gauge, Radar, Droplets, ShieldAlert, FileCheck2,
 } from 'lucide-react';
 import AICopilotPanel from './AICopilotPanel';
 
@@ -46,6 +46,7 @@ const NAV_GROUPS = [
       { id: 'predictive',   label: 'Predictive Risk',     icon: Radar, href: '/command-center/predictive' },
       { id: 'water',        label: 'Water Intelligence',  icon: Droplets, href: '/command-center/water' },
       { id: 'site-risk',    label: 'Site & Supply Risk',  icon: ShieldAlert, href: '/command-center/site-risk' },
+      { id: 'esg',          label: 'ESG Disclosure',      icon: FileCheck2, href: '/command-center/esg' },
       { id: 'deployments',  label: 'Loading Bay',   icon: Package, href: '/deployments' },
       { id: 'scenarios',    label: 'Scenarios',     icon: Shield,  href: '/scenarios' },
       { id: 'integrations', label: 'Integrations',  icon: Plug,    href: '/integrations' },
