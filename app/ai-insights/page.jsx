@@ -87,7 +87,7 @@ function InsightCard({ insight, showToast }) {
 
 function ChatInterface() {
   const [messages, setMessages] = useState([
-    { role: 'assistant', text: "I'm K-Nexus AI Copilot with full portfolio context. Ask me anything about your 12 datacenters, active incidents, tenant capacity, sustainability metrics, or operational risks." },
+    { role: 'assistant', text: "I'm K-Nexus AI Copilot with full portfolio context. Ask me anything about the Nexus facilities, active alerts, tenant capacity, sustainability metrics, or operational risks." },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);

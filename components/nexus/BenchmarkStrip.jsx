@@ -61,7 +61,7 @@ export default function BenchmarkStrip({ facilityId, compact = false }) {
 
   return (
     <div className="space-y-1">
-      <div className="grid grid-cols-[minmax(110px,1.1fr)_minmax(120px,2fr)_auto] gap-x-3 px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-[#94A3B8]">
+      <div className="grid grid-cols-[minmax(110px,1.1fr)_minmax(120px,2fr)_112px] gap-x-3 px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-[#94A3B8]">
         <span>Metric</span>
         <span className="flex justify-between"><span>Worse</span><span>Better →</span></span>
         <span className="text-right">Peer rank</span>
@@ -71,7 +71,7 @@ export default function BenchmarkStrip({ facilityId, compact = false }) {
         const open = hover === m.key;
         return (
           <div key={m.key} className="relative" onMouseEnter={() => setHover(m.key)} onMouseLeave={() => setHover(null)}>
-            <div className={`grid grid-cols-[minmax(110px,1.1fr)_minmax(120px,2fr)_auto] items-center gap-x-3 px-2 py-1.5 rounded-lg transition-colors ${open ? 'bg-[#F5F8FB]' : ''}`}>
+            <div className={`grid grid-cols-[minmax(110px,1.1fr)_minmax(120px,2fr)_112px] items-center gap-x-3 px-2 py-1.5 rounded-lg transition-colors ${open ? 'bg-[#F5F8FB]' : ''}`}>
               <div className="min-w-0">
                 <p className="text-[11px] text-[#64748B] truncate">{m.label}</p>
                 <p className="text-sm font-semibold text-[#1A1F36] tabular-nums" style={{ fontFamily: "'JetBrains Mono', monospace" }}>

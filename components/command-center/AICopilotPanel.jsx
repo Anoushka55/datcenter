@@ -5,9 +5,9 @@ import { Sparkles, X, Send, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
 const SUGGESTIONS = [
-  "What's the risk posture for Mumbai DC-2?",
-  "Which tenants need capacity expansion?",
-  "Summarize today's incidents",
+  "What's the risk posture for Nexus Mumbai-1?",
+  "Which tenants carry the most SLA exposure?",
+  "Summarize today's open alerts",
   "Top 3 actions I should take today",
 ];
 
@@ -17,7 +17,7 @@ export default function AICopilotPanel({ forceOpen, onOpenChange }) {
   const setOpen = (v) => { setLocalOpen(v); onOpenChange?.(v); };
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([
-    { role: 'assistant', text: "I'm your K-Nexus AI Copilot. Ask me about incidents, capacity, sustainability, tenant risks, or any operational question across your 12-facility portfolio." },
+    { role: 'assistant', text: "I'm your K-Nexus AI Copilot. Ask me about incidents, capacity, sustainability, tenant risks, or any operational question across the Nexus portfolio." },
   ]);
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);

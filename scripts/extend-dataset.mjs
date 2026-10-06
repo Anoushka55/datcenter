@@ -357,6 +357,30 @@ for (const [ws, note] of ledgerNotes) {
   if (!present) ws.addRow([note]).getCell(1).style = noteStyle;
 }
 
+// ── Hall 4 retrofit ratings ─────────────────────────────────────────────────
+// Hall 4 is a 2023 AI-ready retrofit with 5,400 kW of row circuits, and its
+// busway (BUSWAY-B4) was re-rated to match — but its RPP, UPS pair and
+// chilled-water loop still carried 2019 ratings that its 4,080 kW load
+// exceeds. Re-rate them to the retrofit so the live hall is within its
+// ratings (each UPS alone carries the hall, keeping N+1).
+const RETROFIT = {
+  'RPP-4': { capacity: 5400, note: 'Hall 4 distribution, re-rated in the 2023 retrofit' },
+  'UPS-5': { capacity: 6250, note: 'Serves Hall 4. N+1 pair. Re-rated in the 2023 retrofit.' },
+  'UPS-6': { capacity: 6250, note: 'Serves Hall 4. N+1 pair. Re-rated in the 2023 retrofit.' },
+  'CHW-LOOP-2': { capacity: 15000, note: 'Supply 12C, return 18C, delta-T 6K. Upsized in the 2023 retrofit.' },
+};
+const compSheet = wb.getWorksheet('04_components');
+const co = cellsByHeader(compSheet);
+for (const row of dataRows(compSheet)) {
+  const r = RETROFIT[co(row, 'component_id').value];
+  if (!r) continue;
+  const derated = round(r.capacity * co(row, 'derate_factor').value, 1);
+  co(row, 'capacity').value = r.capacity;
+  co(row, 'derated_capacity').value = derated;
+  co(row, 'utilisation_pct').value = round((co(row, 'current_load').value / derated) * 100, 1);
+  co(row, 'note').value = r.note;
+}
+
 // README: list the added sheets once.
 const readme = wb.getWorksheet('00_README');
 const marker = 'Operations sheets (23-26)';
