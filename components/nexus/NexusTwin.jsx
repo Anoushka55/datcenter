@@ -233,7 +233,8 @@ export default function NexusTwin({ facilityId, view, runKey = 0, insetLeft = 0,
       const framingFor = (points) => {
         const box = new THREE.Box3();
         points.forEach((p) => box.expandByPoint(new THREE.Vector3(p.x, p.y ?? 0, p.z)));
-        box.expandByScalar(points.length === 1 ? 4 : 1.5);
+        // A single focus component keeps ~9 m of surroundings in frame for context.
+        box.expandByScalar(points.length === 1 ? 9 : 1.5);
         box.max.y = Math.max(box.max.y, 3);
         const center = box.getCenter(new THREE.Vector3());
         const dir = camera.position.clone().sub(controls.target);
@@ -339,7 +340,8 @@ export default function NexusTwin({ facilityId, view, runKey = 0, insetLeft = 0,
         if (state === 'neutral') return base.clone();
         return new THREE.Color(style.color);
       };
-      const applyView = (v) => {
+      let lastFramedKey = null;
+      const applyView = (v, key) => {
         const now = performance.now();
         racks.forEach((r, i) => {
           const s = v?.rackStates?.[r.rack_id] ?? { state: r.status === 'free' ? 'free' : r.status === 'blocked' ? 'blocked' : 'neutral' };
@@ -387,7 +389,15 @@ export default function NexusTwin({ facilityId, view, runKey = 0, insetLeft = 0,
           makeLabel(l.text, LABEL_TONE[l.tone] ?? '#e2e8f0', l.priority ?? 100, l.position, now + (l.hop ?? 0) * MS_PER_HOP);
         }
         sizeLabels();
-        easeTo(v?.focusPoints?.length ? v.focusPoints : homePoints);
+        // Re-frame only when a result is presented or closed (runKey changes),
+        // not when an idle view changes because a row was selected.
+        if (key !== lastFramedKey) {
+          lastFramedKey = key;
+          // Panels may have just opened or closed in this same render: bring the
+          // projection's view offset up to date before fitting against it.
+          resize();
+          easeTo(v?.focusPoints?.length ? v.focusPoints : homePoints);
+        }
       };
 
       // ── Render loop ──
@@ -444,7 +454,7 @@ export default function NexusTwin({ facilityId, view, runKey = 0, insetLeft = 0,
       loop();
 
       sceneRef.current = { applyView, resize, easeTo, homePoints };
-      if (propsRef.current.pendingView) applyView(propsRef.current.pendingView);
+      if (propsRef.current.pendingView) applyView(propsRef.current.pendingView, propsRef.current.pendingKey);
 
       cleanup = () => {
         cancelAnimationFrame(raf);
@@ -470,7 +480,8 @@ export default function NexusTwin({ facilityId, view, runKey = 0, insetLeft = 0,
   // Apply each new view (or re-run of the same view).
   useEffect(() => {
     propsRef.current.pendingView = view;
-    sceneRef.current?.applyView(view);
+    propsRef.current.pendingKey = runKey;
+    sceneRef.current?.applyView(view, runKey);
   }, [view, runKey]);
 
   // Re-centre when side panels open or close.

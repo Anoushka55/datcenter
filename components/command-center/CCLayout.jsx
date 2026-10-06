@@ -7,7 +7,7 @@ import {
   LayoutDashboard, Building2, Server, Cpu, Users, Leaf, Brain,
   AlertTriangle, Wrench, FileText, Settings, Bell, ChevronLeft,
   ChevronRight, Search, Sparkles, Layers, Home,
-  Package, Shield, Plug, Globe,
+  Package, Shield, Plug, Globe, Gauge,
 } from 'lucide-react';
 import AICopilotPanel from './AICopilotPanel';
 
@@ -42,6 +42,7 @@ const NAV_GROUPS = [
   {
     label: 'V3 Features',
     items: [
+      { id: 'capacity-sim', label: 'Capacity Simulation', icon: Gauge, href: '/command-center/capacity-simulation' },
       { id: 'deployments',  label: 'Loading Bay',   icon: Package, href: '/deployments' },
       { id: 'scenarios',    label: 'Scenarios',     icon: Shield,  href: '/scenarios' },
       { id: 'integrations', label: 'Integrations',  icon: Plug,    href: '/integrations' },
@@ -209,9 +210,15 @@ function Toast({ message, onClose }) {
 }
 
 export default function CCLayout({ title, children }) {
-  const [collapsed, setCollapsed] = useState(() =>
-    typeof window !== 'undefined' ? localStorage.getItem('cc-sidebar-collapsed') === 'true' : false
-  );
+  // Read the persisted preference after mount — reading localStorage during the
+  // initial render made the client's first paint differ from the server HTML,
+  // which made React discard and rebuild the whole page on every load.
+  const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    try {
+      if (localStorage.getItem('cc-sidebar-collapsed') === 'true') setCollapsed(true);
+    } catch {}
+  }, []);
   const [copilotOpen, setCopilotOpen] = useState(false);
   const [toast, setToast] = useState(null);
 

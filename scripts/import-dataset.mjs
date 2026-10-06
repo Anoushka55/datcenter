@@ -39,6 +39,9 @@ const SHEETS = {
   '20_active_alerts': 'activeAlerts',
   '21_benchmarks': 'benchmarks',
   '22_timeseries': 'timeseries',
+  // The runsheet. Its Scene 4 line is the only place the scheduled-swap cost
+  // (₹4 lakh) is recorded, so the replay reads it from here.
+  '17_demo_script': 'demoScript',
 };
 
 // Expected answers — test oracles only. Application code must never import
