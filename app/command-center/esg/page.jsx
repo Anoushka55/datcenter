@@ -9,6 +9,7 @@ import { buildDisclosure, ledgerRows, ENERGY_MONTHS, FRAMEWORKS, scopeOf } from 
 import { narrateEsg } from '@/lib/nexus/esg-brief';
 import { buildDisclosurePdf } from '@/lib/nexus/pdf-pack';
 import { exportWorkbook } from '@/lib/export';
+import { logEvent } from '@/lib/audit-client';
 import { fmtNumber, fmtUpTo } from '@/lib/nexus/format';
 import { monthLabel } from '@/lib/nexus/time';
 
@@ -53,7 +54,13 @@ export default function EsgPage() {
   const onText = useMemo(() => (t) => setSummary(t), []);
   const metered = disclosure.facilities.filter((f) => f.metered).map((f) => f.id);
   const fileBase = `nexus-${framework.toLowerCase()}-${site === 'all' ? 'portfolio' : site.toLowerCase()}-${from}-to-${to}`;
+  const logExport = (format) => logEvent('export', `disclosure ${format}`, {
+    facilityId: site === 'all' ? null : site,
+    subject: `${disclosure.framework.id} ${from} to ${to}`,
+    detail: { framework: disclosure.framework.id, readiness: disclosure.readinessScore, sites: disclosure.facilities.map((f) => f.id) },
+  });
   const downloadJson = () => {
+    logExport('json');
     const payload = { framework: disclosure.framework.name, period: disclosure.period, facilities: disclosure.facilities, readinessScore: disclosure.readinessScore, metrics: disclosure.lines, gaps: disclosure.gaps, pending: disclosure.pending, summary };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -62,10 +69,12 @@ export default function EsgPage() {
   };
 
   const downloadPdf = async () => {
+    logExport('pdf');
     setBusy('pdf');
     try { (await buildDisclosurePdf(disclosure, summary)).save(`${fileBase}.pdf`); } finally { setBusy(null); }
   };
   const downloadXlsx = async () => {
+    logExport('xlsx');
     setBusy('xlsx');
     try {
       await exportWorkbook([

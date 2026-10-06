@@ -16,6 +16,17 @@ function LoginInner() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [notice, setNotice] = useState(null);
+  // Single sign-on only: no local passwords, no self sign-up.
+  const ssoOnly = process.env.NEXT_PUBLIC_SSO_ONLY === 'true';
+
+  async function signInWithMicrosoft() {
+    if (!supabase) { setError('Auth is not configured.'); return; }
+    setLoading(true);
+    setError(null);
+    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+    const { error: ssoError } = await supabase.auth.signInWithOAuth({ provider: 'azure', options: { scopes: 'email openid profile', redirectTo } });
+    if (ssoError) { setError(ssoError.message); setLoading(false); }
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -61,10 +72,22 @@ function LoginInner() {
         </h1>
         <p style={{ fontSize: 12, color: '#6B7280', marginTop: 0, marginBottom: 22 }}>
           {mode === 'signin'
-            ? 'Sign in to upload and manage your master data.'
+            ? (ssoOnly ? 'Sign in with your organisation account.' : 'Sign in to upload and manage your master data.')
             : 'Create an account to upload and manage your master data.'}
         </p>
 
+        <button type="button" onClick={signInWithMicrosoft} disabled={loading}
+          style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#FFFFFF', color: '#1A1F36', border: '1px solid #CBD5E1', borderRadius: 8, padding: '10px 0', fontSize: 13, fontWeight: 700, cursor: loading ? 'default' : 'pointer', marginBottom: ssoOnly ? 0 : 16 }}>
+          <span aria-hidden="true" style={{ display: 'grid', gridTemplateColumns: '7px 7px', gap: 1 }}>
+            <span style={{ width: 7, height: 7, background: '#F25022' }} /><span style={{ width: 7, height: 7, background: '#7FBA00' }} />
+            <span style={{ width: 7, height: 7, background: '#00A4EF' }} /><span style={{ width: 7, height: 7, background: '#FFB900' }} />
+          </span>
+          Sign in with Microsoft
+        </button>
+        {ssoOnly && error && <p style={{ fontSize: 11, color: '#DC2626', marginTop: 10 }}>{error}</p>}
+
+        {!ssoOnly && <>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14, color: '#9CA3AF', fontSize: 11 }}><span style={{ flex: 1, height: 1, background: '#E2E8F0' }} />or<span style={{ flex: 1, height: 1, background: '#E2E8F0' }} /></div>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <label style={{ fontSize: 11, fontWeight: 600, color: '#374151' }}>
             Email
@@ -101,6 +124,7 @@ function LoginInner() {
         >
           {mode === 'signin' ? "Don't have an account? Create one" : 'Already have an account? Sign in'}
         </button>
+        </>}
 
         <Link href="/" style={{ display: 'block', marginTop: 18, fontSize: 11, color: '#9CA3AF', textAlign: 'center', textDecoration: 'none' }}>
           ← Back to home

@@ -17,13 +17,15 @@ import BenchmarkScorecard from '@/components/nexus/BenchmarkScorecard';
 import { commandCenterModel } from '@/lib/nexus/command-center';
 import { nexus } from '@/lib/nexus/data';
 import { timeLabel } from '@/lib/nexus/time';
+import { usePersistentState } from '@/lib/use-persistent-state';
+import { logEvent } from '@/lib/audit-client';
 
 const rise = (delay) => ({ initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { delay } });
 
 export default function CommandCenterPage() {
   const model = useMemo(() => commandCenterModel(), []);
   const [facility, setFacility] = useState('MUM-1');
-  const [statuses, setStatuses] = useState({});
+  const [statuses, setStatuses] = usePersistentState('alerts:statuses', {});
 
   return (
     <CCLayout title="Command Center">
@@ -38,7 +40,11 @@ export default function CommandCenterPage() {
               </motion.div>
               <motion.div {...rise(0.1)}>
                 <IncidentCommandCenter incidents={model.incidents} statuses={statuses}
-                  onAcknowledge={(id) => { setStatuses((s) => ({ ...s, [id]: 'acknowledged' })); showToast(`${id} acknowledged`); }} />
+                  onAcknowledge={(id) => {
+                    setStatuses((s) => ({ ...s, [id]: 'acknowledged' }));
+                    logEvent('action', 'acknowledge alert', { facilityId: model.incidents.find((i) => i.id === id)?.facilityId, subject: id });
+                    showToast(`${id} acknowledged`);
+                  }} />
               </motion.div>
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                 <motion.div {...rise(0.15)}>

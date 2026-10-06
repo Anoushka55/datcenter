@@ -10,6 +10,8 @@ import { IMPACT_LABEL } from '@/lib/nexus/incident-brief';
 import { nexus, index } from '@/lib/nexus/data';
 import { AS_OF, daysBetween, timeLabel } from '@/lib/nexus/time';
 import { fmtDuration, fmtDurationShort } from '@/lib/nexus/format';
+import { usePersistentState } from '@/lib/use-persistent-state';
+import { logEvent } from '@/lib/audit-client';
 
 const MONO = { fontFamily: "'JetBrains Mono', monospace" };
 const IMPACTS = ['outage', 'capacity', 'compliance', 'efficiency'];
@@ -53,7 +55,8 @@ export default function IncidentsPage() {
   const [selected, setSelected] = useState({ alertId: QUEUE[0]?.alert_id });
   const [facility, setFacility] = useState('All');
   const [impact, setImpact] = useState('All');
-  const [statuses, setStatuses] = useState({});
+  // Acknowledgements persist per user and are shared with the command centre.
+  const [statuses, setStatuses] = usePersistentState('alerts:statuses', {});
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
@@ -126,6 +129,7 @@ export default function IncidentsPage() {
               status={selected.alertId ? statuses[selected.alertId] : undefined}
               onAcknowledge={() => {
                 setStatuses((s) => ({ ...s, [selected.alertId]: 'acknowledged' }));
+                logEvent('action', 'acknowledge alert', { facilityId: index.alertById.get(selected.alertId)?.facility_id, subject: selected.alertId });
                 showToast(`${selected.alertId} acknowledged`);
               }} />
           </div>

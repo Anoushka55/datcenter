@@ -1,6 +1,7 @@
 import './globals.css';
 import { createClient } from '@/lib/supabase-server';
 import SupabaseProvider from '@/components/SupabaseProvider';
+import WebVitals from '@/components/WebVitals';
 
 export const metadata = {
   title: 'K-Nexus — Datacenter Lifecycle Intelligence',
@@ -31,6 +32,7 @@ export default async function RootLayout({ children }) {
         <SupabaseProvider initialSession={session}>
           {children}
         </SupabaseProvider>
+        <WebVitals />
       </body>
     </html>
   );

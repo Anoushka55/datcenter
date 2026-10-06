@@ -16,6 +16,7 @@ import { facilityWater } from '@/lib/nexus/water-engine';
 import { narratePortfolio } from '@/lib/nexus/portfolio-brief';
 import { portfolioSummary } from '@/lib/nexus/portfolio';
 import { exportPanelPdf } from '@/lib/export';
+import { logEvent } from '@/lib/audit-client';
 import { fmtNumber, fmtUpTo } from '@/lib/nexus/format';
 import { timeLabel } from '@/lib/nexus/time';
 
@@ -156,6 +157,7 @@ export default function NexusPortfolioPage() {
   }, [facilities, sort]);
 
   const doExport = async () => {
+    logEvent('export', 'portfolio briefing pdf', { subject: `as of ${summary.asOf}` });
     setExporting(true);
     try { await exportPanelPdf(exportRef.current, 'nexus-portfolio-briefing.pdf'); } finally { setExporting(false); }
   };

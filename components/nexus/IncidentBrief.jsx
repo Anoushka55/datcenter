@@ -10,6 +10,8 @@ import { similarPatterns } from '@/lib/nexus/pattern-graph';
 import { narrateIncident, IMPACT_LABEL } from '@/lib/nexus/incident-brief';
 import { fmtKw, fmtLakh, fmtDuration, fmtDurationShort, fmtUpTo } from '@/lib/nexus/format';
 import { timeLabel } from '@/lib/nexus/time';
+import { usePersistentState } from '@/lib/use-persistent-state';
+import { logEvent } from '@/lib/audit-client';
 
 const MONO = { fontFamily: "'JetBrains Mono', monospace" };
 
@@ -70,13 +72,21 @@ const clockText = (min) => {
 // Live SLA clock: once declared service-affecting, each exposed tenant's
 // notification deadline and penalty threshold count down in real time.
 function SlaClock({ analysis }) {
-  const [startedAt, setStartedAt] = useState(null);
+  // The declaration time persists per user, so a running clock survives a reload.
+  const [startedAt, setStartedAt] = usePersistentState(`sla:${analysis.id}`, null);
   const [now, setNow] = useState(0);
   useEffect(() => {
     if (!startedAt) return undefined;
-    const t = setInterval(() => setNow(performance.now()), 1000);
+    setNow(Date.now());
+    const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);
   }, [startedAt]);
+  const declare = () => {
+    const t = Date.now();
+    setStartedAt(t);
+    setNow(t);
+    logEvent('action', 'declare service-affecting', { facilityId: analysis.facilityId, subject: analysis.id, detail: { declaredAt: new Date(t).toISOString() } });
+  };
   const elapsed = startedAt ? Math.max(0, (now - startedAt) / 60000) : 0;
   const rows = slaClock(analysis, elapsed);
   if (!rows.length) return null;
@@ -86,7 +96,7 @@ function SlaClock({ analysis }) {
         <p className="flex items-center gap-1.5 text-[11px] font-semibold text-[#334155]"><Timer size={12} /> SLA clock</p>
         {startedAt
           ? <span className="text-[10px] text-[#B42318] font-semibold" style={MONO}>Service-affecting · {clockText(elapsed)}</span>
-          : <button onClick={() => { const t = performance.now(); setStartedAt(t); setNow(t); }} className="text-[10px] font-bold px-2 py-1 rounded-md bg-[#B42318] text-white hover:bg-[#912018]">Declare service-affecting</button>}
+          : <button onClick={declare} className="text-[10px] font-bold px-2 py-1 rounded-md bg-[#B42318] text-white hover:bg-[#912018]">Declare service-affecting</button>}
       </div>
       <table className="w-full text-[11px]">
         <thead><tr className="text-[#94A3B8] text-left"><th className="font-medium">Tenant</th><th className="font-medium text-right">Notify within</th><th className="font-medium text-right">Penalty threshold</th></tr></thead>
