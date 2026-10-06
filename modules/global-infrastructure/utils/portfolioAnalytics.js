@@ -29,15 +29,15 @@ export function buildPortfolioKpis(facilities) {
     { id: 'total-dcs', label: 'Total Data Centers', value: String(facilities.length) },
     { id: 'countries', label: 'Countries', value: String(countries) },
     { id: 'regions', label: 'Regions', value: String(regions) },
-    { id: 'capacity', label: 'Est. Capacity', value: formatCompactNumber(totalCapacity), unit: 'MW', caption: 'Demo estimate' },
-    { id: 'servers', label: 'Est. Servers', value: formatCompactNumber(totalServers), caption: 'Demo estimate' },
-    { id: 'gpuClusters', label: 'Est. GPU Clusters', value: formatCompactNumber(totalGpuClusters), caption: 'Demo estimate' },
+    { id: 'capacity', label: 'Est. Capacity', value: formatCompactNumber(totalCapacity), unit: 'MW', caption: 'Modelled estimate' },
+    { id: 'servers', label: 'Est. Servers', value: formatCompactNumber(totalServers), caption: 'Modelled estimate' },
+    { id: 'gpuClusters', label: 'Est. GPU Clusters', value: formatCompactNumber(totalGpuClusters), caption: 'Modelled estimate' },
     { id: 'utilization', label: 'Avg. Utilization', value: Math.round(avgUtilization).toString(), unit: '%' },
     { id: 'pue', label: 'Average PUE', value: avgPue.toFixed(2) },
     { id: 'renewable', label: 'Renewable Energy', value: Math.round(avgRenewable).toString(), unit: '%' },
     { id: 'critical', label: 'Critical Sites', value: String(criticalSites) },
     { id: 'maintenance', label: 'Under Maintenance', value: String(maintenanceSites) },
-    { id: 'carbon', label: 'Est. Carbon Emissions', value: formatCompactNumber(totalCarbon), unit: 't/yr', caption: 'Demo estimate' },
+    { id: 'carbon', label: 'Est. Carbon Emissions', value: formatCompactNumber(totalCarbon), unit: 't/yr', caption: 'Modelled estimate' },
   ];
 }
 
@@ -56,7 +56,7 @@ export function buildRegionalKpis(facilities) {
   return base
     .filter(kpi => kpi.id !== 'regions')
     .map(kpi => kpi.id === 'carbon'
-      ? { ...kpi, label: 'Avg. Carbon Emissions', value: formatCompactNumber(avgCarbon), caption: 'Demo estimate, per site' }
+      ? { ...kpi, label: 'Avg. Carbon Emissions', value: formatCompactNumber(avgCarbon), caption: 'Modelled estimate, per site' }
       : kpi
     );
 }

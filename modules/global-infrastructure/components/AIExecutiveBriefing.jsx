@@ -16,7 +16,7 @@ export default function AIExecutiveBriefing({
   loading = true,
   lines: linesOverride = null,
   title = 'AI Executive Briefing',
-  subtitle = 'Generated live from the current filtered view — demo narrative, not a live model call',
+  subtitle = 'Generated from the current filtered view',
 }) {
   if (loading || facilities.length === 0) {
     return (

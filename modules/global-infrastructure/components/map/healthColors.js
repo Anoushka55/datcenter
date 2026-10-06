@@ -4,4 +4,5 @@ export const HEALTH_COLORS = {
   healthy: '#00A36C',
   warning: '#D4A017',
   critical: '#DC2626',
+  commissioning: '#94A3B8',
 };

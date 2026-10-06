@@ -73,7 +73,7 @@ export default function SustainabilityDashboard({ facilities = [], trendByDc = {
         <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-4 flex items-center gap-4">
           <Droplets size={20} className="text-[#0077C8] flex-shrink-0" />
           <div>
-            <p className="text-[10px] text-[#9CA3AF]">Annual Water Usage (Demo)</p>
+            <p className="text-[10px] text-[#9CA3AF]">Annual Water Usage (estimate)</p>
             <p className="text-xl font-bold text-[#1A1F36]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{totalWaterMl.toLocaleString()} ML</p>
           </div>
         </div>
