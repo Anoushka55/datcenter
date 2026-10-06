@@ -36,14 +36,14 @@ const json = (name) => JSON.parse(readFileSync(join(root, 'data', 'nexus', `${na
 // SLAs), capacity (growth blocked), compliance (a reportable breach) or
 // efficiency (energy and cost).
 const RUNBOOKS = [
-  ['RB-UPS-BAT', 'ups', 'Battery string degradation', 'outage', 'resistance trending|capacity fade|Battery batch', [
+  ['RB-UPS-BAT', 'ups', 'Battery string degradation', 'outage', 'resistance trending|internal resistance|capacity fade|Battery batch', [
     ['Confirm the string resistance trend against the last discharge test', 'Electrical', 30],
     ['Verify the redundant module can carry the full load, then transfer the affected string', 'Electrical', 60],
     ['Issue tenant notifications for every contract on the affected UPS chain', 'Leadership', 120],
     ['Raise an emergency string replacement with the vendor and pull the depot spare', 'Facilities', 240],
     ['Audit every string from the same batch across the portfolio', 'Electrical', 1440],
   ]],
-  ['RB-CRAH-SAT', 'crah', 'Supply air above setpoint', 'outage', 'Supply air temp|Actuator seized', [
+  ['RB-CRAH-SAT', 'crah', 'Supply air above setpoint', 'outage', 'Supply air temp|actuator', [
     ['Check chilled-water valve actuator response at the unit', 'Facilities', 15],
     ['Raise the partner CRAH fan speed and confirm rack inlets stay under 27 C', 'Facilities', 30],
     ['Replace the actuator from site spares', 'Facilities', 180],
