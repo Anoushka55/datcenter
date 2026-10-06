@@ -32,68 +32,81 @@ const json = (name) => JSON.parse(readFileSync(join(root, 'data', 'nexus', `${na
 // One row per step. match_terms are pipe-separated phrases found in the alert
 // messages (20_active_alerts) and incident root causes (11_incidents) that
 // this runbook answers. owner_team uses the teams already named in 20_active_alerts.
+// impact says what is at stake if the condition runs on: an outage (tenant
+// SLAs), capacity (growth blocked), compliance (a reportable breach) or
+// efficiency (energy and cost).
 const RUNBOOKS = [
-  ['RB-UPS-BAT', 'ups', 'Battery string degradation', 'resistance trending|capacity fade|Battery batch', [
+  ['RB-UPS-BAT', 'ups', 'Battery string degradation', 'outage', 'resistance trending|capacity fade|Battery batch', [
     ['Confirm the string resistance trend against the last discharge test', 'Electrical', 30],
     ['Verify the redundant module can carry the full load, then transfer the affected string', 'Electrical', 60],
     ['Issue tenant notifications for every contract on the affected UPS chain', 'Leadership', 120],
     ['Raise an emergency string replacement with the vendor and pull the depot spare', 'Facilities', 240],
     ['Audit every string from the same batch across the portfolio', 'Electrical', 1440],
   ]],
-  ['RB-CRAH-SAT', 'crah', 'Supply air above setpoint', 'Supply air temp|Actuator seized', [
+  ['RB-CRAH-SAT', 'crah', 'Supply air above setpoint', 'outage', 'Supply air temp|Actuator seized', [
     ['Check chilled-water valve actuator response at the unit', 'Facilities', 15],
     ['Raise the partner CRAH fan speed and confirm rack inlets stay under 27 C', 'Facilities', 30],
     ['Replace the actuator from site spares', 'Facilities', 180],
     ['Log the thermal excursion against the rows served', 'Capacity planning', 1440],
   ]],
-  ['RB-CRAH-FLT', 'crah', 'Filter loading', 'Filter differential pressure', [
+  ['RB-CRAH-FLT', 'crah', 'Filter loading', 'efficiency', 'Filter differential pressure', [
     ['Schedule a filter change in the next maintenance window', 'Facilities', 1440],
     ['Compare fan power draw against the commissioning baseline', 'Facilities', 2880],
   ]],
-  ['RB-CHL-APP', 'chiller', 'Condenser approach degrading', 'Approach temperature|scale build-up', [
+  ['RB-CHL-TRIP', 'chiller', 'Chiller trip on condenser scaling', 'outage', 'scale build-up|Cooling water quality', [
+    ['Start the standby chiller and confirm chilled-water supply temperature', 'Facilities', 15],
+    ['Check rack inlet temperatures in every hall the plant serves', 'Facilities', 30],
+    ['Dose descalant and schedule mechanical tube cleaning', 'Facilities', 1440],
+    ['Review make-up water treatment against the hardness trend', 'Facilities', 4320],
+  ]],
+  ['RB-CHL-APP', 'chiller', 'Condenser approach degrading', 'efficiency', 'Approach temperature', [
     ['Trend condenser approach against the 2.8 C design value', 'Facilities', 240],
     ['Test condenser water hardness and conductivity', 'Facilities', 480],
     ['Stage the chiller out and schedule tube cleaning', 'Facilities', 10080],
     ['Restate the monthly PUE impact for the energy report', 'Sustainability', 10080],
   ]],
-  ['RB-CT-WTR', 'cooling_tower', 'Make-up water shortfall', 'Make-up water|Municipal supply|WUE', [
+  ['RB-CT-WTR', 'cooling_tower', 'Make-up water shortfall', 'outage', 'Make-up water|Municipal supply', [
     ['Switch make-up to treated-water storage and confirm hours of reserve', 'Facilities', 30],
     ['Activate the standby tanker supply contract', 'Facilities', 240],
     ['Raise cycles of concentration within chemistry limits', 'Facilities', 480],
-    ['File the state water-impact disclosure if the WUE breach is reportable', 'Sustainability', 4320],
   ]],
-  ['RB-CHW-DP', 'chw_loop', 'Loop differential pressure rising', 'Differential pressure', [
+  ['RB-CT-WUE', 'cooling_tower', 'Water use above reporting target', 'compliance', 'WUE', [
+    ['Confirm the WUE reading against the make-up and blowdown meters', 'Sustainability', 240],
+    ['Raise cycles of concentration within chemistry limits', 'Facilities', 480],
+    ['File the state water-impact disclosure with the corrective plan', 'Sustainability', 4320],
+  ]],
+  ['RB-CHW-DP', 'chw_loop', 'Loop differential pressure rising', 'efficiency', 'Differential pressure', [
     ['Inspect strainers and isolation valves on the loop', 'Facilities', 240],
     ['Flush the affected loop section during low load', 'Facilities', 4320],
   ]],
-  ['RB-BUS-IMB', 'busway', 'Phase imbalance or loose joint', 'Phase imbalance|Loose connection', [
+  ['RB-BUS-IMB', 'busway', 'Phase imbalance or loose joint', 'outage', 'Phase imbalance|Loose connection', [
     ['Thermographic scan of every tap-off box on the run', 'Electrical', 120],
     ['Rebalance rack PDU phase assignments', 'Electrical', 1440],
     ['Torque-check busway joints in the next window', 'Electrical', 4320],
   ]],
-  ['RB-PDU-OVL', 'pdu', 'Circuit near rated capacity', 'rated capacity', [
+  ['RB-PDU-OVL', 'pdu', 'Circuit near rated capacity', 'capacity', 'rated capacity', [
     ['Freeze new deployments on the circuit', 'Capacity planning', 60],
     ['Move the highest-draw racks to circuits with headroom', 'Capacity planning', 4320],
     ['Raise a PDU upgrade if growth continues', 'Capacity planning', 10080],
   ]],
-  ['RB-GEN-FUEL', 'generator', 'Fuel supply or filtration', 'Fuel level|Fuel filter', [
+  ['RB-GEN-FUEL', 'generator', 'Fuel supply or filtration', 'outage', 'Fuel level|Fuel filter', [
     ['Order a top-up to 90% of tank capacity', 'Facilities', 240],
     ['Replace fuel filters and run a 30-minute load test', 'Electrical', 1440],
     ['Confirm the fuel polishing schedule', 'Facilities', 10080],
   ]],
-  ['RB-UTIL-CAP', 'utility_feed', 'Sanctioned load near limit', 'Sanctioned load|GRID CONSTRAINED', [
+  ['RB-UTIL-CAP', 'utility_feed', 'Sanctioned load near limit', 'capacity', 'Sanctioned load|GRID CONSTRAINED', [
     ['Cap new IT load intake at the site', 'Capacity planning', 60],
     ['Redirect planned deployments to sites with grid headroom', 'Capacity planning', 1440],
     ['File a load enhancement application with the utility', 'Leadership', 10080],
   ]],
-  ['RB-ROW-CAP', 'rack_row', 'Row at full occupancy', 'rack occupancy', [
+  ['RB-ROW-CAP', 'rack_row', 'Row at full occupancy', 'capacity', 'rack occupancy', [
     ['Review stranded capacity elsewhere in the facility', 'Capacity planning', 1440],
     ['Run the density cascade before approving any upgrade', 'Capacity planning', 4320],
   ]],
 ];
 
-const runbookRows = RUNBOOKS.flatMap(([id, type, mode, match, steps]) =>
-  steps.map(([action, owner, within], i) => [id, type, mode, match, i + 1, action, owner, within]));
+const runbookRows = RUNBOOKS.flatMap(([id, type, mode, impact, match, steps]) =>
+  steps.map(([action, owner, within], i) => [id, type, mode, impact, match, i + 1, action, owner, within]));
 
 // ── 24_site_risk ────────────────────────────────────────────────────────────
 // Seismic zone per BIS IS 1893 (Part 1):2016. Exposure scored 1 (low) to 5
@@ -155,11 +168,12 @@ function sensorRows() {
 const SHEETS = [
   {
     name: '23_runbooks',
-    header: ['runbook_id', 'component_type', 'failure_mode', 'match_terms', 'step', 'action', 'owner_team', 'within_min'],
-    widths: [14, 15, 30, 44, 6, 72, 18, 11],
+    header: ['runbook_id', 'component_type', 'failure_mode', 'impact', 'match_terms', 'step', 'action', 'owner_team', 'within_min'],
+    widths: [14, 15, 30, 12, 44, 6, 72, 18, 11],
     rows: runbookRows,
     notes: [
       'Steps run in order. within_min is the target time from detection to completing the step.',
+      'impact: outage (tenant SLAs at stake), capacity (growth blocked), compliance (reportable breach), efficiency (energy and cost).',
       'Owner teams are the teams already named in 20_active_alerts.',
     ],
   },

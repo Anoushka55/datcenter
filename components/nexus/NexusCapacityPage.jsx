@@ -61,8 +61,13 @@ export default function NexusCapacityPage() {
   const narrationRun = useRef(0);
   const autoCollapsed = useRef(false);
 
+  const [urlScene, setUrlScene] = useState(null);
+
   useEffect(() => {
-    setDemoMode(new URLSearchParams(window.location.search).get('demo') === '1');
+    const params = new URLSearchParams(window.location.search);
+    setDemoMode(params.get('demo') === '1');
+    // ?scene=scene4 opens a scene directly (e.g. from an incident brief).
+    if (SCENE_SPECS[params.get('scene')]) setUrlScene(params.get('scene'));
   }, []);
 
   // ── Present a computed answer: twin + panel now, narration streams after ──
@@ -155,6 +160,12 @@ export default function NexusCapacityPage() {
       runIntent(spec.intent, spec.params, { scene: id, prefix: spec.prefix ?? '' });
     }
   }, [runIntent, present]);
+
+  useEffect(() => {
+    if (!urlScene) return;
+    setUrlScene(null);
+    onScene(urlScene);
+  }, [urlScene, onScene]);
 
   const onView = useCallback((id) => {
     if (answer?.viewToggle === id) { closeAnswer(); return; }
