@@ -50,7 +50,7 @@ export function Narration({ text, narrating, source }) {
       )}
       {!narrating && text && (
         <p className="text-[9.5px] text-white/30 mt-1.5">
-          {source === 'llm' ? 'Written by Claude from computed figures; every number checked against the result.' : 'Generated from computed figures.'}
+          {source === 'llm' ? 'Analyst brief from computed figures; every number checked against the result.' : 'Brief generated from computed figures.'}
         </p>
       )}
     </Section>

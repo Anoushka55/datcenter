@@ -12,7 +12,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2024-10",
+    "month": "2024-11",
     "it_load_kw": 5707,
     "facility_load_kw": 8989,
     "pue": 1.575,
@@ -23,7 +23,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2024-11",
+    "month": "2024-12",
     "it_load_kw": 5692,
     "facility_load_kw": 9019,
     "pue": 1.585,
@@ -34,7 +34,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2024-12",
+    "month": "2025-01",
     "it_load_kw": 5799,
     "facility_load_kw": 9217,
     "pue": 1.589,
@@ -45,7 +45,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-01",
+    "month": "2025-02",
     "it_load_kw": 5836,
     "facility_load_kw": 9161,
     "pue": 1.57,
@@ -56,7 +56,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-02",
+    "month": "2025-03",
     "it_load_kw": 5851,
     "facility_load_kw": 9310,
     "pue": 1.591,
@@ -67,7 +67,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-03",
+    "month": "2025-04",
     "it_load_kw": 5907,
     "facility_load_kw": 9394,
     "pue": 1.59,
@@ -78,7 +78,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-04",
+    "month": "2025-05",
     "it_load_kw": 6042,
     "facility_load_kw": 9812,
     "pue": 1.624,
@@ -89,7 +89,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-05",
+    "month": "2025-06",
     "it_load_kw": 6088,
     "facility_load_kw": 9875,
     "pue": 1.622,
@@ -100,7 +100,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-06",
+    "month": "2025-07",
     "it_load_kw": 6059,
     "facility_load_kw": 9791,
     "pue": 1.616,
@@ -111,7 +111,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-07",
+    "month": "2025-08",
     "it_load_kw": 6228,
     "facility_load_kw": 9769,
     "pue": 1.569,
@@ -122,7 +122,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-08",
+    "month": "2025-09",
     "it_load_kw": 6126,
     "facility_load_kw": 9724,
     "pue": 1.587,
@@ -133,7 +133,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-09",
+    "month": "2025-10",
     "it_load_kw": 6168,
     "facility_load_kw": 9739,
     "pue": 1.579,
@@ -144,7 +144,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-10",
+    "month": "2025-11",
     "it_load_kw": 6333,
     "facility_load_kw": 10033,
     "pue": 1.584,
@@ -155,7 +155,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-11",
+    "month": "2025-12",
     "it_load_kw": 6344,
     "facility_load_kw": 9979,
     "pue": 1.573,
@@ -166,7 +166,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2025-12",
+    "month": "2026-01",
     "it_load_kw": 6360,
     "facility_load_kw": 10018,
     "pue": 1.575,
@@ -177,7 +177,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2026-01",
+    "month": "2026-02",
     "it_load_kw": 6507,
     "facility_load_kw": 10205,
     "pue": 1.568,
@@ -188,7 +188,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2026-02",
+    "month": "2026-03",
     "it_load_kw": 6559,
     "facility_load_kw": 10286,
     "pue": 1.568,
@@ -199,7 +199,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2026-03",
+    "month": "2026-04",
     "it_load_kw": 6496,
     "facility_load_kw": 10282,
     "pue": 1.583,
@@ -210,7 +210,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2026-04",
+    "month": "2026-05",
     "it_load_kw": 6523,
     "facility_load_kw": 10644,
     "pue": 1.632,
@@ -221,7 +221,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2026-05",
+    "month": "2026-06",
     "it_load_kw": 6590,
     "facility_load_kw": 10840,
     "pue": 1.645,
@@ -232,7 +232,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2026-06",
+    "month": "2026-07",
     "it_load_kw": 6637,
     "facility_load_kw": 11023,
     "pue": 1.661,
@@ -243,7 +243,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2026-07",
+    "month": "2026-08",
     "it_load_kw": 6726,
     "facility_load_kw": 11089,
     "pue": 1.649,
@@ -254,7 +254,7 @@
   },
   {
     "facility_id": "MUM-1",
-    "month": "2026-08",
+    "month": "2026-09",
     "it_load_kw": 6901,
     "facility_load_kw": 11444,
     "pue": 1.658,
@@ -276,7 +276,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2024-10",
+    "month": "2024-11",
     "it_load_kw": 4155,
     "facility_load_kw": 7219,
     "pue": 1.737,
@@ -287,7 +287,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2024-11",
+    "month": "2024-12",
     "it_load_kw": 4189,
     "facility_load_kw": 7265,
     "pue": 1.734,
@@ -298,7 +298,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2024-12",
+    "month": "2025-01",
     "it_load_kw": 4180,
     "facility_load_kw": 7305,
     "pue": 1.748,
@@ -309,7 +309,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-01",
+    "month": "2025-02",
     "it_load_kw": 4229,
     "facility_load_kw": 7310,
     "pue": 1.728,
@@ -320,7 +320,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-02",
+    "month": "2025-03",
     "it_load_kw": 4314,
     "facility_load_kw": 7466,
     "pue": 1.731,
@@ -331,7 +331,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-03",
+    "month": "2025-04",
     "it_load_kw": 4376,
     "facility_load_kw": 7614,
     "pue": 1.74,
@@ -342,7 +342,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-04",
+    "month": "2025-05",
     "it_load_kw": 4360,
     "facility_load_kw": 7764,
     "pue": 1.781,
@@ -353,7 +353,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-05",
+    "month": "2025-06",
     "it_load_kw": 4445,
     "facility_load_kw": 7933,
     "pue": 1.784,
@@ -364,7 +364,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-06",
+    "month": "2025-07",
     "it_load_kw": 4474,
     "facility_load_kw": 7930,
     "pue": 1.772,
@@ -375,7 +375,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-07",
+    "month": "2025-08",
     "it_load_kw": 4458,
     "facility_load_kw": 7746,
     "pue": 1.737,
@@ -386,7 +386,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-08",
+    "month": "2025-09",
     "it_load_kw": 4484,
     "facility_load_kw": 7826,
     "pue": 1.745,
@@ -397,7 +397,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-09",
+    "month": "2025-10",
     "it_load_kw": 4578,
     "facility_load_kw": 7931,
     "pue": 1.732,
@@ -408,7 +408,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-10",
+    "month": "2025-11",
     "it_load_kw": 4547,
     "facility_load_kw": 7925,
     "pue": 1.743,
@@ -419,7 +419,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-11",
+    "month": "2025-12",
     "it_load_kw": 4569,
     "facility_load_kw": 7961,
     "pue": 1.742,
@@ -430,7 +430,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2025-12",
+    "month": "2026-01",
     "it_load_kw": 4597,
     "facility_load_kw": 8042,
     "pue": 1.75,
@@ -441,7 +441,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2026-01",
+    "month": "2026-02",
     "it_load_kw": 4714,
     "facility_load_kw": 8240,
     "pue": 1.748,
@@ -452,7 +452,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2026-02",
+    "month": "2026-03",
     "it_load_kw": 4786,
     "facility_load_kw": 8325,
     "pue": 1.739,
@@ -463,7 +463,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2026-03",
+    "month": "2026-04",
     "it_load_kw": 4809,
     "facility_load_kw": 8386,
     "pue": 1.744,
@@ -474,7 +474,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2026-04",
+    "month": "2026-05",
     "it_load_kw": 4868,
     "facility_load_kw": 8625,
     "pue": 1.772,
@@ -485,7 +485,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2026-05",
+    "month": "2026-06",
     "it_load_kw": 4839,
     "facility_load_kw": 8606,
     "pue": 1.778,
@@ -496,7 +496,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2026-06",
+    "month": "2026-07",
     "it_load_kw": 4949,
     "facility_load_kw": 8725,
     "pue": 1.763,
@@ -507,7 +507,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2026-07",
+    "month": "2026-08",
     "it_load_kw": 4964,
     "facility_load_kw": 8693,
     "pue": 1.751,
@@ -518,7 +518,7 @@
   },
   {
     "facility_id": "MUM-2",
-    "month": "2026-08",
+    "month": "2026-09",
     "it_load_kw": 4991,
     "facility_load_kw": 8736,
     "pue": 1.75,
@@ -540,7 +540,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2024-10",
+    "month": "2024-11",
     "it_load_kw": 4584,
     "facility_load_kw": 7465,
     "pue": 1.628,
@@ -551,7 +551,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2024-11",
+    "month": "2024-12",
     "it_load_kw": 4568,
     "facility_load_kw": 7390,
     "pue": 1.618,
@@ -562,7 +562,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2024-12",
+    "month": "2025-01",
     "it_load_kw": 4620,
     "facility_load_kw": 7455,
     "pue": 1.614,
@@ -573,7 +573,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-01",
+    "month": "2025-02",
     "it_load_kw": 4680,
     "facility_load_kw": 7576,
     "pue": 1.619,
@@ -584,7 +584,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-02",
+    "month": "2025-03",
     "it_load_kw": 4758,
     "facility_load_kw": 7744,
     "pue": 1.628,
@@ -595,7 +595,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-03",
+    "month": "2025-04",
     "it_load_kw": 4703,
     "facility_load_kw": 7656,
     "pue": 1.628,
@@ -606,7 +606,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-04",
+    "month": "2025-05",
     "it_load_kw": 4769,
     "facility_load_kw": 7876,
     "pue": 1.652,
@@ -617,7 +617,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-05",
+    "month": "2025-06",
     "it_load_kw": 4864,
     "facility_load_kw": 8068,
     "pue": 1.659,
@@ -628,7 +628,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-06",
+    "month": "2025-07",
     "it_load_kw": 4916,
     "facility_load_kw": 8116,
     "pue": 1.651,
@@ -639,7 +639,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-07",
+    "month": "2025-08",
     "it_load_kw": 4916,
     "facility_load_kw": 7951,
     "pue": 1.617,
@@ -650,7 +650,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-08",
+    "month": "2025-09",
     "it_load_kw": 5007,
     "facility_load_kw": 8081,
     "pue": 1.614,
@@ -661,7 +661,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-09",
+    "month": "2025-10",
     "it_load_kw": 5008,
     "facility_load_kw": 8063,
     "pue": 1.61,
@@ -672,7 +672,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-10",
+    "month": "2025-11",
     "it_load_kw": 5053,
     "facility_load_kw": 8198,
     "pue": 1.622,
@@ -683,7 +683,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-11",
+    "month": "2025-12",
     "it_load_kw": 5128,
     "facility_load_kw": 8328,
     "pue": 1.624,
@@ -694,7 +694,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2025-12",
+    "month": "2026-01",
     "it_load_kw": 5178,
     "facility_load_kw": 8377,
     "pue": 1.618,
@@ -705,7 +705,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2026-01",
+    "month": "2026-02",
     "it_load_kw": 5229,
     "facility_load_kw": 8414,
     "pue": 1.609,
@@ -716,7 +716,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2026-02",
+    "month": "2026-03",
     "it_load_kw": 5146,
     "facility_load_kw": 8302,
     "pue": 1.613,
@@ -727,7 +727,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2026-03",
+    "month": "2026-04",
     "it_load_kw": 5310,
     "facility_load_kw": 8603,
     "pue": 1.62,
@@ -738,7 +738,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2026-04",
+    "month": "2026-05",
     "it_load_kw": 5339,
     "facility_load_kw": 8832,
     "pue": 1.654,
@@ -749,7 +749,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2026-05",
+    "month": "2026-06",
     "it_load_kw": 5250,
     "facility_load_kw": 8715,
     "pue": 1.66,
@@ -760,7 +760,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2026-06",
+    "month": "2026-07",
     "it_load_kw": 5330,
     "facility_load_kw": 8843,
     "pue": 1.659,
@@ -771,7 +771,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2026-07",
+    "month": "2026-08",
     "it_load_kw": 5472,
     "facility_load_kw": 8879,
     "pue": 1.623,
@@ -782,7 +782,7 @@
   },
   {
     "facility_id": "CHN-1",
-    "month": "2026-08",
+    "month": "2026-09",
     "it_load_kw": 5447,
     "facility_load_kw": 8856,
     "pue": 1.626,
@@ -804,7 +804,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2024-10",
+    "month": "2024-11",
     "it_load_kw": 6425,
     "facility_load_kw": 8590,
     "pue": 1.337,
@@ -815,7 +815,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2024-11",
+    "month": "2024-12",
     "it_load_kw": 6546,
     "facility_load_kw": 8750,
     "pue": 1.337,
@@ -826,7 +826,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2024-12",
+    "month": "2025-01",
     "it_load_kw": 6556,
     "facility_load_kw": 8855,
     "pue": 1.351,
@@ -837,7 +837,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-01",
+    "month": "2025-02",
     "it_load_kw": 6616,
     "facility_load_kw": 8941,
     "pue": 1.351,
@@ -848,7 +848,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-02",
+    "month": "2025-03",
     "it_load_kw": 6696,
     "facility_load_kw": 9039,
     "pue": 1.35,
@@ -859,7 +859,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-03",
+    "month": "2025-04",
     "it_load_kw": 6753,
     "facility_load_kw": 8976,
     "pue": 1.329,
@@ -870,7 +870,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-04",
+    "month": "2025-05",
     "it_load_kw": 6855,
     "facility_load_kw": 9460,
     "pue": 1.38,
@@ -881,7 +881,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-05",
+    "month": "2025-06",
     "it_load_kw": 6895,
     "facility_load_kw": 9458,
     "pue": 1.372,
@@ -892,7 +892,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-06",
+    "month": "2025-07",
     "it_load_kw": 6816,
     "facility_load_kw": 9312,
     "pue": 1.366,
@@ -903,7 +903,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-07",
+    "month": "2025-08",
     "it_load_kw": 6890,
     "facility_load_kw": 9254,
     "pue": 1.343,
@@ -914,7 +914,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-08",
+    "month": "2025-09",
     "it_load_kw": 7025,
     "facility_load_kw": 9358,
     "pue": 1.332,
@@ -925,7 +925,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-09",
+    "month": "2025-10",
     "it_load_kw": 7129,
     "facility_load_kw": 9478,
     "pue": 1.33,
@@ -936,7 +936,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-10",
+    "month": "2025-11",
     "it_load_kw": 7091,
     "facility_load_kw": 9515,
     "pue": 1.342,
@@ -947,7 +947,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-11",
+    "month": "2025-12",
     "it_load_kw": 7107,
     "facility_load_kw": 9444,
     "pue": 1.329,
@@ -958,7 +958,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2025-12",
+    "month": "2026-01",
     "it_load_kw": 7218,
     "facility_load_kw": 9608,
     "pue": 1.331,
@@ -969,7 +969,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2026-01",
+    "month": "2026-02",
     "it_load_kw": 7197,
     "facility_load_kw": 9590,
     "pue": 1.332,
@@ -980,7 +980,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2026-02",
+    "month": "2026-03",
     "it_load_kw": 7315,
     "facility_load_kw": 9811,
     "pue": 1.341,
@@ -991,7 +991,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2026-03",
+    "month": "2026-04",
     "it_load_kw": 7365,
     "facility_load_kw": 9810,
     "pue": 1.332,
@@ -1002,7 +1002,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2026-04",
+    "month": "2026-05",
     "it_load_kw": 7386,
     "facility_load_kw": 10219,
     "pue": 1.384,
@@ -1013,7 +1013,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2026-05",
+    "month": "2026-06",
     "it_load_kw": 7607,
     "facility_load_kw": 10439,
     "pue": 1.372,
@@ -1024,7 +1024,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2026-06",
+    "month": "2026-07",
     "it_load_kw": 7626,
     "facility_load_kw": 10451,
     "pue": 1.37,
@@ -1035,7 +1035,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2026-07",
+    "month": "2026-08",
     "it_load_kw": 7628,
     "facility_load_kw": 10194,
     "pue": 1.336,
@@ -1046,7 +1046,7 @@
   },
   {
     "facility_id": "HYD-1",
-    "month": "2026-08",
+    "month": "2026-09",
     "it_load_kw": 7622,
     "facility_load_kw": 10195,
     "pue": 1.338,
@@ -1068,7 +1068,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2024-10",
+    "month": "2024-11",
     "it_load_kw": 6262,
     "facility_load_kw": 10562,
     "pue": 1.687,
@@ -1079,7 +1079,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2024-11",
+    "month": "2024-12",
     "it_load_kw": 6206,
     "facility_load_kw": 10500,
     "pue": 1.692,
@@ -1090,7 +1090,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2024-12",
+    "month": "2025-01",
     "it_load_kw": 6389,
     "facility_load_kw": 10672,
     "pue": 1.67,
@@ -1101,7 +1101,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-01",
+    "month": "2025-02",
     "it_load_kw": 6403,
     "facility_load_kw": 10827,
     "pue": 1.691,
@@ -1112,7 +1112,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-02",
+    "month": "2025-03",
     "it_load_kw": 6399,
     "facility_load_kw": 10745,
     "pue": 1.679,
@@ -1123,7 +1123,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-03",
+    "month": "2025-04",
     "it_load_kw": 6420,
     "facility_load_kw": 10770,
     "pue": 1.677,
@@ -1134,7 +1134,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-04",
+    "month": "2025-05",
     "it_load_kw": 6579,
     "facility_load_kw": 11205,
     "pue": 1.703,
@@ -1145,7 +1145,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-05",
+    "month": "2025-06",
     "it_load_kw": 6704,
     "facility_load_kw": 11418,
     "pue": 1.703,
@@ -1156,7 +1156,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-06",
+    "month": "2025-07",
     "it_load_kw": 6702,
     "facility_load_kw": 11476,
     "pue": 1.712,
@@ -1167,7 +1167,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-07",
+    "month": "2025-08",
     "it_load_kw": 6737,
     "facility_load_kw": 11326,
     "pue": 1.681,
@@ -1178,7 +1178,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-08",
+    "month": "2025-09",
     "it_load_kw": 6780,
     "facility_load_kw": 11396,
     "pue": 1.681,
@@ -1189,7 +1189,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-09",
+    "month": "2025-10",
     "it_load_kw": 6928,
     "facility_load_kw": 11676,
     "pue": 1.685,
@@ -1200,7 +1200,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-10",
+    "month": "2025-11",
     "it_load_kw": 6934,
     "facility_load_kw": 11724,
     "pue": 1.691,
@@ -1211,7 +1211,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-11",
+    "month": "2025-12",
     "it_load_kw": 6916,
     "facility_load_kw": 11599,
     "pue": 1.677,
@@ -1222,7 +1222,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2025-12",
+    "month": "2026-01",
     "it_load_kw": 7111,
     "facility_load_kw": 11869,
     "pue": 1.669,
@@ -1233,7 +1233,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2026-01",
+    "month": "2026-02",
     "it_load_kw": 7094,
     "facility_load_kw": 11990,
     "pue": 1.69,
@@ -1244,7 +1244,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2026-02",
+    "month": "2026-03",
     "it_load_kw": 7059,
     "facility_load_kw": 11846,
     "pue": 1.678,
@@ -1255,7 +1255,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2026-03",
+    "month": "2026-04",
     "it_load_kw": 7097,
     "facility_load_kw": 11926,
     "pue": 1.68,
@@ -1266,7 +1266,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2026-04",
+    "month": "2026-05",
     "it_load_kw": 7201,
     "facility_load_kw": 12427,
     "pue": 1.726,
@@ -1277,7 +1277,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2026-05",
+    "month": "2026-06",
     "it_load_kw": 7239,
     "facility_load_kw": 12480,
     "pue": 1.724,
@@ -1288,7 +1288,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2026-06",
+    "month": "2026-07",
     "it_load_kw": 7256,
     "facility_load_kw": 12472,
     "pue": 1.719,
@@ -1299,7 +1299,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2026-07",
+    "month": "2026-08",
     "it_load_kw": 7388,
     "facility_load_kw": 12332,
     "pue": 1.669,
@@ -1310,7 +1310,7 @@
   },
   {
     "facility_id": "NCR-1",
-    "month": "2026-08",
+    "month": "2026-09",
     "it_load_kw": 7488,
     "facility_load_kw": 12513,
     "pue": 1.671,

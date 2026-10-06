@@ -150,7 +150,7 @@ export default function NexusCapacityPage() {
       setRackCount(usableRacks('G'));
     }
     if (cached) {
-      present(spec.intent, cached.result, { view: cached.view, scene: id, meta: `${spec.prefix ?? ''}Preloaded in demo mode (${cached.computeMs.toFixed(1)} ms)` });
+      present(spec.intent, cached.result, { view: cached.view, scene: id, meta: `${spec.prefix ?? ''}Precomputed in ${cached.computeMs.toFixed(1)} ms` });
     } else {
       runIntent(spec.intent, spec.params, { scene: id, prefix: spec.prefix ?? '' });
     }
@@ -172,7 +172,7 @@ export default function NexusCapacityPage() {
       const resolved = resolveQuery(parsed);
       if (resolved.clarification) { setClarification(resolved.clarification); return; }
       const parseMs = performance.now() - t0;
-      runIntent(resolved.intent, resolved.params, { prefix: `Parsed by ${parsed.source === 'llm' ? 'Claude' : 'local parser'} in ${Math.round(parseMs)} ms · ` });
+      runIntent(resolved.intent, resolved.params, { prefix: `Question understood in ${Math.round(parseMs)} ms · ` });
       if (resolved.intent === 'cascade_simulation') {
         setRowId(resolved.params.rowId);
         setDensityKw(resolved.params.densityKw);
@@ -264,12 +264,6 @@ export default function NexusCapacityPage() {
       />
 
       <Legend items={answer?.view?.legend} left={insetLeft + 16} />
-
-      {demoMode && (
-        <div className="absolute bottom-4 z-20 text-[10px] font-mono text-[#fbbf24]/80 bg-[#070d18]/80 border border-[#fbbf24]/30 rounded px-2 py-1" style={{ right: insetRight + 16 }}>
-          DEMO MODE · offline
-        </div>
-      )}
 
       <AnimatePresence>
         {clarification && (

@@ -91,7 +91,7 @@ export default function ControlPanel({
       </div>
 
       <div>
-        <p className="text-[10px] font-bold text-white/40 uppercase tracking-wide mb-1.5">Demo scenes</p>
+        <p className="text-[10px] font-bold text-white/40 uppercase tracking-wide mb-1.5">Key scenarios</p>
         <div className="space-y-1.5">
           {DEMO_SCENES.map((s) => (
             <button key={s.id} onClick={() => onScene(s.id)} disabled={busy}
