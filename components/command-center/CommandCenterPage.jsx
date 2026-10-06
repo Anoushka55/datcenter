@@ -13,6 +13,7 @@ import ContextPanel from './ContextPanel';
 import TenantSlaPanel from './TenantSlaPanel';
 import CCLayout from './CCLayout';
 import BenchmarkStrip from '@/components/nexus/BenchmarkStrip';
+import BenchmarkScorecard from '@/components/nexus/BenchmarkScorecard';
 import { commandCenterModel } from '@/lib/nexus/command-center';
 import { nexus } from '@/lib/nexus/data';
 import { timeLabel } from '@/lib/nexus/time';
@@ -70,6 +71,8 @@ export default function CommandCenterPage() {
                   </select>
                 </div>
                 <BenchmarkStrip facilityId={facility} />
+                <h3 className="font-bold text-[#1A1F36] text-sm mt-6 mb-2" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Portfolio scorecard</h3>
+                <BenchmarkScorecard />
               </motion.div>
             </div>
           </div>
