@@ -83,8 +83,7 @@ async function extractKnowledge(request, eventType, content, metadata, known) {
 Metadata: ${JSON.stringify(metadata)}
 
 Pages that already exist — when an idea matches one, use its exact relPath so it is merged, not duplicated:
-${known.join('
-')}
+${known.join('\n')}
 
 Content (first 4000 chars):
 ${content.slice(0, 4000)}`;
