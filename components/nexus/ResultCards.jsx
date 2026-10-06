@@ -1,6 +1,7 @@
 'use client';
 // Right-hand result panels, one per scene. Every figure shown is an engine
 // output passed through lib/nexus/format.js — nothing here computes a value.
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { X, AlertTriangle, ShieldAlert, Flag, Siren, FileText } from 'lucide-react';
 import { fmtKw, fmtLakh, fmtInr, fmtNumber, fmtUpTo, fmtDuration } from '@/lib/nexus/format';
@@ -56,9 +57,14 @@ export function Narration({ text, narrating, source }) {
   );
 }
 
-export function ResultShell({ children, onClose, meta }) {
+// One panel for every result: it animates in on open and out on close, and
+// switching scenes swaps its content in place (scrolled back to the top).
+export function ResultShell({ children, onClose, meta, scrollKey }) {
+  const ref = useRef(null);
+  useEffect(() => { ref.current?.scrollTo({ top: 0 }); }, [scrollKey]);
   return (
     <motion.aside
+      ref={ref}
       initial={{ x: 40, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: 40, opacity: 0 }}

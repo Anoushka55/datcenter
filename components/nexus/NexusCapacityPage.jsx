@@ -27,6 +27,18 @@ const MIN_TWIN_W = 640;
 const REPLAY_INCIDENT = 'INC-2026-0318';
 const SCENE2_QUERY = 'Can we take 2MW at 60kW density?';
 
+// The four demo scenes, exactly as PLAN.md §5 runs them. Scene 2 goes through
+// the same local parser a typed question would, so the preset can't diverge.
+const SCENE_SPECS = {
+  scene1: () => ({ intent: 'stranded_capacity', params: { facilityId: FACILITY } }),
+  scene2: () => {
+    const r = resolveQuery(parseLocally(SCENE2_QUERY));
+    return { intent: r.intent, params: r.params, prefix: `“${SCENE2_QUERY}” · ` };
+  },
+  scene3: () => ({ intent: 'cascade_simulation', params: { facilityId: FACILITY, rowId: 'G', densityKw: 60 } }),
+  scene4: () => ({ intent: 'replay', params: { facilityId: FACILITY, incidentId: REPLAY_INCIDENT } }),
+};
+
 const usableRacks = (rowId) => racksInRow(FACILITY, rowId).filter((r) => r.status !== 'blocked').length;
 const averageDensity = (rowId) => {
   const racks = racksInRow(FACILITY, rowId).filter((r) => r.status !== 'blocked');
@@ -119,20 +131,30 @@ export default function NexusCapacityPage() {
   }, [compute, present]);
 
   // ── Demo scenes and views ──
-  const onScene = useCallback((id) => {
-    if (id === 'scene1') runIntent('stranded_capacity', { facilityId: FACILITY }, { scene: id });
-    if (id === 'scene2') {
-      const r = resolveQuery(parseLocally(SCENE2_QUERY));
-      runIntent(r.intent, r.params, { scene: id, prefix: `“${SCENE2_QUERY}” · ` });
+  // Demo mode precomputes all four scenes on load so every click is instant.
+  const sceneCache = useRef(new Map());
+  useEffect(() => {
+    if (!demoMode) return;
+    for (const id of Object.keys(SCENE_SPECS)) {
+      const spec = SCENE_SPECS[id]();
+      sceneCache.current.set(id, { spec, ...compute(spec.intent, spec.params) });
     }
+  }, [demoMode, compute]);
+
+  const onScene = useCallback((id) => {
+    const cached = sceneCache.current.get(id);
+    const spec = cached?.spec ?? SCENE_SPECS[id]();
     if (id === 'scene3') {
       setRowId('G');
       setDensityKw(60);
       setRackCount(usableRacks('G'));
-      runIntent('cascade_simulation', { facilityId: FACILITY, rowId: 'G', densityKw: 60 }, { scene: id });
     }
-    if (id === 'scene4') runIntent('replay', { facilityId: FACILITY, incidentId: REPLAY_INCIDENT }, { scene: id });
-  }, [runIntent]);
+    if (cached) {
+      present(spec.intent, cached.result, { view: cached.view, scene: id, meta: `${spec.prefix ?? ''}Preloaded in demo mode (${cached.computeMs.toFixed(1)} ms)` });
+    } else {
+      runIntent(spec.intent, spec.params, { scene: id, prefix: spec.prefix ?? '' });
+    }
+  }, [runIntent, present]);
 
   const onView = useCallback((id) => {
     if (answer?.viewToggle === id) { closeAnswer(); return; }
@@ -264,7 +286,7 @@ export default function NexusCapacityPage() {
 
       <AnimatePresence>
         {answer && (
-          <ResultShell key={`${answer.intent}-${runKey}`} onClose={closeAnswer} meta={answer.meta}>
+          <ResultShell key="result-panel" scrollKey={runKey} onClose={closeAnswer} meta={answer.meta}>
             {card()}
           </ResultShell>
         )}

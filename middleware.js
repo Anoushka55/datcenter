@@ -5,6 +5,12 @@ import { NextResponse } from 'next/server';
 // refreshes the Supabase session cookie so components like Navbar can
 // still reflect a signed-in user if one exists.
 export async function middleware(request) {
+  // Demo mode (?demo=1) must not wait on any network call — not even a
+  // session refresh on a venue network.
+  if (request.nextUrl.searchParams.get('demo') === '1') {
+    return NextResponse.next({ request });
+  }
+
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return NextResponse.next({ request });
   }
@@ -52,5 +58,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.svg).*)'],
+  matcher: ['/((?!_next/static|_next/image|fonts/|favicon.ico|.*\\.svg).*)'],
 };
