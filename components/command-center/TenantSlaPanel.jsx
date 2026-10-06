@@ -13,7 +13,7 @@ export default function TenantSlaPanel({ tenants }) {
       <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
         <div>
           <h2 className="font-bold text-[#1A1F36] text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Tenants & SLA Exposure</h2>
-          <p className="text-[#9CA3AF] text-xs mt-0.5">{tenants.length} contracts · {exposed.length} exposed to an open outage-class alert · exposure if the affected chain drops for its typical outage, capped per contract</p>
+          <p className="text-[#9CA3AF] text-xs mt-0.5">{tenants.length} contracts · {exposed.length} exposed to an open outage-class alert · exposure if the affected chain drops for its typical outage; a penalty applies once an outage passes the contract threshold</p>
         </div>
       </div>
       <div className="overflow-x-auto">
@@ -24,7 +24,7 @@ export default function TenantSlaPanel({ tenants }) {
               <th className="font-semibold pb-2">Site</th>
               <th className="font-semibold pb-2 text-right">SLA</th>
               <th className="font-semibold pb-2 text-right">Downtime allowed / yr</th>
-              <th className="font-semibold pb-2 text-right">Penalty cap</th>
+              <th className="font-semibold pb-2 text-right">Penalty · threshold</th>
               <th className="font-semibold pb-2 text-right">Exposure now</th>
             </tr>
           </thead>
@@ -38,7 +38,7 @@ export default function TenantSlaPanel({ tenants }) {
                 <td className="py-1.5 pr-2 text-[#64748B]">{t.facilityId}</td>
                 <td className="py-1.5 pr-2 text-right tabular-nums text-[#334155]" style={MONO}>{t.slaUptimePct}%</td>
                 <td className="py-1.5 pr-2 text-right tabular-nums text-[#334155]" style={MONO}>{t.allowedDowntimeMinPerYear} min</td>
-                <td className="py-1.5 pr-2 text-right tabular-nums text-[#334155]" style={MONO}>₹{fmtUpTo(t.penaltyCapInrLakh, 1)} L</td>
+                <td className="py-1.5 pr-2 text-right tabular-nums text-[#334155]" style={MONO}>₹{fmtUpTo(t.penaltyInrLakh, 1)} L · {t.thresholdHours} h</td>
                 <td className="py-1.5 text-right tabular-nums whitespace-nowrap" style={MONO}>
                   {t.exposureInrLakh > 0 ? (
                     <Link href={`/incidents?alert=${t.worstAlert}`} className="text-[#B42318] font-semibold hover:underline" title={`Largest via ${t.worstAlert}`}>

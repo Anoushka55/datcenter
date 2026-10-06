@@ -17,6 +17,7 @@ const SOURCE_ICON = {
   '20_active_alerts': BellRing,
   '22_timeseries': Activity,
   '04_components': Boxes,
+  '15_grid': Activity,
 };
 const SOURCE_LABEL = {
   '19_maintenance': 'Maintenance',
@@ -24,6 +25,7 @@ const SOURCE_LABEL = {
   '20_active_alerts': 'Alert',
   '22_timeseries': 'Monthly trend',
   '04_components': 'Redundancy',
+  '15_grid': 'Grid connection',
 };
 
 function RiskCard({ r }) {
@@ -41,11 +43,14 @@ function RiskCard({ r }) {
         {r.kind === 'efficiency-drift' && (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#FBF3DE] text-[#8A6508]"><TrendingUp size={10} /> Efficiency drift</span>
         )}
+        {r.kind === 'capacity-trend' && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#EAF2FB] text-[#1D4E89]"><TrendingUp size={10} /> Capacity trend</span>
+        )}
         <span className="text-[10px] text-[#94A3B8] ml-auto">{site}</span>
       </div>
       <h3 className="text-sm font-bold text-[#1A1F36]">{r.title}</h3>
       <p className="text-xs text-[#64748B] mt-0.5">
-        {r.kind === 'efficiency-drift' ? `Since ${monthLabel(r.since)} · ${r.signal}` : `First signal ${timeLabel(r.since)} · act by ${timeLabel(r.actBy)}`}
+        {r.kind === 'efficiency-drift' ? `Since ${monthLabel(r.since)} · ${r.signal}` : r.kind === 'capacity-trend' ? r.signal : `First signal ${timeLabel(r.since)} · act by ${timeLabel(r.actBy)}`}
       </p>
 
       {r.commonModeWith?.length > 0 && (
@@ -55,7 +60,7 @@ function RiskCard({ r }) {
         </div>
       )}
 
-      <div className="mt-3 grid sm:grid-cols-3 gap-2">
+      <div className="mt-3 grid sm:grid-cols-2 xl:grid-cols-4 gap-2">
         {r.cost?.scheduledInrLakh != null && (
           <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] px-3 py-2">
             <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] font-semibold">Act now vs wait</p>
@@ -63,6 +68,26 @@ function RiskCard({ r }) {
             <p className="text-[11px] text-[#64748B]">{fmtLakh(r.cost.emergencyInrLakh)} median emergency</p>
           </div>
         )}
+        {(r.kind === 'efficiency-drift' || r.kind === 'capacity-trend') && (() => {
+          const t = r.kind === 'efficiency-drift' ? r.drift.trend : r.trend;
+          return (
+            <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] px-3 py-2">
+              <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] font-semibold">Trend</p>
+              <p className="text-xs text-[#1A1F36]"><strong>+{t.slopePerMonth}</strong> a month</p>
+              <p className="text-[11px] text-[#64748B]">{t.confidence} confidence · fit {t.r2}</p>
+            </div>
+          );
+        })()}
+        {(r.kind === 'efficiency-drift' ? r.drift.trend : r.trend)?.projectedBreachMonth && (() => {
+          const t = r.kind === 'efficiency-drift' ? r.drift.trend : r.trend;
+          return (
+            <div className="rounded-lg bg-[#FEF0E6] border border-[#F6D6BD] px-3 py-2">
+              <p className="text-[10px] uppercase tracking-wider text-[#B54708] font-semibold">Projected breach</p>
+              <p className="text-xs text-[#1A1F36]"><strong>{monthLabel(t.projectedBreachMonth)}</strong></p>
+              <p className="text-[11px] text-[#64748B]">{t.interventionWindowWeeks} weeks to act · threshold {t.threshold}{r.kind === 'capacity-trend' ? '%' : ''}</p>
+            </div>
+          );
+        })()}
         {r.kind === 'efficiency-drift' && (
           <>
             <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] px-3 py-2">

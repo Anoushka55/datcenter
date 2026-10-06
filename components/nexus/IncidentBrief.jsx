@@ -4,8 +4,8 @@
 // who is exposed and what to do. Every figure comes from analyseIncident().
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Activity, GitBranch, Users, ListChecks, ShieldCheck, ShieldAlert, ShieldQuestion, History, Truck, Scale } from 'lucide-react';
-import { analyseIncident } from '@/lib/nexus/incident-engine';
+import { Activity, GitBranch, Users, ListChecks, ShieldCheck, ShieldAlert, ShieldQuestion, History, Truck, Scale, Timer } from 'lucide-react';
+import { analyseIncident, slaClock } from '@/lib/nexus/incident-engine';
 import { similarPatterns } from '@/lib/nexus/pattern-graph';
 import { narrateIncident, IMPACT_LABEL } from '@/lib/nexus/incident-brief';
 import { fmtKw, fmtLakh, fmtDuration, fmtDurationShort, fmtUpTo } from '@/lib/nexus/format';
@@ -57,6 +57,52 @@ const PROTECTION = {
   exposed: { icon: ShieldAlert, fg: '#B42318', bg: '#FDECEC', label: 'Peers cannot carry the load' },
   unknown: { icon: ShieldQuestion, fg: '#475569', bg: '#EEF2F7', label: 'Topology not on file' },
 };
+
+const clockText = (min) => {
+  const neg = min < 0;
+  const m = Math.abs(min);
+  const h = Math.floor(m / 60);
+  const mm = Math.floor(m % 60);
+  const ss = Math.floor((m * 60) % 60);
+  return `${neg ? '−' : ''}${h ? `${h} h ` : ''}${String(mm).padStart(h ? 2 : 1, '0')} min ${String(ss).padStart(2, '0')} s`;
+};
+
+// Live SLA clock: once declared service-affecting, each exposed tenant's
+// notification deadline and penalty threshold count down in real time.
+function SlaClock({ analysis }) {
+  const [startedAt, setStartedAt] = useState(null);
+  const [now, setNow] = useState(0);
+  useEffect(() => {
+    if (!startedAt) return undefined;
+    const t = setInterval(() => setNow(performance.now()), 1000);
+    return () => clearInterval(t);
+  }, [startedAt]);
+  const elapsed = startedAt ? Math.max(0, (now - startedAt) / 60000) : 0;
+  const rows = slaClock(analysis, elapsed);
+  if (!rows.length) return null;
+  return (
+    <div className="mt-3 rounded-lg border border-[#E2E8F0] p-2.5">
+      <div className="flex items-center justify-between gap-2 mb-1.5">
+        <p className="flex items-center gap-1.5 text-[11px] font-semibold text-[#334155]"><Timer size={12} /> SLA clock</p>
+        {startedAt
+          ? <span className="text-[10px] text-[#B42318] font-semibold" style={MONO}>Service-affecting · {clockText(elapsed)}</span>
+          : <button onClick={() => { const t = performance.now(); setStartedAt(t); setNow(t); }} className="text-[10px] font-bold px-2 py-1 rounded-md bg-[#B42318] text-white hover:bg-[#912018]">Declare service-affecting</button>}
+      </div>
+      <table className="w-full text-[11px]">
+        <thead><tr className="text-[#94A3B8] text-left"><th className="font-medium">Tenant</th><th className="font-medium text-right">Notify within</th><th className="font-medium text-right">Penalty threshold</th></tr></thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.tenantId} className="border-t border-[#F1F5F9]">
+              <td className="py-1 pr-2 text-[#1A1F36]">{r.name}</td>
+              <td className="py-1 pr-2 text-right whitespace-nowrap" style={{ ...MONO, color: r.notifyLeftMin !== null && r.notifyLeftMin < 0 ? '#B42318' : '#334155' }}>{r.notifyLeftMin === null ? '—' : r.notifyLeftMin < 0 ? 'overdue' : clockText(r.notifyLeftMin)}</td>
+              <td className="py-1 text-right whitespace-nowrap" style={{ ...MONO, color: r.breached ? '#B42318' : r.breakLeftMin < 30 ? '#B54708' : '#334155' }}>{r.breached ? `breached · ₹${fmtUpTo(r.penaltyInrLakh, 1)} L` : clockText(r.breakLeftMin)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 function Brief({ analysis, offline }) {
   const [state, setState] = useState({ text: '', narrating: true, source: null });
@@ -160,6 +206,13 @@ export default function IncidentBrief({ alertId, incidentId, offline = false, st
         <Card icon={GitBranch} title="Why">
           {a.why.failureMode && <Fact label="Failure mode">{a.why.failureMode}</Fact>}
           {a.why.rootCause && <Fact label="Root cause">{a.why.rootCause}</Fact>}
+          {a.why.probableCause && (
+            <Fact label="Probable cause">
+              {a.why.probableCause.cause}{' '}
+              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{ background: a.why.probableCause.confidence === 'high' ? '#E6F6EF' : a.why.probableCause.confidence === 'moderate' ? '#FBF3DE' : '#EEF2F7', color: a.why.probableCause.confidence === 'high' ? '#00704A' : a.why.probableCause.confidence === 'moderate' ? '#8A6508' : '#475569' }}>{a.why.probableCause.confidence} confidence</span>
+              <span className="block text-[10px] text-[#94A3B8]">{a.why.probableCause.basis}</span>
+            </Fact>
+          )}
           {a.why.findings[0] && <Fact label="Last finding">{a.why.findings[0].findings} <span className="text-[#94A3B8]">({a.why.findings[0].date})</span></Fact>}
           {a.why.pattern.length > 0 ? (
             <div className="mt-2">
@@ -209,7 +262,7 @@ export default function IncidentBrief({ alertId, incidentId, offline = false, st
           ) : (
             <>
               <p className="text-xs text-[#334155] mb-2">
-                {a.who.mapped ? <><span style={MONO}>{a.who.racks}</span> racks, <span style={MONO}>{fmtKw(a.who.itKw)}</span> of IT load downstream</>
+                {a.who.mapped ? <><span style={MONO}>{a.who.racks}</span> racks in {a.who.rows.length === 1 ? 'Row' : 'Rows'} {a.who.rows.join(', ')}, <span style={MONO}>{fmtKw(a.who.itKw)}</span> of IT load downstream</>
                   : a.who.scope === 'site' ? 'Site-wide plant: every tenant at the facility depends on it.'
                     : 'Rack-level mapping for this site is not on file.'}
               </p>
@@ -240,10 +293,11 @@ export default function IncidentBrief({ alertId, incidentId, offline = false, st
               )}
               {a.who.totalExposureInrLakh !== null && a.who.tenants.length > 0 && (
                 <p className="text-[11px] text-[#64748B] mt-2">
-                  If the chain drops for {fmtDuration(a.who.outage.minutes)} ({a.who.outage.basis.toLowerCase()}): <strong className="text-[#1A1F36]">{fmtLakh(a.who.totalExposureInrLakh)}</strong>, capped per contract.
+                  If the chain drops for {fmtDuration(a.who.outage.minutes)} ({a.who.outage.basis.toLowerCase()}): <strong className="text-[#1A1F36]">{fmtLakh(a.who.totalExposureInrLakh)}</strong>, from contracts whose penalty threshold the outage passes.
                   {a.who.tenants[0].contract?.notificationClause && ` Notification: ${a.who.tenants[0].contract.notificationClause.toLowerCase()} once service-affecting.`}
                 </p>
               )}
+              {a.kind === 'alert' && a.impact === 'outage' && <SlaClock analysis={a} />}
             </>
           )}
         </Card>
