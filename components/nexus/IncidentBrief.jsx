@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Activity, GitBranch, Users, ListChecks, ShieldCheck, ShieldAlert, ShieldQuestion, History, Truck, Scale } from 'lucide-react';
 import { analyseIncident } from '@/lib/nexus/incident-engine';
+import { similarPatterns } from '@/lib/nexus/pattern-graph';
 import { narrateIncident, IMPACT_LABEL } from '@/lib/nexus/incident-brief';
 import { fmtKw, fmtLakh, fmtDuration, fmtDurationShort, fmtUpTo } from '@/lib/nexus/format';
 import { timeLabel } from '@/lib/nexus/time';
@@ -103,6 +104,11 @@ function Brief({ analysis, offline }) {
 
 export default function IncidentBrief({ alertId, incidentId, offline = false, status, onAcknowledge }) {
   const analysis = useMemo(() => analyseIncident({ alertId, incidentId }), [alertId, incidentId]);
+  // The same failure mode, still open elsewhere in the portfolio.
+  const related = useMemo(() => similarPatterns({
+    facilityId: analysis.facilityId, componentId: analysis.componentId,
+    text: `${analysis.what.headline} ${analysis.what.note ?? ''} ${analysis.why.rootCause ?? ''}`, excludeId: analysis.id,
+  }), [analysis]);
   const a = analysis;
   const sev = SEVERITY_STYLE[a.severity] ?? SEVERITY_STYLE.medium;
   const prot = a.who.protection ? PROTECTION[a.who.protection.state] : null;
@@ -174,6 +180,15 @@ export default function IncidentBrief({ alertId, incidentId, offline = false, st
             </div>
           ) : (
             <p className="text-xs text-[#94A3B8] mt-1">No earlier incident in the record matches this pattern.</p>
+          )}
+          {related?.liveElsewhere.length > 0 && (
+            <div className="mt-2 rounded-lg bg-[#F3EDFA] border border-[#E2D5F3] p-2.5">
+              <p className="text-[11px] font-semibold text-[#6B3FA0] mb-0.5">Live elsewhere now</p>
+              {related.liveElsewhere.map((r) => (
+                <p key={r.id} className="text-[11px] text-[#334155]"><span style={MONO}>{r.componentId}</span> at {r.facilityId} · {r.kind === 'advisory' ? 'maintenance advisory' : 'open alert'} {r.date}</p>
+              ))}
+              <Link href="/wiki?mode=patterns" className="text-[10px] font-semibold text-[#6B3FA0] hover:underline">See the pattern graph →</Link>
+            </div>
           )}
         </Card>
 
