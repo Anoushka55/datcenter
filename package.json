@@ -6,7 +6,9 @@
     "dev": "next dev -p 3004",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "import:dataset": "node scripts/import-dataset.mjs",
+    "test:nexus": "node --import ./scripts/json-loader.mjs --test \"lib/nexus/*.test.mjs\""
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.96.0",
