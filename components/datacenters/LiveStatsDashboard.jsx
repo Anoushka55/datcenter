@@ -85,11 +85,12 @@ const STATUS_CONFIG = {
   operational: { Icon: CheckCircle,   color: '#00A36C', label: 'Operational' },
   warning:     { Icon: AlertTriangle, color: '#D4A017', label: 'Warning' },
   critical:    { Icon: XCircle,       color: '#DC2626', label: 'Critical' },
+  unmonitored: { Icon: Shield,        color: '#94A3B8', label: 'Not monitored' },
 };
 
 function getOverallStatus(zoneHealth) {
   if (!zoneHealth) return 'operational';
-  const statuses = Object.values(zoneHealth).map((z) => z.status);
+  const statuses = Object.values(zoneHealth).map((z) => z?.status);
   if (statuses.includes('critical')) return 'critical';
   if (statuses.includes('warning')) return 'warning';
   return 'operational';
@@ -113,7 +114,8 @@ function ZoneCard({ zoneId, data, isActive, onClick }) {
   const statusCfg = STATUS_CONFIG[data?.status] || STATUS_CONFIG.operational;
   if (!cfg || !data) return null;
 
-  const metrics = cfg.metrics(data);
+  // Record-based zones carry their own labelled metrics.
+  const metrics = data.metrics ?? cfg.metrics(data);
   const alerts = data.alerts || [];
 
   return (
@@ -146,6 +148,7 @@ function ZoneCard({ zoneId, data, isActive, onClick }) {
 
       {/* Metrics */}
       <div className="space-y-1.5">
+        {metrics.length === 0 && data.note && <p className="text-[10px] text-[#94A3B8] leading-snug">{data.note}</p>}
         {metrics.slice(0, 3).map((m) => (
           <div key={m.label}>
             <div className="flex items-center justify-between">
@@ -187,7 +190,7 @@ function DetailPanel({ zoneId, zoneHealth }) {
   const cfg = ZONE_CONFIG[zoneId];
   const data = zoneHealth[zoneId];
   const statusCfg = STATUS_CONFIG[data.status] || STATUS_CONFIG.operational;
-  const metrics = cfg.metrics(data);
+  const metrics = data.metrics ?? cfg.metrics(data);
   const alerts = data.alerts || [];
 
   return (
@@ -205,6 +208,8 @@ function DetailPanel({ zoneId, zoneHealth }) {
           </div>
         </div>
       </div>
+
+      {metrics.length === 0 && data.note && <p className="text-xs text-[#94A3B8] mb-4">{data.note}</p>}
 
       {/* All metrics */}
       <div className="space-y-2 mb-4">
@@ -257,7 +262,7 @@ export default function LiveStatsDashboard({ dc, zoneHealth, activeZoneId, isGen
               </span>
             )}
           </div>
-          <div className="text-[10px] text-[#6B7280]">{dc?.city}, {dc?.country} · {dc?.tier}</div>
+          <div className="text-[10px] text-[#6B7280]">{dc?.city}, {dc?.country} · {dc?.tier}{zoneHealth?.asOf ? ` · operating record as of ${zoneHealth.asOf}` : ''}</div>
         </div>
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border"
           style={{ borderColor: overallCfg.color + '44', background: overallCfg.color + '11' }}>
@@ -270,7 +275,7 @@ export default function LiveStatsDashboard({ dc, zoneHealth, activeZoneId, isGen
 
       {/* KPI cards grid */}
       <div className="flex-shrink-0 p-3 grid grid-cols-2 gap-2 border-b border-[#E2E8F0]">
-        {zones.map((zoneId) => (
+        {zones.filter((zoneId) => zoneHealth?.[zoneId]).map((zoneId) => (
           <ZoneCard
             key={zoneId}
             zoneId={zoneId}

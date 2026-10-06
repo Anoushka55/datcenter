@@ -15,9 +15,12 @@ const STATUS_CONFIG = {
   operational: { label: 'Operational', Icon: CheckCircle, color: '#00A36C' },
   warning:     { label: 'Warning',     Icon: AlertTriangle, color: '#D4A017' },
   critical:    { label: 'Critical',    Icon: XCircle,    color: '#DC2626' },
+  unmonitored: { label: 'Not monitored', Icon: CheckCircle, color: '#94A3B8' },
 };
 
 function getMetrics(zoneId, data) {
+  // Record-based zones carry their own labelled metrics.
+  if (data.metrics) return data.metrics.length ? data.metrics.map((m) => `${m.label}: ${m.value}`) : [data.note ?? 'Not monitored'];
   switch (zoneId) {
     case 'power':
       return [

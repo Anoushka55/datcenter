@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 
 const STATUS_COLOR = {
   operational: 0x00a36c,
+  unmonitored: 0x94a3b8,
   warning:     0xd4a017,
   critical:    0xdc2626,
 };

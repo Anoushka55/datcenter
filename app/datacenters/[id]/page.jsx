@@ -1,11 +1,13 @@
 'use client';
-import { useState, use, useCallback, useEffect } from 'react';
+import { useState, use, useCallback, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Server, AlertTriangle, Zap, Thermometer, Network, Shield, Activity, Leaf, Users } from 'lucide-react';
 import CCLayout from '@/components/command-center/CCLayout';
 import { mockDatacenters, mockIncidents, mockTenants, mockDCInfrastructure, mockSustainability, mockZoneHealth } from '@/data/mock/index';
+import { nexusZoneHealth } from '@/lib/nexus/zone-health';
+import { facilitySummary } from '@/lib/nexus/portfolio';
 
 const DigitalTwinViewer = dynamic(() => import('@/components/datacenters/DigitalTwinViewer'), { ssr: false });
 const LiveStatsDashboard = dynamic(() => import('@/components/datacenters/LiveStatsDashboard'), { ssr: false });
@@ -14,6 +16,14 @@ const STATUS_CONFIG = {
   healthy:  { label: 'Healthy',  color: '#00A36C', bg: '#F0FDF4' },
   degraded: { label: 'Degraded', color: '#D4A017', bg: '#FFFBEB' },
   critical: { label: 'Critical', color: '#DC2626', bg: '#FEF2F2' },
+};
+
+// Health from the operating record (lib/nexus/portfolio.js), worst open alert first.
+const RECORD_HEALTH = {
+  critical: { label: 'Critical', color: '#DC2626' },
+  serious:  { label: 'Serious',  color: '#B54708' },
+  warning:  { label: 'Warning',  color: '#D4A017' },
+  good:     { label: 'Good',     color: '#00A36C' },
 };
 
 const SEV_CONFIG = {
@@ -333,7 +343,8 @@ export default function DatacenterDetailPage({ params }) {
   const router = useRouter();
   const dc = mockDatacenters.find(d => d.id === id);
   const infra = mockDCInfrastructure[id];
-  const zoneHealth = mockZoneHealth[id];
+  // Mumbai-1 is in the operating record; its status comes from there.
+  const zoneHealth = useMemo(() => (id === 'mum-1' ? nexusZoneHealth('MUM-1') : mockZoneHealth[id]), [id]);
   const [activeZoneId, setActiveZoneId] = useState(null);
   const [rightTab, setRightTab] = useState('stats');
 
@@ -352,7 +363,8 @@ export default function DatacenterDetailPage({ params }) {
     </CCLayout>
   );
 
-  const sc = STATUS_CONFIG[dc.status] || STATUS_CONFIG.healthy;
+  const recordHealth = id === 'mum-1' ? RECORD_HEALTH[facilitySummary('MUM-1').health] : null;
+  const sc = recordHealth ?? STATUS_CONFIG[dc.status] ?? STATUS_CONFIG.healthy;
 
   return (
     <CCLayout title={dc.name}>
@@ -372,12 +384,12 @@ export default function DatacenterDetailPage({ params }) {
             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1" style={{ backgroundColor: sc.color + '22', color: sc.color }}>
               {sc.label}
             </span>
-            <div className="ml-auto flex items-center gap-1.5">
+            {!recordHealth && <div className="ml-auto flex items-center gap-1.5">
               <div className="h-1 rounded-full bg-[#E2E8F0] w-16 overflow-hidden">
                 <div className="h-full rounded-full" style={{ width: `${dc.healthScore}%`, backgroundColor: dc.healthScore >= 90 ? '#00A36C' : '#D4A017' }} />
               </div>
               <span className="text-[10px] font-mono text-[#6B7280]">{dc.healthScore}</span>
-            </div>
+            </div>}
           </div>
 
           {/* Twin canvas — full height minus the top strip (36px) */}
