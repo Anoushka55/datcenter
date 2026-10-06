@@ -6,6 +6,8 @@ import CCLayout from '@/components/command-center/CCLayout';
 import { portfolioSiteRisk, WEIGHTS, BLEND, equipmentLabel } from '@/lib/nexus/site-risk-engine';
 import { narrateSiteRisk } from '@/lib/nexus/site-risk-brief';
 import { fmtNumber, fmtUpTo } from '@/lib/nexus/format';
+import { nexus } from '@/lib/nexus/data';
+import LiveConditions from '@/components/nexus/LiveConditions';
 
 const MONO = { fontFamily: "'JetBrains Mono', monospace" };
 // Validated sequential ramp (single hue, light → dark).
@@ -129,6 +131,8 @@ export default function SiteRiskPage() {
             <span className="ml-3 text-[#94A3B8]">Hover a cell for its source.</span>
           </div>
         </section>
+
+        <LiveConditions offline={offline} facilities={nexus.facilities.map((f) => ({ id: f.facility_id, name: f.name }))} />
 
         <div className="grid xl:grid-cols-2 gap-4">
           <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
