@@ -386,3 +386,54 @@ export function Legend({ items, left }) {
   );
 }
 
+
+// ─── Thermal ───────────────────────────────────────────────────────────────
+export function ThermalCard({ result, narration, onFail }) {
+  const { map, summary, crahs } = result;
+  const f = map.failure;
+  const hottest = [...map.rows].sort((a, b) => b.maxInletC - a.maxInletC)[0];
+  return (
+    <>
+      <div className="flex items-start justify-between">
+        <Badge tone={f ? (f.holds ? 'warn' : 'bad') : 'info'}>{f ? `${f.crahId} failure · estimate` : 'Inlet temperature · estimate'}</Badge>
+      </div>
+      {f ? (
+        <div>
+          <p className="text-4xl font-semibold text-white">{hottest.maxInletC} °C</p>
+          <p className="text-xs text-white/55 mt-1">hottest estimated inlet in Row {f.rowId} — {f.holds ? 'within' : 'beyond'} the surviving unit's rating</p>
+        </div>
+      ) : (
+        <div>
+          <p className="text-4xl font-semibold text-white">{summary.tightestRows[0].marginC} °C</p>
+          <p className="text-xs text-white/55 mt-1">smallest margin to the 27 °C recommended inlet limit (Row {summary.tightestRows[0].rowId})</p>
+        </div>
+      )}
+      {f && (
+        <div className="grid grid-cols-3 gap-2">
+          <Stat label="Survivor loading" value={`${f.utilisationAfterPct}%`} sub={`${f.survivors.join(', ')}, was ${f.utilisationBeforePct}%`} />
+          <Stat label="Row heat load" value={`${f.loadKw} kW`} sub={`rating ${f.survivorCapacityKw} kW`} />
+          <Stat label="Inlet rise" value={`+${f.riseC} °C`} sub="steady-state estimate" />
+        </div>
+      )}
+      <Section title="Rows that cannot lose a CRAH">
+        <p className="text-xs text-white/75 mb-1.5">{summary.exposedRows.length} of {map.rows.length} rows: the surviving unit would run past its rating.</p>
+        <div className="flex flex-wrap gap-1">
+          {summary.exposedRows.map((r) => (
+            <button key={r} onClick={() => onFail?.(`CRAH-${r}-01`)} className="font-mono text-[11px] px-2 py-0.5 rounded bg-white/[0.06] text-white/80 hover:bg-white/[0.12]">Row {r}</button>
+          ))}
+        </div>
+      </Section>
+      <Section title="Simulate a CRAH failure">
+        <div className="flex gap-2">
+          <select value={f?.crahId ?? ''} onChange={(e) => onFail?.(e.target.value || null)} aria-label="CRAH to fail"
+            className="flex-1 bg-white/[0.06] border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white">
+            <option value="">None — current state</option>
+            {crahs.map((id) => <option key={id} value={id}>{id}</option>)}
+          </select>
+        </div>
+      </Section>
+      <Narration {...narration} />
+      <p className="text-[9.5px] text-white/35">Estimated from each row's cold-aisle sensors and CRAH loading; failure rise is a modelled steady state.</p>
+    </>
+  );
+}

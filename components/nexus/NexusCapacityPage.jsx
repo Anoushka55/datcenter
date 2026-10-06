@@ -7,15 +7,17 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MessageCircleQuestion, X } from 'lucide-react';
-import { getRow, racksInRow, index } from '@/lib/nexus/data';
+import { getRow, racksInRow, rowsOf, index } from '@/lib/nexus/data';
 import { findStrandedCapacity, canAccommodate, densityReadiness, findBreakingPoint } from '@/lib/nexus/capacity-engine';
 import { propagateChange } from '@/lib/nexus/impact-engine';
 import { buildReplay } from '@/lib/nexus/replay';
-import { idleView, strandedView, capacityView, densityView, cascadeView, replayView } from '@/lib/nexus/twin-model';
+import { idleView, strandedView, capacityView, densityView, cascadeView, replayView, thermalView } from '@/lib/nexus/twin-model';
+import { thermalMap, thermalSummary, rowCrahs } from '@/lib/nexus/thermal-model';
 import { parseQuery, parseLocally, resolveQuery, HERO_FACILITY } from '@/lib/nexus/query-parser';
 import { narrate } from '@/lib/nexus/narrator';
 import ControlPanel, { QueryBar } from './ControlPanel';
-import { ResultShell, StrandedCard, CapacityCard, DensityCard, ImpactReport, ReplayPanel, Legend } from './ResultCards';
+import { ResultShell, StrandedCard, CapacityCard, DensityCard, ImpactReport, ReplayPanel, ThermalCard, Legend } from './ResultCards';
+import RackDetail from './RackDetail';
 
 const NexusTwin = dynamic(() => import('./NexusTwin'), { ssr: false });
 
@@ -62,6 +64,7 @@ export default function NexusCapacityPage() {
   const autoCollapsed = useRef(false);
 
   const [urlScene, setUrlScene] = useState(null);
+  const [selectedRack, setSelectedRack] = useState(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -120,6 +123,12 @@ export default function NexusCapacityPage() {
         result = propagateChange({ facilityId: params.facilityId, changes: [{ componentId: params.componentId, failed: true }] });
         view = cascadeView(params.facilityId, result);
         break;
+      case 'thermal': {
+        const map = thermalMap(params.facilityId, { failedCrah: params.failedCrah ?? null });
+        result = { map, summary: thermalSummary(params.facilityId), crahs: rowsOf(params.facilityId).flatMap((r) => rowCrahs(r.row_id).map((c) => c.component_id)) };
+        view = thermalView(params.facilityId, map);
+        break;
+      }
       case 'replay':
         result = buildReplay(params.incidentId);
         view = replayView(params.facilityId, index.incidentById.get(params.incidentId));
@@ -171,6 +180,7 @@ export default function NexusCapacityPage() {
     if (answer?.viewToggle === id) { closeAnswer(); return; }
     if (id === 'stranded') runIntent('stranded_capacity', { facilityId: FACILITY }, { viewToggle: id });
     if (id === 'density') runIntent('density_readiness', { facilityId: FACILITY }, { viewToggle: id });
+    if (id === 'thermal') runIntent('thermal', { facilityId: FACILITY }, { viewToggle: id });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answer, runIntent]);
 
@@ -242,13 +252,16 @@ export default function NexusCapacityPage() {
       case 'cascade_simulation':
       case 'failure_simulation': return <ImpactReport {...props} />;
       case 'replay': return <ReplayPanel {...props} />;
+      case 'thermal': return <ThermalCard {...props} onFail={(crahId) => runIntent('thermal', { facilityId: FACILITY, failedCrah: crahId }, { viewToggle: 'thermal', keepPanel: true })} />;
       default: return null;
     }
   };
 
   return (
     <div ref={rootRef} className="w-full h-full relative overflow-hidden bg-[#070d18]" data-testid="nexus-page">
-      <NexusTwin facilityId={FACILITY} view={view} runKey={runKey} insetLeft={insetLeft} insetRight={insetRight} onRackClick={(rack) => onRow(rack.row_id)} />
+      <NexusTwin facilityId={FACILITY} view={view} runKey={runKey} insetLeft={insetLeft} insetRight={insetRight} onRackClick={(rack) => { onRow(rack.row_id); setSelectedRack(rack.rack_id); }} />
+
+      {selectedRack && <RackDetail rackId={selectedRack} left={insetLeft + 16} onClose={() => setSelectedRack(null)} />}
 
       <QueryBar onSubmit={onQuery} busy={busy} left={insetLeft} right={insetRight} />
 

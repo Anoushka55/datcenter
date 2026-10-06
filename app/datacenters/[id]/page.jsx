@@ -386,6 +386,7 @@ export default function DatacenterDetailPage({ params }) {
               dc={dc}
               zoneHealth={zoneHealth}
               onHotspotChange={handleHotspotChange}
+              nexusFacilityId={id === 'mum-1' ? 'MUM-1' : null}
             />
           </div>
         </div>

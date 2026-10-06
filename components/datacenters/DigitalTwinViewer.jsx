@@ -9,8 +9,10 @@ import RackDetailPanel from './RackDetailPanel';
 const ExteriorModel3D = dynamic(() => import('./ExteriorModel3D'), { ssr: false });
 const InteriorModel3D = dynamic(() => import('./InteriorModel3D'), { ssr: false });
 const ThermalHeatmapView = dynamic(() => import('../thermal/ThermalHeatmapView'), { ssr: false });
+// Facilities in the Nexus dataset show the dataset-driven twin inside.
+const NexusTwinPanel = dynamic(() => import('../nexus/NexusTwinPanel'), { ssr: false });
 
-export default function DigitalTwinViewer({ dc, zoneHealth, onHotspotChange, isGenerated }) {
+export default function DigitalTwinViewer({ dc, zoneHealth, onHotspotChange, isGenerated, nexusFacilityId = null }) {
   const [view, setView] = useState('exterior');
   const [activeHotspot, setActiveHotspot] = useState(null);
   const [activeRackId, setActiveRackId] = useState(null);
@@ -116,7 +118,9 @@ export default function DigitalTwinViewer({ dc, zoneHealth, onHotspotChange, isG
               transition={{ duration: 0.25 }}
               className="absolute inset-0"
             >
-              <InteriorModel3D dc={dc} zoneHealth={zoneHealth} onHotspotClick={handleHotspotClick} onRackClick={handleRackClick} />
+              {nexusFacilityId
+                ? <NexusTwinPanel facilityId={nexusFacilityId} mode="idle" />
+                : <InteriorModel3D dc={dc} zoneHealth={zoneHealth} onHotspotClick={handleHotspotClick} onRackClick={handleRackClick} />}
             </motion.div>
           )}
           {view === 'thermal' && (
@@ -128,7 +132,7 @@ export default function DigitalTwinViewer({ dc, zoneHealth, onHotspotChange, isG
               transition={{ duration: 0.25 }}
               className="absolute inset-0"
             >
-              <ThermalHeatmapView dc={dc} />
+              {nexusFacilityId ? <NexusTwinPanel facilityId={nexusFacilityId} mode="thermal" /> : <ThermalHeatmapView dc={dc} />}
             </motion.div>
           )}
         </AnimatePresence>
@@ -165,7 +169,7 @@ export default function DigitalTwinViewer({ dc, zoneHealth, onHotspotChange, isG
             <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{
               background: view === 'exterior' ? '#60a5fa' : view === 'thermal' ? '#f87171' : '#34d399'
             }} />
-            {view === 'exterior' ? 'EXTERIOR — SECURITY VIEW' : view === 'thermal' ? 'THERMAL — CFD HEATMAP' : 'INTERIOR — OPERATIONAL VIEW'}
+            {view === 'exterior' ? 'EXTERIOR — SECURITY VIEW' : view === 'thermal' ? (nexusFacilityId ? 'THERMAL — INLET ESTIMATE FROM ROW SENSORS' : 'THERMAL — CFD HEATMAP') : 'INTERIOR — OPERATIONAL VIEW'}
           </div>
         </div>
 

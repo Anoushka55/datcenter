@@ -23,6 +23,12 @@ export const STATE_STYLE = {
   'band-amber': { color: '#f59e0b' },
   'band-red': { color: '#ef4444' },
   alert: { color: '#ef4444', pulse: 'strong', outline: true },
+  // Estimated inlet temperature (validated single-hue ramp for the dark twin surface).
+  'thermal-0': { color: '#6b4a2c' },
+  'thermal-1': { color: '#94592a' },
+  'thermal-2': { color: '#c46d27' },
+  'thermal-3': { color: '#ef9447', pulse: 'soft' },
+  'thermal-4': { color: '#ffc788', pulse: 'strong' },
 };
 
 export const COMPONENT_BASE = { electrical: '#5b7fa6', thermal: '#3f8f98', load: '#4b6a8f' };

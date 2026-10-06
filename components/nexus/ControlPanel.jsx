@@ -1,6 +1,6 @@
 'use client';
 import { useRef, useState } from 'react';
-import { Layers, ChevronLeft, ChevronRight, Zap, Target, Search, Sparkles, Unplug, Gauge } from 'lucide-react';
+import { Layers, ChevronLeft, ChevronRight, Zap, Target, Search, Sparkles, Unplug, Gauge, Thermometer } from 'lucide-react';
 import { getHall } from '@/lib/nexus/data';
 
 const VERDICT_STYLE = {
@@ -74,7 +74,7 @@ export default function ControlPanel({
             className={`w-9 h-9 rounded-lg text-xs font-bold transition-colors ${activeScene === s.id ? 'bg-[#00338D] text-white' : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white'}`}>{s.n}</button>
         ))}
         <div className="h-px bg-white/10" />
-        {[['stranded', 'Stranded', 'Stranded view', Unplug], ['density', 'Density', 'Density view', Gauge]].map(([id, label, title, Icon]) => (
+        {[['stranded', 'Stranded', 'Stranded view', Unplug], ['density', 'Density', 'Density view', Gauge], ['thermal', 'Thermal', 'Thermal view', Thermometer]].map(([id, label, title, Icon]) => (
           <button key={id} onClick={() => onView(id)} aria-pressed={activeView === id} aria-label={label} title={title}
             className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${activeView === id ? 'bg-[#00338D] text-white' : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'}`}><Icon size={15} /></button>
         ))}
@@ -109,7 +109,7 @@ export default function ControlPanel({
       <div>
         <p className="text-[10px] font-bold text-white/40 uppercase tracking-wide mb-1.5">Views</p>
         <div className="flex gap-1.5">
-          {[['stranded', 'Stranded'], ['density', 'Density']].map(([id, label]) => (
+          {[['stranded', 'Stranded'], ['density', 'Density'], ['thermal', 'Thermal']].map(([id, label]) => (
             <button key={id} onClick={() => onView(id)} aria-pressed={activeView === id}
               className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-colors ${activeView === id ? 'bg-[#00338D] text-white' : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'}`}>{label}</button>
           ))}
