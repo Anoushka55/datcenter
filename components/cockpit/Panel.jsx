@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { C, enter } from './tokens';
 
 /** White panel with the blue leading edge, title and an inert "View Details" link. */
-export default function Panel({ title, icon: Icon, action = 'View Details', delay = 0, className = '', children }) {
+export default function Panel({ title, icon: Icon, action = 'View Details', onAction, delay = 0, className = '', children }) {
   return (
     <motion.section
       {...enter(delay)}
@@ -15,7 +15,9 @@ export default function Panel({ title, icon: Icon, action = 'View Details', dela
           {Icon && <Icon size={18} strokeWidth={2} style={{ color: C.navyBlue }} />}
           {title}
         </h2>
-        {action && <span className="cursor-pointer whitespace-nowrap" style={{ fontSize: 12, fontWeight: 500, color: C.blue }}>{action}</span>}
+        {action && (onAction
+          ? <button type="button" onClick={onAction} className="whitespace-nowrap hover:underline" style={{ fontSize: 12, fontWeight: 500, color: C.blue }}>{action} →</button>
+          : <span className="whitespace-nowrap" style={{ fontSize: 12, fontWeight: 500, color: C.blue }}>{action}</span>)}
       </header>
       {children}
     </motion.section>

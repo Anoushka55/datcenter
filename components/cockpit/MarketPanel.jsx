@@ -7,14 +7,14 @@ import { C } from './tokens';
 const RAMP = ['#B9D3F6', '#8DB8F0', '#5A98E6', '#2F72D8', '#1A47B5'];
 const BEGIN = 900; // ms, after the panel has landed
 
-export default function MarketPanel({ market, delay }) {
+export default function MarketPanel({ market, delay, onAction }) {
   const n = market.growth.length;
   // Trajectory sits just above the bars and stops short of the final bar, ending in an arrow.
   const data = market.growth.map((g, i) => ({ ...g, trend: i < n - 1 ? Math.round((g.sizeBn * 1.18 + 1.6) * 10) / 10 : null }));
   const cagrIndex = Math.floor((n - 1) / 2);
 
   return (
-    <Panel title="Market Opportunity" delay={delay}>
+    <Panel title="Market Opportunity" delay={delay} onAction={onAction}>
       <p className="flex-shrink-0" style={{ fontSize: 13, color: C.text2, lineHeight: 1.45 }}>{market.headline}</p>
       <div className="flex items-center gap-5 mt-2 flex-shrink-0" style={{ fontSize: 12, color: C.text2 }}>
         <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-[3px]" style={{ background: C.blue }} />Market Size (Bn USD)</span>

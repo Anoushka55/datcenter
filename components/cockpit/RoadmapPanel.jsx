@@ -6,10 +6,10 @@ import { C } from './tokens';
 
 const STEP_COLORS = ['#1E3A8A', '#3B82F6', '#60A5FA', '#8B7CF6'];
 
-export default function RoadmapPanel({ roadmap, delay }) {
+export default function RoadmapPanel({ roadmap, delay, onAction }) {
   const n = roadmap.length;
   return (
-    <Panel title="Strategic Roadmap" action="View Full Roadmap" delay={delay}>
+    <Panel title="Strategic Roadmap" action="View Full Roadmap" delay={delay} onAction={onAction}>
       <div className="relative mt-2">
         {/* connecting line, navy → blue → violet */}
         <motion.div className="absolute h-[3px] rounded-full" style={{ top: 16.5, left: `${50 / n}%`, right: `${50 / n}%`, transformOrigin: 'left', background: `linear-gradient(90deg, ${STEP_COLORS.join(', ')})` }}

@@ -4,9 +4,9 @@ import { Lightbulb } from 'lucide-react';
 import Panel from './Panel';
 import { C, ICONS, TINTS } from './tokens';
 
-export default function InsightsPanel({ insights, delay, className = '' }) {
+export default function InsightsPanel({ insights, delay, className = '', onAction }) {
   return (
-    <Panel title="Key Insights" icon={Lightbulb} delay={delay} className={`h-full ${className}`}>
+    <Panel title="Key Insights" icon={Lightbulb} delay={delay} onAction={onAction} className={`h-full ${className}`}>
       <div className="flex-1 flex flex-col gap-3">
         {insights.map((it, i) => {
           const Icon = ICONS[it.icon];

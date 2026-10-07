@@ -9,13 +9,13 @@ import { Home, BarChart2, ShieldCheck, SearchCode, LineChart, FileText, ChevronD
 import { C, FONT } from './tokens';
 import { KPMG_MARK } from './kpmg-mark';
 
-const NAV = [
-  { label: 'Cockpit View', Icon: Home, active: true },
-  { label: 'Market Analysis', Icon: BarChart2 },
-  { label: 'Opportunities', Icon: ShieldCheck },
-  { label: 'Competitive Intel', Icon: SearchCode },
-  { label: 'Strategic Roadmap', Icon: LineChart },
-  { label: 'Reports', Icon: FileText },
+export const NAV = [
+  { id: 'overview', label: 'Cockpit View', Icon: Home },
+  { id: 'market', label: 'Market Analysis', Icon: BarChart2 },
+  { id: 'opportunities', label: 'Opportunities', Icon: ShieldCheck },
+  { id: 'competitive', label: 'Competitive Intel', Icon: SearchCode },
+  { id: 'roadmap', label: 'Strategic Roadmap', Icon: LineChart },
+  { id: 'reports', label: 'Reports', Icon: FileText },
 ];
 
 function IndiaFlag() {
@@ -46,7 +46,7 @@ function useFit() {
   return fit;
 }
 
-export default function CockpitShell({ client, children }) {
+export default function CockpitShell({ client, active = 'overview', onNavigate, children }) {
   const fit = useFit();
   return (
     <div className="fixed inset-0 overflow-hidden" style={{ background: C.shell }}>
@@ -76,17 +76,19 @@ export default function CockpitShell({ client, children }) {
         {/* Sidebar */}
         <nav className="flex-shrink-0 w-[220px] flex flex-col justify-between py-5 px-3" style={{ background: `linear-gradient(180deg, ${C.shell} 0%, ${C.shellDeep} 100%)` }}>
           <ul className="space-y-1.5">
-            {NAV.map(({ label, Icon, active }) => (
-              <li key={label}>
-                <span
-                  className={`flex items-center gap-3 px-3.5 py-3 rounded-lg cursor-pointer transition-colors ${active ? '' : 'hover:bg-white/5 hover:text-white'}`}
-                  style={active ? { background: '#1D52A6', color: C.onDark, fontSize: 14, fontWeight: 500 } : { color: '#C3D4EA', fontSize: 14 }}
-                >
-                  <Icon size={18} strokeWidth={1.8} />
-                  {label}
-                </span>
-              </li>
-            ))}
+            {NAV.map(({ id, label, Icon }) => {
+              const on = id === active;
+              return (
+                <li key={id}>
+                  <button type="button" onClick={() => onNavigate?.(id)} aria-current={on ? 'page' : undefined}
+                    className={`w-full text-left flex items-center gap-3 px-3.5 py-3 rounded-lg transition-colors ${on ? '' : 'hover:bg-white/5 hover:text-white'}`}
+                    style={on ? { background: '#1D52A6', color: C.onDark, fontSize: 14, fontWeight: 500 } : { color: '#C3D4EA', fontSize: 14 }}>
+                    <Icon size={18} strokeWidth={1.8} />
+                    {label}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
           <p className="px-3.5" style={{ color: C.muted, fontSize: 11, lineHeight: 1.4 }}>KPMG<br />Confidential</p>
         </nav>

@@ -62,21 +62,30 @@ function EnergyScene() {
   );
 }
 
-export default function Hero({ client, image = null }) {
+/** Full hero on the overview; a compact band (tab title over the cockpit name) on the other tabs. */
+export default function Hero({ client, image = null, tab = null }) {
   return (
     <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
-      className="relative overflow-hidden flex-shrink-0" style={{ height: 160, background: C.shell }}
+      className="relative overflow-hidden flex-shrink-0" style={{ height: tab ? 108 : 160, background: C.shell }}
     >
       {image
         ? <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />
         : <EnergyScene />}
       <div className="absolute inset-0" style={{ background: OVERLAY }} />
+      {tab ? (
+        <div className="relative h-full flex flex-col justify-center px-6" style={{ maxWidth: '62%' }}>
+          <p style={{ color: C.onDarkDim, fontSize: 13, fontWeight: 500 }}>{client.cockpitTitle}</p>
+          <h1 style={{ color: C.onDark, fontSize: 28, fontWeight: 700, lineHeight: 1.15, marginTop: 2, fontFamily: "'Plus Jakarta Sans', 'DM Sans', sans-serif" }}>{tab.title}</h1>
+          <p style={{ color: C.onDark, opacity: 0.8, fontSize: 14, marginTop: 4 }}>{tab.lede}</p>
+        </div>
+      ) : (
       <div className="relative h-full flex flex-col justify-center px-6" style={{ maxWidth: '58%' }}>
         <h1 style={{ color: C.onDark, fontSize: 34, fontWeight: 700, lineHeight: 1.12, fontFamily: "'Plus Jakarta Sans', 'DM Sans', sans-serif" }}>{client.cockpitTitle}</h1>
         <p style={{ color: C.onDark, fontSize: 20, fontWeight: 500, marginTop: 4 }}>{client.subtitle}</p>
         <p style={{ color: C.onDark, opacity: 0.8, fontSize: 14, marginTop: 8, lineHeight: 1.45, maxWidth: 560 }}>{client.description}</p>
       </div>
+      )}
     </motion.div>
   );
 }

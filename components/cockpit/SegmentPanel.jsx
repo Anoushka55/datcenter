@@ -14,9 +14,9 @@ function arcLabel({ cx, cy, midAngle, innerRadius, outerRadius, payload }) {
   return <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fontSize={12} fontWeight={600} fill={DARK.has(payload.color) ? '#FFFFFF' : C.navyBlue}>{payload.share}%</text>;
 }
 
-export default function SegmentPanel({ segments, delay }) {
+export default function SegmentPanel({ segments, delay, onAction }) {
   return (
-    <Panel title="Opportunity by Segment" delay={delay}>
+    <Panel title="Opportunity by Segment" delay={delay} onAction={onAction}>
       <div className="flex-1 flex items-center gap-4 min-h-0">
         <div className="relative flex-shrink-0" style={{ width: '50%', height: 220 }}>
           <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 400, height: 200 }}>

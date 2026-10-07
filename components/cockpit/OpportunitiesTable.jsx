@@ -2,7 +2,7 @@
 import Panel from './Panel';
 import { C } from './tokens';
 
-const SEGMENT = {
+export const SEGMENT = {
   Renewable: { fg: '#047857', border: '#A7E3C9', bg: '#F0FBF6' },
   Storage: { fg: C.blue, border: '#BCD3F8', bg: '#F3F7FE' },
   Grid: { fg: '#1E3A8A', border: '#C7D3EE', bg: '#F5F7FC' },
@@ -10,7 +10,7 @@ const SEGMENT = {
   Backup: { fg: C.text2, border: '#D6DEEA', bg: '#F7F9FC' },
 };
 
-function Fit({ score, max = 5 }) {
+export function Fit({ score, max = 5 }) {
   return (
     <span className="inline-flex gap-[3px]" aria-label={`Fit ${score} of ${max}`}>
       {Array.from({ length: max }, (_, i) => (
@@ -22,9 +22,9 @@ function Fit({ score, max = 5 }) {
 
 const TH = { fontSize: 12, fontWeight: 500, color: C.text2, textAlign: 'left', padding: '0 10px 8px' };
 
-export default function OpportunitiesTable({ opportunities, delay }) {
+export default function OpportunitiesTable({ opportunities, delay, onAction }) {
   return (
-    <Panel title="Top Investment Opportunities" action="View All" delay={delay}>
+    <Panel title="Top Investment Opportunities" action="View All" delay={delay} onAction={onAction}>
       <table className="w-full border-collapse">
         <thead>
           <tr style={{ borderBottom: `1px solid ${C.border}` }}>
