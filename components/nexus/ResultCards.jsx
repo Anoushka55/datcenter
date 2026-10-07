@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import { X, AlertTriangle, ShieldAlert, Flag, Siren, FileText } from 'lucide-react';
 import { fmtKw, fmtLakh, fmtInr, fmtNumber, fmtUpTo, fmtDuration } from '@/lib/nexus/format';
 import { getHall } from '@/lib/nexus/data';
+import { embodiedCarbonOfStranded } from '@/lib/nexus/carbon-engine';
+import Link from 'next/link';
 import { legendColor } from './palette';
 import TelemetryChart from './TelemetryChart';
 
@@ -85,6 +87,7 @@ export function ResultShell({ children, onClose, meta, scrollKey }) {
 
 // ─── Scene 1 ───────────────────────────────────────────────────────────────
 export function StrandedCard({ result, narration }) {
+  const embodied = embodiedCarbonOfStranded(result.facilityId);
   const structural = result.byRow.filter((r) => r.classification === 'structural');
   const planned = result.byRow.filter((r) => r.classification === 'planned headroom').sort((a, b) => a.rowId.localeCompare(b.rowId));
   return (
@@ -115,6 +118,12 @@ export function StrandedCard({ result, narration }) {
         <div className="rounded-lg border border-[#38bdf8]/30 bg-[#38bdf8]/[0.07] px-3 py-2.5">
           <p className="text-xs text-white/85"><span className="font-semibold">{fmtKw(result.plannedHeadroomKw)}</span> in {getHall(planned[0].hallId).name} is <span className="font-semibold">planned headroom</span> — deliberate provisioning, not waste.</p>
           <p className="text-[10px] text-white/45 mt-1 font-mono">Rows {planned.map((r) => r.rowId).join(', ')}</p>
+        </div>
+      )}
+      {embodied.strandedKw > 0 && (
+        <div className="rounded-lg border border-[#00B0A0]/35 bg-[#00B0A0]/[0.08] px-3 py-2.5">
+          <p className="text-xs text-white/85"><span className="font-semibold">{fmtKw(embodied.strandedKw)}</span> of stranded capacity already carries an estimated <span className="font-semibold">{fmtNumber(embodied.estimatedEmbodiedTco2)} tCO2e</span> of embodied carbon. Recovering it avoids building that again.</p>
+          <p className="text-[10px] text-white/45 mt-1">{embodied.intensityTco2PerKw} tCO2e per kW of facility infrastructure (Wadenstein &amp; Vanderbauwhede, 2025). <Link href="/command-center/clean-energy" className="text-[#7FD8CF] hover:underline">Clean energy and carbon →</Link></p>
         </div>
       )}
       <Narration {...narration} />

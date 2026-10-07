@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Scale, CalendarClock, Droplets } from 'lucide-react';
 import CCLayout from '@/components/command-center/CCLayout';
 import WueChart from '@/components/nexus/WueChart';
+import WaterCircularity from '@/components/nexus/WaterCircularity';
 import { portfolioWater, waterImpactOfChange } from '@/lib/nexus/water-engine';
 import { narrateWater } from '@/lib/nexus/water-brief';
 import { cohortFor } from '@/lib/nexus/benchmark-engine';
@@ -172,6 +173,8 @@ export default function WaterPage() {
             <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-[#00B0A0]" /> Treated recycle</span>
           </div>
         </section>
+
+        <WaterCircularity />
       </div>
     </CCLayout>
   );

@@ -7,7 +7,7 @@ import {
   LayoutDashboard, Building2, Server, Cpu, Users, Leaf, Brain,
   AlertTriangle, Wrench, FileText, Settings, Bell, ChevronLeft,
   ChevronRight, Search, Sparkles, Layers, Home,
-  Package, Shield, Plug, Globe, Gauge, Radar, Droplets, ShieldAlert, FileCheck2, Map, Network, Scale,
+  Package, Shield, Plug, Globe, Gauge, Radar, Droplets, ShieldAlert, FileCheck2, Map, Network, Scale, SunMedium,
 } from 'lucide-react';
 import AICopilotPanel from './AICopilotPanel';
 
@@ -46,6 +46,7 @@ const NAV_GROUPS = [
       { id: 'capacity-sim', label: 'Capacity Simulation', icon: Gauge, href: '/command-center/capacity-simulation' },
       { id: 'predictive',   label: 'Predictive Risk',     icon: Radar, href: '/command-center/predictive' },
       { id: 'water',        label: 'Water Intelligence',  icon: Droplets, href: '/command-center/water' },
+      { id: 'clean-energy', label: 'Clean Energy (24/7)', icon: SunMedium, href: '/command-center/clean-energy' },
       { id: 'site-risk',    label: 'Site & Supply Risk',  icon: ShieldAlert, href: '/command-center/site-risk' },
       { id: 'esg',          label: 'ESG Disclosure',      icon: FileCheck2, href: '/command-center/esg' },
       { id: 'compliance',   label: 'Policy & Compliance', icon: Scale, href: '/command-center/compliance' },
