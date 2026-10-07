@@ -165,7 +165,100 @@ function sensorRows() {
   return out;
 }
 
+// ── 27_hourly_generation: proposed solar PPA against MUM-1's real load ─────
+// 30 representative days across January–September 2026. Load is each month's
+// 13_energy average (total_kwh ÷ hours in month) with a small afternoon
+// cooling swing, so it reconciles with the energy sheet. Solar follows the
+// Mumbai day (zero before 06:00 and from 19:00, peak around 12:30 at ~92% of
+// PPA capacity), scaled by sky condition; the monsoon months are cloudier and
+// 16 July is a storm day. The PPA is sized so annual volumetric sourcing is
+// about 72%, the figure a REC-based report would show.
+const CFE_DAYS = [['2026-01-08','clear'],['2026-01-17','clear'],['2026-01-26','partly cloudy'],['2026-02-05','clear'],['2026-02-14','clear'],['2026-02-23','clear'],['2026-03-04','clear'],['2026-03-12','clear'],['2026-03-20','partly cloudy'],['2026-03-28','clear'],['2026-04-06','clear'],['2026-04-15','clear'],['2026-04-23','hazy'],['2026-05-02','clear'],['2026-05-11','hazy'],['2026-05-20','clear'],['2026-05-29','partly cloudy'],['2026-06-09','partly cloudy'],['2026-06-18','overcast'],['2026-06-27','overcast'],['2026-07-07','overcast'],['2026-07-16','storm'],['2026-07-25','overcast'],['2026-08-04','overcast'],['2026-08-13','partly cloudy'],['2026-08-22','overcast'],['2026-09-03','partly cloudy'],['2026-09-12','overcast'],['2026-09-21','partly cloudy'],['2026-09-29','clear']];
+const SKY_FACTOR = { clear: 1, hazy: 0.88, 'partly cloudy': 0.74, overcast: 0.4, storm: 0.06 };
+const PPA_KW = 38500;
+function hourlyGenerationRows() {
+  const energy = json('energy').filter((e) => e.facility_id === 'MUM-1');
+  const hoursOf = (m) => { const [y, mo] = m.split('-').map(Number); return new Date(Date.UTC(y, mo, 0)).getUTCDate() * 24; };
+  const shape = (h) => (h < 6 || h >= 19 ? 0 : Math.max(0, Math.sin((Math.PI * (h + 0.5 - 6)) / 13)) ** 1.7);
+  const out = [];
+  CFE_DAYS.forEach(([date, sky], d) => {
+    const e = energy.find((x) => x.month === date.slice(0, 7));
+    const avgKw = e.total_kwh / hoursOf(e.month);
+    const day = 1 + (((d * 7919) % 11) - 5) / 100; // ±5% day-to-day variation, fixed
+    for (let h = 0; h < 24; h += 1) {
+      const load = Math.round(avgKw * (1 + 0.035 * Math.cos((2 * Math.PI * (h - 15)) / 24)));
+      const solar = Math.round(PPA_KW * 0.92 * SKY_FACTOR[sky] * day * shape(h));
+      const matched = Math.min(solar, load);
+      out.push(['MUM-1', date, h, `${date} ${String(h).padStart(2, '0')}:00`, sky, load, solar, PPA_KW, load - matched, matched, load - matched, Math.round((matched / load) * 1000) / 10]);
+    }
+  });
+  return out;
+}
+
+// ── 28_clean_energy_assets: the proposed PPA and storage options ───────────
+// Battery cost from Ember (Dec 2025) grid-scale all-in ~USD 125/kWh at ₹85/USD;
+// behind-the-meter projects usually cost more. PPA landed cost within the
+// ₹4.0–8.15/kWh range reported for Maharashtra open-access solar (2025–26).
+const CLEAN_ASSETS = [
+  ['MUM-1', 'PPA-MUM-1-SOLAR', 'solar_ppa', 'proposed', 0, PPA_KW, 100, 5.5, 0, 40, 'Tata Power-style solar PPA, group captive, sized for ~72% annual volumetric match'],
+  ['MUM-1', 'BESS-MUM-1-PILOT', 'bess', 'proposed', 4000, 2000, 88, 0, 425, 26, '4 MWh pilot: the size often quoted, covers a small share of the night'],
+  ['MUM-1', 'BESS-MUM-1-A', 'bess', 'proposed', 120000, 30000, 88, 0, 12750, 52, '4-hour battery sized to firm the PPA overnight'],
+];
+
+// ── 29_water_reuse_opportunities: the three standard datacentre levers ─────
+// Rainwater volume = roof catchment × annual rainfall × 0.8 runoff. Mumbai
+// ~2,400 mm, Chennai ~1,400 mm (IMD normals). water_cost blends the municipal
+// commercial tariff with tanker top-up during shortfalls (site cost).
+const REUSE_SITES = { 'MUM-1': { roof: 9600, rainMm: 2400, costKl: 85 }, 'CHN-1': { roof: 7800, rainMm: 1400, costKl: 140 } };
+function waterReuseRows() {
+  const out = [];
+  for (const [id, s] of Object.entries(REUSE_SITES)) {
+    const rain = Math.round(s.roof * (s.rainMm / 1000) * 0.8 * 1000);
+    const humid = id === 'MUM-1';
+    out.push(
+      [id, 'condensate', 'Recover condensate from CRAH and AHU cooling coils into the cooling-tower make-up tank', humid ? 6200000 : 5100000, 'Low: filtration and UV', humid ? 22 : 20, 1.5, s.costKl],
+      [id, 'greywater', 'Treat greywater from the facility’s own washrooms and canteen for cooling-tower make-up', humid ? 1400000 : 1100000, 'Medium: membrane bioreactor', humid ? 35 : 32, 4, s.costKl],
+      [id, 'rainwater', `Harvest rainwater from ${s.roof.toLocaleString('en-IN')} m² of roof into storage for make-up`, rain, 'Low: first-flush, filtration, storage', humid ? 68 : 58, 2.5, s.costKl],
+    );
+  }
+  return out;
+}
+
 const SHEETS = [
+  {
+    name: '27_hourly_generation',
+    header: ['facility_id', 'date', 'hour_of_day', 'timestamp', 'sky', 'load_kw', 'solar_generation_kw', 'ppa_capacity_kw', 'grid_draw_kw', 'matched_kw', 'unmatched_kw', 'matching_pct'],
+    widths: [11, 12, 11, 17, 14, 10, 18, 15, 12, 11, 13, 13],
+    rows: hourlyGenerationRows(),
+    notes: [
+      'Proposed solar PPA (PPA-MUM-1-SOLAR in 28_clean_energy_assets) against MUM-1 facility load. 30 representative days, January to September 2026.',
+      'load_kw is the month’s 13_energy total_kwh ÷ hours in the month, with a ±3.5% afternoon cooling swing. It reconciles with 13_energy.',
+      'Solar is zero before 06:00 and from 19:00 and peaks near 12:30. Sky condition scales the day; 16 July is a monsoon storm day.',
+      'matched_kw = min(solar, load): what is clean in the hour it is used. No storage is installed today.',
+    ],
+  },
+  {
+    name: '28_clean_energy_assets',
+    header: ['facility_id', 'asset_id', 'asset_type', 'status', 'capacity_kwh', 'power_kw', 'round_trip_efficiency_pct', 'tariff_inr_kwh', 'cost_inr_lakh', 'lead_time_weeks', 'basis'],
+    widths: [11, 18, 11, 10, 13, 10, 24, 14, 13, 15, 72],
+    rows: CLEAN_ASSETS,
+    notes: [
+      'MUM-1 has no storage today. Both batteries are options; the PPA is the scenario modelled in 27_hourly_generation.',
+      'Battery cost: Ember, How cheap is battery storage? (Dec 2025), grid-scale all-in ~USD 125/kWh at ₹85/USD. Behind-the-meter projects usually cost more.',
+      'PPA tariff: landed cost within the ₹4.0–8.15/kWh range reported for Maharashtra open-access solar, 2025–26.',
+    ],
+  },
+  {
+    name: '29_water_reuse_opportunities',
+    header: ['facility_id', 'source', 'description', 'volume_litres_per_year', 'treatment_required', 'capex_inr_lakh', 'opex_inr_lakh_per_year', 'water_cost_inr_per_kl'],
+    widths: [11, 12, 70, 22, 34, 14, 22, 20],
+    rows: waterReuseRows(),
+    notes: [
+      'Rainwater = roof catchment × annual rainfall × 0.8 runoff. Rainfall: Mumbai ~2,400 mm, Chennai ~1,400 mm (IMD normals).',
+      'water_cost_inr_per_kl blends the municipal commercial tariff with tanker top-up during shortfalls.',
+      'Payback = capex ÷ (litres saved × water cost − opex). Greywater rarely pays back on cost alone at these volumes.',
+    ],
+  },
   {
     name: '23_runbooks',
     header: ['runbook_id', 'component_type', 'failure_mode', 'impact', 'match_terms', 'step', 'action', 'owner_team', 'within_min'],
@@ -209,6 +302,8 @@ const SHEETS = [
     ],
   },
 ];
+// Keep workbook order: the clean-energy and water sheets follow 26_thermal_sensors.
+SHEETS.push(...SHEETS.splice(0, 3));
 
 // ── write ───────────────────────────────────────────────────────────────────
 const wb = new ExcelJS.Workbook();

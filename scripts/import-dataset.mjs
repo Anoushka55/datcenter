@@ -43,6 +43,9 @@ const SHEETS = {
   '24_site_risk': 'siteRisk',
   '25_supply_chain': 'supplyChain',
   '26_thermal_sensors': 'thermalSensors',
+  '27_hourly_generation': 'hourlyGeneration',
+  '28_clean_energy_assets': 'cleanEnergyAssets',
+  '29_water_reuse_opportunities': 'waterReuse',
   // The runsheet. Its Scene 4 line is the only place the scheduled-swap cost
   // (₹4 lakh) is recorded, so the replay reads it from here.
   '17_demo_script': 'demoScript',
