@@ -13,12 +13,12 @@
 // Performance rules: state changes go through instance colours and cached
 // textures, never a geometry rebuild; the heatmap is rebuilt only when its
 // values change; ?lowfx=1 turns off bloom and shadows.
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Maximize2, Minimize2 } from 'lucide-react';
 import { racksOf, componentsOf, getComponent, getRack } from '@/lib/nexus/data';
 import { orientationLabels } from '@/lib/nexus/twin-model';
 import { rampRgb, overlayT } from '@/lib/nexus/twin-overlay';
-import { describeObject, hallSummaries, plantSummaries } from '@/lib/nexus/twin-site';
+import { describeObject } from '@/lib/nexus/twin-site';
 import { STATE_STYLE, COMPONENT_BASE, LABEL_TONE, RACK_BODY, STRIP_COLOR, STRIP_GAIN, SCENE } from './palette';
 
 const MS_PER_HOP = 120;
@@ -44,7 +44,7 @@ const SHAPES = {
   chw_loop: { kind: 'box', size: [6, 0.5, 0.5] },
 };
 const RACK_SIZE = [0.56, 2.0, 1.15];
-const STRIP_SIZE = [0.46, 1.5, 0.02];
+const STRIP_SIZE = [0.46, 1.75, 0.02];
 
 const STATUS_TONE = {
   Normal: '#22D3A7', Free: '#8FA8C8', Blocked: '#8FA8C8', Warning: '#F5A623', Exceeded: '#FF4D4D', Critical: '#FF4D4D',
@@ -114,6 +114,7 @@ function backdropTexture(THREE) {
 export default function NexusTwin({
   facilityId, view, runKey = 0, insetLeft = 0, insetRight = 0, onRackClick, onComponentClick,
   variant = 'interior', overlay = null, focus = null, infoCards = true, fullscreenTarget = null, showFullscreen = true, fullscreenAt = 'bottom-right',
+  callouts: externalCallouts = [], isolate = null,
 }) {
   const rootRef = useRef(null);
   const mountRef = useRef(null);
@@ -124,21 +125,7 @@ export default function NexusTwin({
   const [labels, setLabels] = useState([]);
   const [selected, setSelected] = useState(null);
   const [isFull, setIsFull] = useState(false);
-  propsRef.current = { ...propsRef.current, insetLeft, insetRight, onRackClick, onComponentClick, infoCards, selected };
-
-  const siteCallouts = useMemo(() => {
-    if (variant !== 'site') return [];
-    return [
-      ...hallSummaries(facilityId).map((h) => ({
-        id: `hall:${h.hallId}`, kind: 'hall', ref: h.hallId, priority: 200,
-        anchor: { x: (h.bounds.x0 + h.bounds.x1) / 2, y: 3.6, z: (h.bounds.z0 + h.bounds.z1) / 2 },
-        title: h.name, lines: [`${(h.usedKw / 1000).toFixed(2)} MW · ${h.racks} racks`], status: h.status,
-      })),
-      ...plantSummaries(facilityId).map((p) => ({
-        id: `plant:${p.id}`, kind: 'plant', ref: p.id, priority: 150, anchor: p.anchor, title: p.title, lines: [], status: p.status,
-      })),
-    ];
-  }, [facilityId, variant]);
+  propsRef.current = { ...propsRef.current, insetLeft, insetRight, onRackClick, onComponentClick, infoCards, selected, isolate };
 
   // ─── Build the scene once per facility and variant ───────────────────────
   useEffect(() => {
@@ -218,10 +205,12 @@ export default function NexusTwin({
         glass: new THREE.MeshStandardMaterial({ color: 0x6fa8dc, roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.16, side: THREE.DoubleSide, depthWrite: false }),
         edge: new THREE.LineBasicMaterial({ color: SCENE.edge, transparent: true, opacity: 0.55 }),
       };
+      let parent = scene;
+      const add = (o) => parent.add(o);
       const edgesOf = (mesh) => {
         const e = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 25), mat.edge);
         e.position.copy(mesh.position); e.rotation.copy(mesh.rotation);
-        scene.add(e);
+        add(e);
       };
       const slab = (x0, x1, z0, z1, material, y, userData) => {
         const m = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, z1 - z0), material);
@@ -229,7 +218,7 @@ export default function NexusTwin({
         m.position.set((x0 + x1) / 2, y, (z0 + z1) / 2);
         m.receiveShadow = fx;
         if (userData) m.userData = userData;
-        scene.add(m);
+        add(m);
         return m;
       };
       const pickables = [];
@@ -246,7 +235,7 @@ export default function NexusTwin({
           m.position.set(px, height / 2, pz);
           m.castShadow = fx && material !== mat.glass;
           m.receiveShadow = fx;
-          scene.add(m);
+          add(m);
           edgesOf(m);
         }
       };
@@ -287,13 +276,22 @@ export default function NexusTwin({
       // ── Halls: light floor, walls, edges ──
       const extent = (items, getX, getZ, p) => [Math.min(...items.map(getX)) - p, Math.max(...items.map(getX)) + p, Math.min(...items.map(getZ)) - p, Math.max(...items.map(getZ)) + p];
       const hallFloors = [];
+      const hallGroups = new Map();
+      const hallBox = new Map();
       for (const hallId of [...new Set(racks.map((r) => r.hall_id))]) {
         const [x0, x1, z0, z1] = extent(racks.filter((r) => r.hall_id === hallId), (r) => r.x_m, (r) => r.z_m, 1.8);
+        parent = new THREE.Group();
+        scene.add(parent);
+        hallGroups.set(hallId, parent);
+        hallBox.set(hallId, { x0, x1, z0, z1 });
         const floor = slab(x0, x1, z0, z1, mat.hall, 0.01, { kind: 'hall', id: hallId });
         pickables.push(floor);
         hallFloors.push([x0, x1, z0, z1]);
         shell(x0, x1, z0, z1, site ? 3.4 : 2.7, site ? mat.wall : mat.glass);
       }
+      const plantGroup = new THREE.Group();
+      scene.add(plantGroup);
+      parent = plantGroup;
       for (const zone of ['plant room', 'outdoor yard']) {
         const zc = comps.filter((c) => c.zone === zone);
         if (!zc.length) continue;
@@ -302,6 +300,9 @@ export default function NexusTwin({
         if (zone === 'plant room') shell(x0, x1, z0, z1, site ? 4.6 : 3, site ? mat.wall : mat.glass);
       }
 
+      const floorLabels = new THREE.Group();
+      scene.add(floorLabels);
+      parent = floorLabels;
       // Floor-painted orientation labels (hall names, zones).
       if (!site) {
         for (const l of orientationLabels(facilityId)) {
@@ -318,13 +319,16 @@ export default function NexusTwin({
           m.rotation.x = -Math.PI / 2;
           const offset = l.id.startsWith('hall-') ? 8.6 : 0;
           m.position.set(l.position.x, 0.04, l.position.z + offset);
-          scene.add(m);
+          add(m);
         }
       }
 
+      parent = scene;
+
       // ── Heatmap plane (texture swapped per overlay, never rebuilt per frame) ──
       const hb = { x0: Math.min(...hallFloors.map((h) => h[0])), x1: Math.max(...hallFloors.map((h) => h[1])), z0: Math.min(...hallFloors.map((h) => h[2])), z1: Math.max(...hallFloors.map((h) => h[3])) };
-      const heatMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.85, depthWrite: false, toneMapped: false });
+      // Slightly dimmed so warm colours on the floor do not bloom; only the strips should.
+      const heatMat = new THREE.MeshBasicMaterial({ color: 0xb8b8b8, transparent: true, opacity: 0.78, depthWrite: false, toneMapped: false });
       const heat = new THREE.Mesh(new THREE.PlaneGeometry(hb.x1 - hb.x0, hb.z1 - hb.z0), heatMat);
       heat.rotation.x = -Math.PI / 2;
       heat.position.set((hb.x0 + hb.x1) / 2, 0.03, (hb.z0 + hb.z1) / 2);
@@ -336,7 +340,18 @@ export default function NexusTwin({
       // ── Racks: bodies and emissive strips, instanced ──
       const dummy = new THREE.Object3D();
       const bodies = new THREE.InstancedMesh(new THREE.BoxGeometry(...RACK_SIZE), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.55, metalness: 0.45 }), racks.length);
-      const strips = new THREE.InstancedMesh(new THREE.BoxGeometry(...STRIP_SIZE), new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false }), racks.length * 2);
+      // Rack fronts read as stacked server units: bright bands with dark gaps.
+      const unitCanvas = document.createElement('canvas');
+      unitCanvas.width = 32; unitCanvas.height = 256;
+      const uctx = unitCanvas.getContext('2d');
+      uctx.fillStyle = '#ffffff'; uctx.fillRect(0, 0, 32, 256);
+      uctx.fillStyle = '#1b2433';
+      for (let y = 0; y < 256; y += 16) uctx.fillRect(0, y, 32, 3);
+      uctx.fillStyle = '#7d8aa0';
+      for (let y = 6; y < 256; y += 16) uctx.fillRect(24, y, 4, 4);
+      const unitTex = new THREE.CanvasTexture(unitCanvas);
+      unitTex.colorSpace = THREE.SRGBColorSpace;
+      const strips = new THREE.InstancedMesh(new THREE.BoxGeometry(...STRIP_SIZE), new THREE.MeshBasicMaterial({ color: 0xffffff, map: unitTex, toneMapped: false }), racks.length * 2);
       bodies.castShadow = fx; bodies.receiveShadow = fx;
       const n = racks.length;
       racks.forEach((r, i) => {
@@ -351,6 +366,9 @@ export default function NexusTwin({
           strips.setColorAt(i + k * n, new THREE.Color(STRIP_COLOR.neutral));
         }
       });
+      const zero = new THREE.Matrix4().makeScale(0, 0, 0);
+      const rackBase = racks.map((_, i) => { const m = new THREE.Matrix4(); bodies.getMatrixAt(i, m); return m; });
+      const stripBase = Array.from({ length: n * 2 }, (_, i) => { const m = new THREE.Matrix4(); strips.getMatrixAt(i, m); return m; });
       bodies.userData = { ids: racks.map((r) => r.rack_id), kind: 'rack' };
       strips.userData = { ids: [...racks, ...racks].map((r) => r.rack_id), kind: 'rack' };
       scene.add(bodies, strips);
@@ -376,7 +394,7 @@ export default function NexusTwin({
           mesh.setColorAt(i, new THREE.Color(COMPONENT_BASE[c.chain] ?? COMPONENT_BASE.electrical));
           compSlot.set(c.component_id, { mesh, index: i, shape, component: c });
         });
-        mesh.userData = { ids: list.map((c) => c.component_id), kind: 'component' };
+        mesh.userData = { ids: list.map((c) => c.component_id), kind: 'component', base: list.map((_, i) => { const m = new THREE.Matrix4(); mesh.getMatrixAt(i, m); return m; }) };
         scene.add(mesh);
         compMeshes.push(mesh);
       }
@@ -488,7 +506,7 @@ export default function NexusTwin({
         const rect = renderer.domElement.getBoundingClientRect();
         pointer.set(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1);
         raycaster.setFromCamera(pointer, camera);
-        const hit = raycaster.intersectObjects([bodies, strips, ...compMeshes, ...pickables], false)[0];
+        const hit = raycaster.intersectObjects([bodies, strips, ...compMeshes, ...pickables.filter((o) => o.parent?.visible !== false)], false)[0];
         if (!hit) return null;
         const ud = hit.object.userData;
         if (ud.kind === 'hall') return { kind: 'hall', id: ud.id, x: e.clientX - rect.left, y: e.clientY - rect.top, point: hit.point };
@@ -532,18 +550,53 @@ export default function NexusTwin({
       const styleOf = (state) => STATE_STYLE[state] ?? STATE_STYLE.neutral;
       let overlayState = null;
       let lastFramedKey = null;
+      let isolated = null;
       const applyOverlay = (ov) => {
         overlayState = ov;
         if (!ov) { heat.visible = false; return; }
-        if (!heatCache.has(ov.key)) {
-          const tex = new THREE.CanvasTexture(buildHeatCanvas(racks, ov, hb));
+        const k = `${ov.key}:${isolated ?? 'all'}`;
+        if (!heatCache.has(k)) {
+          const subset = isolated ? racks.filter((r) => r.hall_id === isolated) : racks;
+          const tex = new THREE.CanvasTexture(buildHeatCanvas(subset, ov, hb));
           tex.colorSpace = THREE.SRGBColorSpace;
-          heatCache.set(ov.key, tex);
+          heatCache.set(k, tex);
         }
-        heatMat.map = heatCache.get(ov.key);
+        heatMat.map = heatCache.get(k);
         heatMat.needsUpdate = true;
         heat.visible = true;
       };
+      // One hall on its own: other halls, the plant and their equipment are
+      // hidden (zero-scale instances, no rebuild) and the heatmap is redrawn
+      // from that hall's racks.
+      let home = homePoints;
+      const applyIsolation = (hallId) => {
+        isolated = hallId && hallGroups.has(hallId) ? hallId : null;
+        for (const [id, g] of hallGroups) g.visible = !isolated || id === isolated;
+        plantGroup.visible = !isolated;
+        floorLabels.visible = !isolated;
+        racks.forEach((r, i) => {
+          const show = !isolated || r.hall_id === isolated;
+          bodies.setMatrixAt(i, show ? rackBase[i] : zero);
+          strips.setMatrixAt(i, show ? stripBase[i] : zero);
+          strips.setMatrixAt(i + n, show ? stripBase[i + n] : zero);
+        });
+        bodies.instanceMatrix.needsUpdate = true;
+        strips.instanceMatrix.needsUpdate = true;
+        bodies.computeBoundingSphere(); strips.computeBoundingSphere();
+        const box = isolated ? hallBox.get(isolated) : null;
+        for (const m of compMeshes) {
+          m.userData.ids.forEach((id, i) => {
+            const c = compSlot.get(id).component;
+            const show = !box || (c.position.x >= box.x0 - 2.5 && c.position.x <= box.x1 + 2.5 && c.position.z >= box.z0 - 2.5 && c.position.z <= box.z1 + 2.5);
+            m.setMatrixAt(i, show ? m.userData.base[i] : zero);
+          });
+          m.instanceMatrix.needsUpdate = true;
+          m.computeBoundingSphere();
+        }
+        home = box ? [{ x: box.x0, y: 0, z: box.z0 }, { x: box.x1, y: 2, z: box.z1 }] : homePoints;
+        if (overlayState) applyOverlay(overlayState);
+      };
+
       const applyView = (v, key, ov) => {
         const now = performance.now();
         applyOverlay(ov);
@@ -555,7 +608,7 @@ export default function NexusTwin({
             const [rr, gg, bb] = rampRgb(overlayT(ov, ovValue));
             const c = new THREE.Color(`rgb(${rr},${gg},${bb})`);
             slot.bodyTarget = neutralBody.clone().lerp(c, 0.8);
-            slot.stripTarget = c.clone().multiplyScalar(STRIP_BASE_GAIN);
+            slot.stripTarget = c.clone().multiplyScalar(1.35);
           } else {
             const state = ov ? (r.status === 'free' ? 'free' : 'dimmed') : s.state;
             const style = styleOf(state);
@@ -610,7 +663,7 @@ export default function NexusTwin({
         if (key !== lastFramedKey) {
           lastFramedKey = key;
           resize();
-          easeTo(v?.focusPoints?.length ? v.focusPoints : homePoints);
+          easeTo(v?.focusPoints?.length ? v.focusPoints : home);
         }
       };
 
@@ -707,8 +760,9 @@ export default function NexusTwin({
       };
       loop();
 
-      sceneRef.current = { applyView, applyOverlay, resize, easeTo, homePoints };
+      sceneRef.current = { applyView, applyOverlay, applyIsolation, resize, easeTo, get homePoints() { return home; } };
       const pending = propsRef.current;
+      applyIsolation(pending.isolate ?? null);
       if (pending.pendingView !== undefined) applyView(pending.pendingView, pending.pendingKey, pending.pendingOverlay);
       else applyView(null, 'home', pending.pendingOverlay);
 
@@ -734,6 +788,9 @@ export default function NexusTwin({
       sceneRef.current = null;
     };
   }, [facilityId, variant]);
+
+  // Isolation first, so the view and focus below frame the right area.
+  useEffect(() => { propsRef.current.isolate = isolate; sceneRef.current?.applyIsolation(isolate); setSelected(null); }, [isolate]);
 
   // Apply each new view (or re-run), and overlay changes.
   useEffect(() => {
@@ -771,7 +828,7 @@ export default function NexusTwin({
 
   const card = selected ? describeObject(facilityId, selected.kind, selected.id) : null;
   const hoverInfo = hover && !selected ? describeObject(facilityId, hover.kind, hover.id) : null;
-  const callouts = [...siteCallouts, ...labels];
+  const callouts = [...externalCallouts, ...labels];
 
   return (
     <div ref={rootRef} className="absolute inset-0 overflow-hidden" data-testid="nexus-twin" style={{ background: SCENE.backdrop }}>
@@ -789,11 +846,13 @@ export default function NexusTwin({
                 <button type="button" onClick={() => setSelected({ kind: c.kind, id: c.ref, anchor: c.anchor })}
                   className="pointer-events-auto text-left whitespace-nowrap rounded-lg px-3 py-2 hover:brightness-125 transition"
                   style={{ background: 'rgba(10,22,40,0.92)', border: '1px solid rgba(63,169,245,0.45)', boxShadow: '0 4px 24px rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>
-                  <span className="block" style={{ color: '#E8EEF6', fontSize: 13, fontWeight: 700 }}>{c.title}</span>
-                  {c.lines.map((l) => <span key={l} className="block" style={{ color: '#9FB4CF', fontSize: 11.5 }}>{l}</span>)}
-                  <span className="flex items-center gap-1.5 mt-0.5" style={{ color: STATUS_TONE[c.status], fontSize: 11.5, fontWeight: 600 }}>
-                    <span className="w-2 h-2 rounded-full" style={{ background: STATUS_TONE[c.status] }} />{c.status === 'Normal' ? 'Normal' : c.status}
+                  <span className="flex items-center justify-between gap-3">
+                    <span style={{ color: '#E8EEF6', fontSize: 13, fontWeight: 700 }}>{c.title}</span>
+                    <span className="flex items-center gap-1.5" style={{ color: STATUS_TONE[c.status], fontSize: 11.5, fontWeight: 600 }}>
+                      <span className="w-2 h-2 rounded-full" style={{ background: STATUS_TONE[c.status], boxShadow: `0 0 6px ${STATUS_TONE[c.status]}` }} />{c.status}
+                    </span>
                   </span>
+                  {c.lines.map((l) => <span key={l} className="block" style={{ color: '#9FB4CF', fontSize: 11.5, lineHeight: 1.35 }}>{l}</span>)}
                 </button>
               )}
             </div>

@@ -8,7 +8,7 @@ import NexusTwin from './NexusTwin';
 import { idleView, thermalView } from '@/lib/nexus/twin-model';
 import { thermalMap, ASHRAE } from '@/lib/nexus/thermal-model';
 import { thermalOverlay, powerOverlay, rampHex, overlayT } from '@/lib/nexus/twin-overlay';
-import { hallSummaries, siteSummary } from '@/lib/nexus/twin-site';
+import { hallSummaries, siteSummary, siteCallouts, rowCallouts, heatCallouts } from '@/lib/nexus/twin-site';
 import { racksOf } from '@/lib/nexus/data';
 
 const VIEWS = [
@@ -65,7 +65,11 @@ const STATUS_DOT = [['Normal', '#22D3A7'], ['Warning', '#F5A623'], ['Critical', 
 export default function TwinStudio({ facilityId }) {
   const rootRef = useRef(null);
   const [mode, setMode] = useState('outer');
-  const [hallId, setHallId] = useState('all');
+  // Inner view is always one hall (Hall 2 carries today's alerts); the heatmap starts site-wide.
+  const [innerHall, setInnerHall] = useState('MUM-1-H2');
+  const [heatHall, setHeatHall] = useState('all');
+  const hallId = mode === 'inner' ? innerHall : mode === 'heat' ? heatHall : 'all';
+  const setHallId = mode === 'inner' ? setInnerHall : setHeatHall;
   const [heatKind, setHeatKind] = useState('thermal');
   const [failure, setFailure] = useState(false);
 
@@ -93,6 +97,12 @@ export default function TwinStudio({ facilityId }) {
     const b = hall.bounds;
     return { key: `${mode}:${hall.hallId}`, points: [{ x: b.x0, y: 0, z: b.z0 }, { x: b.x1, y: 2, z: b.z1 }] };
   }, [hall, mode]);
+  const isolate = mode !== 'outer' && hall ? hall.hallId : null;
+  const callouts = useMemo(() => {
+    if (mode === 'outer') return siteCallouts(facilityId);
+    if (mode === 'inner') return hall ? rowCallouts(facilityId, hall.hallId) : [];
+    return overlay ? heatCallouts(facilityId, overlay, hall?.hallId ?? null) : [];
+  }, [mode, hall, overlay, facilityId]);
 
   const racks = useMemo(() => racksOf(facilityId), [facilityId]);
   const scope = hall ?? {
@@ -121,6 +131,8 @@ export default function TwinStudio({ facilityId }) {
         runKey={mode === 'heat' ? `${heatKind}:${failure}` : mode}
         overlay={overlay}
         focus={focus}
+        isolate={isolate}
+        callouts={callouts}
         fullscreenTarget={rootRef}
       />
 
@@ -148,7 +160,7 @@ export default function TwinStudio({ facilityId }) {
             </div>
           )}
           {mode === 'heat' && heatKind === 'thermal' && (
-            <button type="button" onClick={() => setFailure((f) => !f)} aria-pressed={failure}
+            <button type="button" onClick={() => { setFailure((f) => !f); if (!failure) setHeatHall('MUM-1-H2'); }} aria-pressed={failure}
               className="flex items-center gap-2 px-3.5 py-2 rounded-xl"
               style={{ ...GLASS, color: failure ? '#FFFFFF' : '#E8EEF6', fontSize: 13, fontWeight: 600, background: failure ? 'rgba(230,57,70,0.85)' : GLASS.background, border: failure ? '1px solid #FF4D4D' : GLASS.border }}>
               <Wind size={15} />{failure ? `${FAIL_CRAH} failed · restore` : `Simulate ${FAIL_CRAH} failure`}
@@ -157,7 +169,7 @@ export default function TwinStudio({ facilityId }) {
           {mode !== 'outer' && (
             <select value={hallId} onChange={(e) => setHallId(e.target.value)} aria-label="Hall"
               className="rounded-xl px-3.5 py-2 outline-none cursor-pointer" style={{ ...GLASS, color: '#E8EEF6', fontSize: 13.5 }}>
-              <option value="all" style={{ background: '#0A1628' }}>All halls</option>
+              {mode === 'heat' && <option value="all" style={{ background: '#0A1628' }}>All halls</option>}
               {halls.map((h) => <option key={h.hallId} value={h.hallId} style={{ background: '#0A1628' }}>{h.name}</option>)}
             </select>
           )}
