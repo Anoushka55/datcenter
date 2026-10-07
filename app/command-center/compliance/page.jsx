@@ -22,7 +22,7 @@ const STATUS = {
 
 function Tile({ label, value, sub }) {
   return (
-    <div className="bg-white rounded-xl border border-[#E2E8F0] px-4 py-3">
+    <div className="bg-white rounded-xl border border-[#D8DCE3] px-4 py-3">
       <p className="text-[10px] font-bold uppercase tracking-widest text-[#94A3B8]">{label}</p>
       <p className="text-xl font-semibold text-[#1A1F36]" style={MONO}>{value}</p>
       {sub && <p className="text-[11px] text-[#64748B]">{sub}</p>}
@@ -50,12 +50,12 @@ export default function CompliancePage() {
           <Tile label={`Coming into force, ${DEADLINE_WINDOW_DAYS} days`} value={deadlines.length} sub={deadlines.map((d) => `${d.jurisdiction} in ${d.inDays} days (${d.facility})`).join(', ') || 'None'} />
         </div>
 
-        <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+        <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
           <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] mb-3">Policy timeline · as of {timeLabel(AS_OF)}</h2>
           <ol className="relative flex flex-wrap gap-y-3">
             {timeline.map((t) => (
               <li key={t.jurisdiction} className="flex-1 min-w-[150px] pr-3">
-                <div className={`h-1 rounded-full mb-2 ${t.inForce ? 'bg-[#0077C8]' : 'bg-[#E8590C]'}`} />
+                <div className={`h-1 rounded-full mb-2 ${t.inForce ? 'bg-[#005EB8]' : 'bg-[#E8590C]'}`} />
                 <p className="text-[10px] text-[#94A3B8]" style={MONO}>{timeLabel(t.effectiveFrom)}</p>
                 <p className="text-xs font-semibold text-[#1A1F36] leading-snug">{t.jurisdiction}</p>
                 <p className="text-[11px] text-[#64748B] leading-snug">{t.policy}</p>
@@ -72,7 +72,7 @@ export default function CompliancePage() {
             const worst = s.obligations.some((o) => o.status === 'gap') ? 'gap' : s.obligations.some((o) => o.status === 'partial') ? 'partial' : s.obligations.some((o) => o.status === 'from-commissioning') ? 'from-commissioning' : 'ready';
             return (
               <button key={s.facilityId} onClick={() => setSelected(s.facilityId)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${selected === s.facilityId ? 'bg-[#00338D] text-white border-[#00338D]' : 'bg-white text-[#334155] border-[#E2E8F0] hover:bg-[#F8FAFC]'}`}>
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${selected === s.facilityId ? 'bg-[#00338D] text-white border-[#00338D]' : 'bg-white text-[#334155] border-[#D8DCE3] hover:bg-[#F8FAFC]'}`}>
                 <span className="inline-block w-2 h-2 rounded-full mr-1.5 align-middle" style={{ background: STATUS[worst].fg }} aria-hidden="true" />
                 {s.name.replace('Nexus ', '')}
               </button>
@@ -81,14 +81,14 @@ export default function CompliancePage() {
         </div>
 
         <div className="grid xl:grid-cols-[1.6fr_1fr] gap-4">
-          <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+          <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
             <h2 className="text-sm font-bold text-[#1A1F36]">{site.name} · {site.jurisdiction}</h2>
             <p className="text-[11px] text-[#64748B] mb-3">{site.status}</p>
             <div className="space-y-3">
               {site.obligations.map((o) => {
                 const st = STATUS[o.status];
                 return (
-                  <article key={o.jurisdiction} className="rounded-lg border border-[#E2E8F0] p-3">
+                  <article key={o.jurisdiction} className="rounded-lg border border-[#D8DCE3] p-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <p className="text-xs font-semibold text-[#1A1F36]">{o.jurisdiction} · {o.policy}</p>
                       <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ background: st.bg, color: st.fg }}><st.icon size={11} /> {st.label}</span>
@@ -101,11 +101,11 @@ export default function CompliancePage() {
                 );
               })}
             </div>
-            <Link href="/command-center/esg" className="inline-block mt-3 text-xs font-semibold text-[#0077C8] hover:underline">Build the disclosure pack →</Link>
+            <Link href="/command-center/esg" className="inline-block mt-3 text-xs font-semibold text-[#005EB8] hover:underline">Build the disclosure pack →</Link>
           </section>
 
           <div className="space-y-4">
-            <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+            <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
               <h3 className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#64748B] mb-2"><Gift size={12} /> Incentives available</h3>
               {site.incentivesAvailable.length ? site.incentivesAvailable.map((i) => (
                 <div key={i.jurisdiction} className="mb-2">
@@ -115,7 +115,7 @@ export default function CompliancePage() {
                 </div>
               )) : <p className="text-xs text-[#94A3B8]">No incentives under the applicable policies.</p>}
             </section>
-            <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+            <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
               <h3 className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#64748B] mb-2"><CalendarClock size={12} /> Deadlines</h3>
               {site.deadlinesApproaching.length ? site.deadlinesApproaching.map((d) => (
                 <p key={d.jurisdiction} className="text-xs text-[#1A1F36]"><strong>{d.jurisdiction}</strong> {d.policy} takes effect {timeLabel(d.effectiveFrom)} — in {d.inDays} days.</p>

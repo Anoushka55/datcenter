@@ -65,19 +65,19 @@ export default function CommandCenterPage() {
               <motion.div {...rise(0.35)}>
                 <TenantSlaPanel tenants={model.tenants} />
               </motion.div>
-              <motion.div {...rise(0.4)} className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-5">
+              <motion.div {...rise(0.4)} className="bg-white rounded-2xl border border-[#D8DCE3] shadow-sm p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                   <div>
-                    <h2 className="font-bold text-[#1A1F36] text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Peer Benchmarks</h2>
+                    <h2 className="font-bold text-[#1A1F36] text-sm" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>Peer Benchmarks</h2>
                     <p className="text-[#9CA3AF] text-xs mt-0.5">Against published Indian operator percentiles</p>
                   </div>
                   <select value={facility} onChange={(e) => setFacility(e.target.value)} aria-label="Facility to benchmark"
-                    className="text-xs text-[#334155] bg-[#F4F6F9] border border-[#E2E8F0] rounded-lg px-3 py-1.5 focus:outline-none">
+                    className="text-xs text-[#334155] bg-[#F0F2F5] border border-[#D8DCE3] rounded-lg px-3 py-1.5 focus:outline-none">
                     {nexus.facilities.map((f) => <option key={f.facility_id} value={f.facility_id}>{f.name}</option>)}
                   </select>
                 </div>
                 <BenchmarkStrip facilityId={facility} />
-                <h3 className="font-bold text-[#1A1F36] text-sm mt-6 mb-2" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Portfolio scorecard</h3>
+                <h3 className="font-bold text-[#1A1F36] text-sm mt-6 mb-2" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>Portfolio scorecard</h3>
                 <BenchmarkScorecard />
               </motion.div>
             </div>

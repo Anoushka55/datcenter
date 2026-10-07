@@ -67,7 +67,7 @@ export default function DecisionQuickStarts() {
                       <p className="text-xs font-bold text-[#1A1F36] leading-snug">{qs.title}</p>
                       <p className="text-[10px] text-[#6B7280] leading-snug">{qs.subtitle}</p>
                     </div>
-                    <ArrowRight size={11} className="text-[#CBD5E1] group-hover:text-[#0077C8] flex-shrink-0 transition-colors" />
+                    <ArrowRight size={11} className="text-[#CBD5E1] group-hover:text-[#005EB8] flex-shrink-0 transition-colors" />
                   </div>
                 </button>
               );
@@ -140,7 +140,7 @@ export default function DecisionQuickStarts() {
               disabled={!clientName.trim() || !location.trim()}
               onClick={() => goToCockpit('client_specific')}
               className="w-full mt-3 flex items-center justify-center gap-1.5 px-3 py-2.5 text-white text-[10px] font-bold rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              style={{ background: 'linear-gradient(135deg, #00338D 0%, #0077C8 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #00338D 0%, #005EB8 100%)' }}
             >
               Run Decision Engine <ArrowRight size={11} />
             </button>
@@ -178,7 +178,7 @@ export default function DecisionQuickStarts() {
               disabled={!location.trim()}
               onClick={() => goToCockpit('exploratory')}
               className="w-full mt-3 flex items-center justify-center gap-1.5 px-3 py-2.5 text-white text-[10px] font-bold rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              style={{ background: 'linear-gradient(135deg, #00338D 0%, #0077C8 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #00338D 0%, #005EB8 100%)' }}
             >
               Run Decision Engine <ArrowRight size={11} />
             </button>

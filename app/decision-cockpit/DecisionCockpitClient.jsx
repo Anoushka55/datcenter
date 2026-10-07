@@ -178,7 +178,7 @@ export default function DecisionCockpitClient() {
               <Cpu size={14} className="text-accent" />
             </div>
             <div className="min-w-0">
-              <p className="font-extrabold text-text-primary text-sm leading-tight truncate" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              <p className="font-extrabold text-text-primary text-sm leading-tight truncate" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
                 {quickStart?.title || 'Decision Cockpit'}
               </p>
               <p className="text-[9px] text-text-muted leading-tight">

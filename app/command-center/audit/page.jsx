@@ -45,21 +45,21 @@ export default function AuditPage() {
   return (
     <CCLayout title="Audit & Usage">
       <div className="p-6 space-y-4">
-        <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+        <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
             <div>
               <h2 className="text-sm font-bold text-[#1A1F36]">Audit trail</h2>
               <p className="text-xs text-[#64748B]">Every user action and every agent output, append-only.</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <div className="flex bg-[#F4F6F9] rounded-lg p-0.5 gap-0.5">
+              <div className="flex bg-[#F0F2F5] rounded-lg p-0.5 gap-0.5">
                 {KINDS.map((k) => (
                   <button key={k || 'all'} onClick={() => setKind(k)}
                     className={`px-2.5 py-1 rounded-md text-[11px] font-semibold ${kind === k ? 'bg-[#00338D] text-white' : 'text-[#6B7280] hover:text-[#1A1F36]'}`}>{KIND_LABEL[k]}</button>
                 ))}
               </div>
               <select value={facility} onChange={(e) => setFacility(e.target.value)} aria-label="Facility"
-                className="text-xs text-[#334155] bg-[#F4F6F9] border border-[#E2E8F0] rounded-lg px-2 py-1">
+                className="text-xs text-[#334155] bg-[#F0F2F5] border border-[#D8DCE3] rounded-lg px-2 py-1">
                 <option value="">All facilities</option>
                 {nexus.facilities.map((f) => <option key={f.facility_id} value={f.facility_id}>{f.facility_id}</option>)}
               </select>
@@ -68,7 +68,7 @@ export default function AuditPage() {
               )}
             </div>
           </div>
-          {audit.state === 'loading' && <div className="h-24 bg-[#F4F6F9] rounded-lg animate-pulse" />}
+          {audit.state === 'loading' && <div className="h-24 bg-[#F0F2F5] rounded-lg animate-pulse" />}
           {audit.state === 'denied' && <Denied message={`${audit.message}. The audit trail is visible to partner and admin roles.`} />}
           {audit.state === 'ok' && (
             <>
@@ -104,10 +104,10 @@ export default function AuditPage() {
           )}
         </section>
 
-        <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+        <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
           <h2 className="text-sm font-bold text-[#1A1F36]">Model spend by engagement</h2>
           <p className="text-xs text-[#64748B] mb-3">Tokens and list-price cost per facility or engagement, from every model call.</p>
-          {usage.state === 'loading' && <div className="h-16 bg-[#F4F6F9] rounded-lg animate-pulse" />}
+          {usage.state === 'loading' && <div className="h-16 bg-[#F0F2F5] rounded-lg animate-pulse" />}
           {usage.state === 'denied' && <Denied message={`${usage.message}. Model spend is visible to partner and admin roles.`} />}
           {usage.state === 'ok' && (usage.engagements.length ? (
             <table className="w-full text-xs">

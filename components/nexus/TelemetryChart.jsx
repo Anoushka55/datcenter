@@ -18,7 +18,7 @@ const C = {
   critical: '#d03b3b',
   grid: '#1c2a3d',
   surface: '#0a1220',
-  ink: '#e2e8f0',
+  ink: '#D8DCE3',
   inkSecondary: '#c3c2b7',
   muted: '#898781',
 };

@@ -129,7 +129,7 @@ function DatacenterNewsSection() {
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold border transition-colors ${
         indiaMode
           ? 'bg-[#FF9933]/10 border-[#FF9933]/40 text-[#CC6600]'
-          : 'bg-white border-[#E2E8F0] text-[#9CA3AF] hover:bg-[#F4F6F9]'
+          : 'bg-white border-[#D8DCE3] text-[#9CA3AF] hover:bg-[#F0F2F5]'
       }`}
     >
       {indiaMode ? <IndiaBadge /> : <Globe size={11} />}
@@ -145,7 +145,7 @@ function DatacenterNewsSection() {
       </div>
       <div style={{ columnCount: 3, columnGap: '12px' }}>
         {[...Array(6)].map((_, i) => (
-          <div key={i} className="break-inside-avoid mb-3 bg-white border border-[#E2E8F0] rounded-xl overflow-hidden shadow-sm">
+          <div key={i} className="break-inside-avoid mb-3 bg-white border border-[#D8DCE3] rounded-xl overflow-hidden shadow-sm">
             {i % 4 === 0 && <div className="shimmer h-44 w-full" />}
             <div className="p-4 space-y-2">
               <div className="shimmer h-3 w-1/3 rounded" />
@@ -164,13 +164,13 @@ function DatacenterNewsSection() {
         <h2 className="text-[#9CA3AF] text-sm font-semibold uppercase tracking-widest">{sectionTitle}</h2>
         <IndiaToggle />
       </div>
-      <div className="bg-white border border-[#E2E8F0] rounded-xl p-8 text-center shadow-sm">
+      <div className="bg-white border border-[#D8DCE3] rounded-xl p-8 text-center shadow-sm">
         <Newspaper size={32} className="text-[#CBD5E1] mx-auto mb-3" />
         <p className="text-[#6B7280] text-sm font-semibold mb-1">News unavailable</p>
         <p className="text-[#9CA3AF] text-xs mb-4">{error || 'No articles found at this time.'}</p>
         <button
           onClick={() => fetchNews(indiaMode)}
-          className="px-4 py-2 bg-[#00338D] text-white text-xs font-bold rounded-lg hover:bg-[#0044b8] transition-colors"
+          className="px-4 py-2 bg-[#00338D] text-white text-xs font-bold rounded-lg hover:bg-[#002A73] transition-colors"
         >
           Try again
         </button>
@@ -205,12 +205,12 @@ function DatacenterNewsSection() {
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="break-inside-avoid block mb-3 bg-white border border-[#E2E8F0] rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-[#0077C8]/30 transition-all duration-200 group relative"
+              className="break-inside-avoid block mb-3 bg-white border border-[#D8DCE3] rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-[#005EB8]/30 transition-all duration-200 group relative"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.6 + i * 0.05 }}
             >
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#00338D] to-[#0077C8] opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#00338D] to-[#005EB8] opacity-0 group-hover:opacity-100 transition-opacity" />
               {showImage && (
                 <div className={`overflow-hidden ${featured ? 'h-44' : 'h-28'}`}>
                   <img
@@ -223,14 +223,14 @@ function DatacenterNewsSection() {
               )}
               <div className="p-4">
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="text-[#0077C8] text-[10px] font-bold uppercase tracking-wider truncate">{article.source}</span>
+                  <span className="text-[#005EB8] text-[10px] font-bold uppercase tracking-wider truncate">{article.source}</span>
                   <span className="flex items-center gap-1 text-[#9CA3AF] text-[10px] flex-shrink-0">
                     <Clock size={9} />{relativeTime(article.publishedAt)}
                   </span>
                 </div>
                 <h3
                   className={`text-[#1A1F36] font-bold leading-snug mb-2 group-hover:text-[#00338D] transition-colors ${featured ? 'text-sm line-clamp-3' : 'text-xs line-clamp-2'}`}
-                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                  style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}
                 >
                   {article.title}
                 </h3>
@@ -239,7 +239,7 @@ function DatacenterNewsSection() {
                     {article.description}
                   </p>
                 )}
-                <div className="flex items-center gap-1 text-[#0077C8] text-[10px] font-semibold group-hover:gap-2 transition-all">
+                <div className="flex items-center gap-1 text-[#005EB8] text-[10px] font-semibold group-hover:gap-2 transition-all">
                   Read more <ExternalLink size={9} />
                 </div>
               </div>
@@ -301,7 +301,7 @@ export default function LandingPage() {
               />
               <div
                 className="text-[#00338D] text-xs tracking-[6px] uppercase font-semibold"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}
               >
                 Data Centre Lifecycle Intelligence
               </div>
@@ -318,7 +318,7 @@ export default function LandingPage() {
         {/* Left 60% — Globe, height-locked */}
         <motion.div
           className="flex flex-col items-center justify-center"
-          style={{ width: '60%', height: '100%', overflow: 'hidden', padding: '32px 36px 32px 48px', backgroundColor: '#010D20' }}
+          style={{ width: '60%', height: '100%', overflow: 'hidden', padding: '32px 36px 32px 48px', background: 'radial-gradient(ellipse at 45% 45%, #0A4AAE 0%, #00338D 45%, #00266B 100%)' }}
           initial={{ opacity: 0, x: -24 }}
           animate={{ opacity: contentVisible ? 1 : 0, x: contentVisible ? 0 : -24 }}
           transition={{ duration: 0.7, delay: 0.15 }}
@@ -330,12 +330,12 @@ export default function LandingPage() {
             </p>
             <h2
               className="text-white text-2xl font-extrabold mt-1 leading-tight"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+              style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}
             >
               Datacenters across the world,{' '}
               <span
                 className="text-transparent bg-clip-text"
-                style={{ backgroundImage: 'linear-gradient(90deg, #00338D, #0077C8)' }}
+                style={{ backgroundImage: 'linear-gradient(90deg, #8CC4F2, #CFE6FA)' }}
               >
                 at your fingertips
               </span>

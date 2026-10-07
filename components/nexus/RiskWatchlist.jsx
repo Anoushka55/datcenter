@@ -32,7 +32,7 @@ function RiskCard({ r }) {
   const p = PRIORITY[r.priority];
   const site = getFacility(r.facilityId).name;
   return (
-    <article className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+    <article className="bg-white rounded-xl border border-[#D8DCE3] p-4">
       <div className="flex flex-wrap items-center gap-2 mb-1.5">
         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: p.bg, color: p.fg }}>{p.label} priority</span>
         {r.kind === 'component' && (r.alert ? (
@@ -62,7 +62,7 @@ function RiskCard({ r }) {
 
       <div className="mt-3 grid sm:grid-cols-2 xl:grid-cols-4 gap-2">
         {r.cost?.scheduledInrLakh != null && (
-          <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] px-3 py-2">
+          <div className="rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] px-3 py-2">
             <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] font-semibold">Act now vs wait</p>
             <p className="text-xs text-[#1A1F36]"><strong>{fmtLakh(r.cost.scheduledInrLakh)}</strong> scheduled</p>
             <p className="text-[11px] text-[#64748B]">{fmtLakh(r.cost.emergencyInrLakh)} median emergency</p>
@@ -71,7 +71,7 @@ function RiskCard({ r }) {
         {(r.kind === 'efficiency-drift' || r.kind === 'capacity-trend') && (() => {
           const t = r.kind === 'efficiency-drift' ? r.drift.trend : r.trend;
           return (
-            <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] px-3 py-2">
+            <div className="rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] px-3 py-2">
               <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] font-semibold">Trend</p>
               <p className="text-xs text-[#1A1F36]"><strong>+{t.slopePerMonth}</strong> a month</p>
               <p className="text-[11px] text-[#64748B]">{t.confidence} confidence · fit {t.r2}</p>
@@ -90,12 +90,12 @@ function RiskCard({ r }) {
         })()}
         {r.kind === 'efficiency-drift' && (
           <>
-            <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] px-3 py-2">
+            <div className="rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] px-3 py-2">
               <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] font-semibold">Cost so far</p>
               <p className="text-xs text-[#1A1F36]"><strong>{fmtLakh(r.cost.extraCostInrLakh)}</strong></p>
               <p className="text-[11px] text-[#64748B]">{r.cost.extraTco2} tCO2 extra</p>
             </div>
-            <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] px-3 py-2">
+            <div className="rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] px-3 py-2">
               <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] font-semibold">If it continues</p>
               <p className="text-xs text-[#1A1F36]"><strong>{fmtLakh(r.cost.annualRunRateInrLakh)}</strong> a year</p>
               <p className="text-[11px] text-[#64748B]">at +{r.cost.meanExcess3m} PUE</p>
@@ -103,7 +103,7 @@ function RiskCard({ r }) {
           </>
         )}
         {r.exposure && (
-          <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] px-3 py-2">
+          <div className="rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] px-3 py-2">
             <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] font-semibold">Downstream</p>
             <p className="text-xs text-[#1A1F36]"><strong>{r.exposure.racks}</strong> racks</p>
             <p className="text-[11px] text-[#64748B]">{r.exposure.tenants} {r.exposure.tenants === 1 ? 'tenant' : 'tenants'}</p>
@@ -118,7 +118,7 @@ function RiskCard({ r }) {
             <li key={i} className="flex items-start gap-2 text-[11.5px] text-[#334155]">
               <Icon size={12} className="mt-0.5 flex-shrink-0 text-[#94A3B8]" />
               <span><span className="text-[#94A3B8]">{SOURCE_LABEL[e.source] ?? e.source}:</span>{' '}
-                {e.alertId ? <Link href={`/incidents?alert=${e.alertId}`} className="text-[#0077C8] hover:underline">{e.text}</Link> : e.text}
+                {e.alertId ? <Link href={`/incidents?alert=${e.alertId}`} className="text-[#005EB8] hover:underline">{e.text}</Link> : e.text}
               </span>
             </li>
           );

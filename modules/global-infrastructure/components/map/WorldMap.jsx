@@ -57,7 +57,7 @@ export default function WorldMap({
   const wrapperClass = mode === 'dark' ? 'gii-map-dark' : 'gii-map-light';
 
   return (
-    <div className={`w-full h-full rounded-2xl overflow-hidden border border-[#E2E8F0] ${wrapperClass}`}>
+    <div className={`w-full h-full rounded-2xl overflow-hidden border border-[#D8DCE3] ${wrapperClass}`}>
       <MapContainer
         center={[20, 10]}
         zoom={2}

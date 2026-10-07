@@ -16,7 +16,7 @@ export default function WaterMap({ sites, selected, onSelect }) {
   const bounds = [[Math.min(...lats) - 1.5, Math.min(...lons) - 2], [Math.max(...lats) + 1.5, Math.max(...lons) + 2]];
   return (
     <MapContainer bounds={bounds} minZoom={4} maxZoom={9} scrollWheelZoom={false}
-      style={{ height: '100%', width: '100%', background: '#F4F6F9' }} attributionControl>
+      style={{ height: '100%', width: '100%', background: '#F0F2F5' }} attributionControl>
       <TileLayer
         url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
         attribution="Tiles &copy; Esri" />

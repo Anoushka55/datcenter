@@ -26,7 +26,7 @@ const BAND = {
 
 function Tile({ label, value, sub }) {
   return (
-    <div className="bg-white rounded-xl border border-[#E2E8F0] px-4 py-3">
+    <div className="bg-white rounded-xl border border-[#D8DCE3] px-4 py-3">
       <p className="text-[10px] font-bold uppercase tracking-widest text-[#94A3B8]">{label}</p>
       <p className="text-xl font-semibold text-[#1A1F36]" style={MONO}>{value}</p>
       {sub && <p className="text-[11px] text-[#64748B]">{sub}</p>}
@@ -46,7 +46,7 @@ function Brief({ data, offline }) {
   }, [data, offline]);
   return (
     <section className="bg-[#F7FAFD] rounded-xl border border-[#D6E4F2] p-4">
-      <p className="text-[11px] font-bold uppercase tracking-wider text-[#0077C8] mb-2">Risk brief</p>
+      <p className="text-[11px] font-bold uppercase tracking-wider text-[#005EB8] mb-2">Risk brief</p>
       {state.narrating && !state.text
         ? <div className="space-y-2 animate-pulse"><div className="h-2.5 bg-[#D6E4F2] rounded" /><div className="h-2.5 bg-[#D6E4F2] rounded w-5/6" /></div>
         : <p className="text-[13px] leading-relaxed text-[#1A1F36]">{state.text}</p>}
@@ -82,7 +82,7 @@ export default function SiteRiskPage() {
 
         {offline !== null && <Brief data={data} offline={offline} />}
 
-        <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+        <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
             <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Exposure by site</h2>
             <p className="text-[10px] text-[#94A3B8]">Scores 0–100, hazard levels 1–5; darker is worse. Composite = {BLEND.mean * 100}% weighted mean (grid {WEIGHTS.grid * 100}%, hazard {WEIGHTS.hazard * 100}%, water {WEIGHTS.water * 100}%) + {BLEND.worst * 100}% worst part.</p>
@@ -135,7 +135,7 @@ export default function SiteRiskPage() {
         <LiveConditions offline={offline} facilities={nexus.facilities.map((f) => ({ id: f.facility_id, name: f.name }))} />
 
         <div className="grid xl:grid-cols-2 gap-4">
-          <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+          <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
             <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] mb-3">Grid connection and headroom</h2>
             <div className="space-y-3">
               {data.grid.map((g) => (
@@ -147,8 +147,8 @@ export default function SiteRiskPage() {
                       : <span className="text-[#B54708] font-semibold">Queue #{g.queuePosition} · {g.energisation}</span>}
                   </div>
                   {g.status === 'Connected' ? (
-                    <div className="mt-1 h-2.5 rounded-full bg-[#E2E8F0] overflow-hidden" role="img" aria-label={`${g.utilisedPct}% of sanctioned load`}>
-                      <div className="h-full rounded-full" style={{ width: `${g.utilisedPct}%`, background: g.utilisedPct >= 95 ? '#DC2626' : g.utilisedPct >= 90 ? '#D4A017' : '#0077C8' }} />
+                    <div className="mt-1 h-2.5 rounded-full bg-[#D8DCE3] overflow-hidden" role="img" aria-label={`${g.utilisedPct}% of sanctioned load`}>
+                      <div className="h-full rounded-full" style={{ width: `${g.utilisedPct}%`, background: g.utilisedPct >= 95 ? '#C8102E' : g.utilisedPct >= 90 ? '#E87722' : '#005EB8' }} />
                     </div>
                   ) : <div className="mt-1 h-2.5 rounded-full border border-dashed border-[#CBD5E1]" />}
                   <p className="text-[10px] text-[#94A3B8] mt-0.5">{fmtNumber(g.drawKw)} of {fmtNumber(g.sanctionedKw)} kW sanctioned · {g.note}</p>
@@ -157,7 +157,7 @@ export default function SiteRiskPage() {
             </div>
           </section>
 
-          <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+          <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
             <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] mb-1">Supply chain behind recovery</h2>
             <p className="text-[10px] text-[#94A3B8] mb-3">Shared across the portfolio. Exposure weighs lead time, single sourcing and spares held.</p>
             <table className="w-full text-xs">
@@ -174,7 +174,7 @@ export default function SiteRiskPage() {
                     <td className="py-1.5 pr-2 text-[#64748B]">{s.vendor} · {s.origin}<span className="block text-[10px] text-[#94A3B8]">{s.note}</span></td>
                     <td className="py-1.5 pr-2 text-right text-[#334155] whitespace-nowrap" style={MONO}>{s.leadWeeks} wk</td>
                     <td className="py-1.5 text-right whitespace-nowrap">
-                      <span className="inline-block w-12 h-2 rounded-full bg-[#E2E8F0] overflow-hidden align-middle mr-1.5"><span className="block h-full rounded-full" style={{ width: `${s.exposure}%`, background: cellColor(s.exposure) }} /></span>
+                      <span className="inline-block w-12 h-2 rounded-full bg-[#D8DCE3] overflow-hidden align-middle mr-1.5"><span className="block h-full rounded-full" style={{ width: `${s.exposure}%`, background: cellColor(s.exposure) }} /></span>
                       <span className="text-[#334155]" style={MONO}>{s.exposure}</span>
                     </td>
                   </tr>

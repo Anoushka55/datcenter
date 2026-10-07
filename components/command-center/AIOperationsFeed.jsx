@@ -8,23 +8,23 @@ import { getFacility } from '@/lib/nexus/data';
 import { fmtLakh } from '@/lib/nexus/format';
 
 const PRIORITY = {
-  high: { border: 'border-[#DC2626]/20', bg: 'bg-[#DC2626]/5', fg: '#B42318' },
-  medium: { border: 'border-[#D4A017]/25', bg: 'bg-[#D4A017]/5', fg: '#8A6508' },
+  high: { border: 'border-[#C8102E]/20', bg: 'bg-[#C8102E]/5', fg: '#B42318' },
+  medium: { border: 'border-[#E87722]/25', bg: 'bg-[#E87722]/5', fg: '#8A6508' },
 };
 
 export default function AIOperationsFeed({ risks }) {
   return (
-    <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden h-full">
-      <div className="h-0.5 bg-gradient-to-r from-[#00338D] via-[#0077C8] to-[#00A36C]" />
+    <div className="bg-white rounded-2xl border border-[#D8DCE3] shadow-sm overflow-hidden h-full">
+      <div className="h-0.5 bg-gradient-to-r from-[#00338D] via-[#005EB8] to-[#00B0A0]" />
       <div className="p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <h2 className="font-bold text-[#1A1F36] text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Before It Breaks</h2>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#0077C8]/10 text-[#0077C8] text-[10px] font-bold">
+            <h2 className="font-bold text-[#1A1F36] text-sm" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>Before It Breaks</h2>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#005EB8]/10 text-[#005EB8] text-[10px] font-bold">
               <Radar size={9} /> Predictive
             </span>
           </div>
-          <Link href="/command-center/predictive" className="text-[10px] text-[#0077C8] font-semibold hover:underline">{risks.length} risks →</Link>
+          <Link href="/command-center/predictive" className="text-[10px] text-[#005EB8] font-semibold hover:underline">{risks.length} risks →</Link>
         </div>
 
         <div className="space-y-2.5">

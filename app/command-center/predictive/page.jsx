@@ -17,7 +17,7 @@ const OPERATING = nexus.facilities.filter((f) => f.status === 'Operational').map
 
 function Tile({ label, value, sub }) {
   return (
-    <div className="bg-white rounded-xl border border-[#E2E8F0] px-4 py-3">
+    <div className="bg-white rounded-xl border border-[#D8DCE3] px-4 py-3">
       <p className="text-[10px] font-bold uppercase tracking-widest text-[#94A3B8]">{label}</p>
       <p className="text-xl font-semibold text-[#1A1F36] tabular-nums" style={MONO}>{value}</p>
       {sub && <p className="text-[11px] text-[#64748B]">{sub}</p>}
@@ -37,7 +37,7 @@ function RiskNote({ items, offline }) {
   }, [items, offline]);
   return (
     <section className="bg-[#F7FAFD] rounded-xl border border-[#D6E4F2] p-4">
-      <p className="text-[11px] font-bold uppercase tracking-wider text-[#0077C8] mb-2">Before it breaks · risk note</p>
+      <p className="text-[11px] font-bold uppercase tracking-wider text-[#005EB8] mb-2">Before it breaks · risk note</p>
       {state.narrating && !state.text ? (
         <div className="space-y-2 animate-pulse"><div className="h-2.5 bg-[#D6E4F2] rounded" /><div className="h-2.5 bg-[#D6E4F2] rounded w-5/6" /></div>
       ) : (
@@ -71,7 +71,7 @@ export default function PredictivePage() {
 
         {offline !== null && <RiskNote items={items} offline={offline} />}
 
-        <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+        <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
           <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] mb-3">PUE against the same month last year</h2>
           <DriftChart facilityIds={OPERATING} measure="pue" />
         </section>

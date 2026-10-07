@@ -49,7 +49,7 @@ function Track({ m }) {
       <div className="absolute top-1/2 -translate-y-1/2 h-2 bg-[#D5DCE5]" style={span(band.p25, band.p75)} />
       <div className="absolute top-1/2 -translate-y-1/2 w-[2px] h-3.5 bg-[#64748B] rounded" style={{ left: x(band.p50) }} />
       {m.value !== null && (
-        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#0077C8] ring-2 ring-white shadow-sm" style={{ left: x(m.value) }} />
+        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#005EB8] ring-2 ring-white shadow-sm" style={{ left: x(m.value) }} />
       )}
     </div>
   );
@@ -91,7 +91,7 @@ export default function BenchmarkStrip({ facilityId, compact = false }) {
               </div>
             </div>
             {!compact && open && (
-              <div role="tooltip" className="absolute z-20 left-2 right-2 top-full mt-0.5 rounded-lg border border-[#E2E8F0] bg-white shadow-lg px-3 py-2 text-[11px] text-[#334155]">
+              <div role="tooltip" className="absolute z-20 left-2 right-2 top-full mt-0.5 rounded-lg border border-[#D8DCE3] bg-white shadow-lg px-3 py-2 text-[11px] text-[#334155]">
                 <p className="font-semibold text-[#1A1F36]">{m.cohort} · {m.direction.toLowerCase()}</p>
                 <p className="tabular-nums mt-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                   p10 {fmt(m.band.p10, 2)} · p25 {fmt(m.band.p25, 2)} · median {fmt(m.band.p50, 2)} · p75 {fmt(m.band.p75, 2)} · p90 {fmt(m.band.p90, 2)}

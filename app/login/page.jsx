@@ -60,13 +60,13 @@ function LoginInner() {
 
   const inputStyle = {
     display: 'block', width: '100%', marginTop: 4, padding: '9px 12px',
-    borderRadius: 8, border: '1px solid #E2E8F0', fontSize: 13, color: '#1A1F36',
+    borderRadius: 8, border: '1px solid #D8DCE3', fontSize: 13, color: '#1A1F36',
     boxSizing: 'border-box',
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F4F6F9', padding: 20 }}>
-      <div style={{ width: '100%', maxWidth: 380, background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 16, padding: 32, boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F0F2F5', padding: 20 }}>
+      <div style={{ width: '100%', maxWidth: 380, background: '#FFFFFF', border: '1px solid #D8DCE3', borderRadius: 16, padding: 32, boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
         <h1 style={{ fontSize: 20, fontWeight: 700, color: '#1A1F36', margin: 0, marginBottom: 4 }}>
           {mode === 'signin' ? 'Sign in' : 'Create account'}
         </h1>
@@ -84,10 +84,10 @@ function LoginInner() {
           </span>
           Sign in with Microsoft
         </button>
-        {ssoOnly && error && <p style={{ fontSize: 11, color: '#DC2626', marginTop: 10 }}>{error}</p>}
+        {ssoOnly && error && <p style={{ fontSize: 11, color: '#C8102E', marginTop: 10 }}>{error}</p>}
 
         {!ssoOnly && <>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14, color: '#9CA3AF', fontSize: 11 }}><span style={{ flex: 1, height: 1, background: '#E2E8F0' }} />or<span style={{ flex: 1, height: 1, background: '#E2E8F0' }} /></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14, color: '#9CA3AF', fontSize: 11 }}><span style={{ flex: 1, height: 1, background: '#D8DCE3' }} />or<span style={{ flex: 1, height: 1, background: '#D8DCE3' }} /></div>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <label style={{ fontSize: 11, fontWeight: 600, color: '#374151' }}>
             Email
@@ -102,13 +102,13 @@ function LoginInner() {
             />
           </label>
 
-          {error && <p style={{ fontSize: 11, color: '#DC2626', margin: 0 }}>{error}</p>}
-          {notice && <p style={{ fontSize: 11, color: '#00A36C', margin: 0 }}>{notice}</p>}
+          {error && <p style={{ fontSize: 11, color: '#C8102E', margin: 0 }}>{error}</p>}
+          {notice && <p style={{ fontSize: 11, color: '#00B0A0', margin: 0 }}>{notice}</p>}
 
           <button
             type="submit" disabled={loading}
             style={{
-              marginTop: 4, background: loading ? '#94A3B8' : '#0077C8', color: '#fff', border: 'none',
+              marginTop: 4, background: loading ? '#94A3B8' : '#005EB8', color: '#fff', border: 'none',
               borderRadius: 8, padding: '10px 0', fontSize: 13, fontWeight: 700,
               cursor: loading ? 'default' : 'pointer',
             }}
@@ -120,7 +120,7 @@ function LoginInner() {
         <button
           type="button"
           onClick={() => { setMode(m => (m === 'signin' ? 'signup' : 'signin')); setError(null); setNotice(null); }}
-          style={{ marginTop: 16, fontSize: 11, color: '#0077C8', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'center', width: '100%' }}
+          style={{ marginTop: 16, fontSize: 11, color: '#005EB8', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'center', width: '100%' }}
         >
           {mode === 'signin' ? "Don't have an account? Create one" : 'Already have an account? Sign in'}
         </button>

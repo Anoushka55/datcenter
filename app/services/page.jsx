@@ -33,7 +33,7 @@ export default function ServicesPage() {
             <div className="min-w-0">
               <p
                 className="font-extrabold text-text-primary text-sm leading-tight truncate"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}
               >
                 Services
               </p>
@@ -46,7 +46,7 @@ export default function ServicesPage() {
 
         <div className="flex items-center gap-2 flex-shrink-0">
           <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-success-light border border-grey-border rounded-lg">
-            <span className="w-2 h-2 rounded-full bg-success flex-shrink-0" style={{ boxShadow: '0 0 6px #00A36C' }} />
+            <span className="w-2 h-2 rounded-full bg-success flex-shrink-0" style={{ boxShadow: '0 0 6px #00B0A0' }} />
             <span className="text-sm font-black tabular-nums text-success">{activeCount}</span>
             <span className="text-[9px] text-text-secondary font-medium">Live agents</span>
           </div>

@@ -29,7 +29,7 @@ function Summary({ disclosure, offline, onText }) {
   }, [disclosure, offline, onText]);
   return (
     <section className="bg-[#F7FAFD] rounded-xl border border-[#D6E4F2] p-4">
-      <p className="text-[11px] font-bold uppercase tracking-wider text-[#0077C8] mb-2">Executive summary</p>
+      <p className="text-[11px] font-bold uppercase tracking-wider text-[#005EB8] mb-2">Executive summary</p>
       {state.narrating && !state.text
         ? <div className="space-y-2 animate-pulse"><div className="h-2.5 bg-[#D6E4F2] rounded" /><div className="h-2.5 bg-[#D6E4F2] rounded w-4/5" /></div>
         : <p className="text-[13px] leading-relaxed text-[#1A1F36]">{state.text}</p>}
@@ -88,10 +88,10 @@ export default function EsgPage() {
   return (
     <CCLayout title="ESG Disclosure">
       <div className="p-6 space-y-4">
-        <section className="bg-white rounded-xl border border-[#E2E8F0] p-4 flex flex-wrap items-end gap-4">
+        <section className="bg-white rounded-xl border border-[#D8DCE3] p-4 flex flex-wrap items-end gap-4">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-1">Framework</p>
-            <div className="flex bg-[#F4F6F9] rounded-lg p-0.5 gap-0.5">
+            <div className="flex bg-[#F0F2F5] rounded-lg p-0.5 gap-0.5">
               {Object.values(FRAMEWORKS).map((f) => (
                 <button key={f.id} onClick={() => setFramework(f.id)}
                   className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${framework === f.id ? 'bg-[#00338D] text-white' : 'text-[#6B7280] hover:text-[#1A1F36]'}`}>
@@ -102,7 +102,7 @@ export default function EsgPage() {
           </div>
           <label className="text-xs">
             <span className="block text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-1">Scope</span>
-            <select value={site} onChange={(e) => setSite(e.target.value)} className="text-xs text-[#334155] bg-[#F4F6F9] border border-[#E2E8F0] rounded-lg px-3 py-1.5">
+            <select value={site} onChange={(e) => setSite(e.target.value)} className="text-xs text-[#334155] bg-[#F0F2F5] border border-[#D8DCE3] rounded-lg px-3 py-1.5">
               <option value="all">All sites in scope ({scopeSites.length})</option>
               {scopeSites.map((id) => <option key={id} value={id}>{id}</option>)}
             </select>
@@ -113,14 +113,14 @@ export default function EsgPage() {
               <select value={val} onChange={(e) => {
                 const v = e.target.value;
                 if (label === 'From') { setFrom(v); if (v > to) setTo(v); } else { setTo(v); if (v < from) setFrom(v); }
-              }} className="text-xs text-[#334155] bg-[#F4F6F9] border border-[#E2E8F0] rounded-lg px-3 py-1.5">
+              }} className="text-xs text-[#334155] bg-[#F0F2F5] border border-[#D8DCE3] rounded-lg px-3 py-1.5">
                 {ENERGY_MONTHS.map((m) => <option key={m} value={m}>{monthLabel(m)}</option>)}
               </select>
             </label>
           ))}
           <div className="ml-auto flex gap-2">
             <button onClick={downloadPdf} disabled={busy !== null || !summary}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-[#00338D] hover:bg-[#0044b8] text-white disabled:opacity-50">
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-[#00338D] hover:bg-[#002A73] text-white disabled:opacity-50">
               <FileDown size={13} /> {busy === 'pdf' ? 'Building…' : 'Disclosure pack (PDF)'}
             </button>
             <button onClick={downloadXlsx} disabled={busy !== null}
@@ -142,7 +142,7 @@ export default function EsgPage() {
 
         {offline !== null && <Summary disclosure={disclosure} offline={offline} onText={onText} />}
 
-        <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+        <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
             <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">{disclosure.framework.name} · {monthLabel(from)} to {monthLabel(to)}</h2>
             <span className="text-xs text-[#334155]">Readiness <strong style={MONO}>{disclosure.readinessScore}%</strong> <span className="text-[#94A3B8]">of required items disclosable from operating data</span></span>
@@ -179,7 +179,7 @@ export default function EsgPage() {
         </section>
 
         {disclosure.byFacility.length > 0 && (
-          <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+          <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
             <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] mb-3">By site</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-xs min-w-[680px]">

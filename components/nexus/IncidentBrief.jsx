@@ -16,10 +16,10 @@ import { logEvent } from '@/lib/audit-client';
 const MONO = { fontFamily: "'JetBrains Mono', monospace" };
 
 export const SEVERITY_STYLE = {
-  critical: { fg: '#B42318', bg: '#FDECEC', dot: '#DC2626', label: 'Critical' },
+  critical: { fg: '#B42318', bg: '#FDECEC', dot: '#C8102E', label: 'Critical' },
   high: { fg: '#B54708', bg: '#FEF0E6', dot: '#E8590C', label: 'High' },
-  medium: { fg: '#8A6508', bg: '#FBF3DE', dot: '#D4A017', label: 'Medium' },
-  low: { fg: '#1D4E89', bg: '#EAF2FB', dot: '#0077C8', label: 'Low' },
+  medium: { fg: '#8A6508', bg: '#FBF3DE', dot: '#E87722', label: 'Medium' },
+  low: { fg: '#1D4E89', bg: '#EAF2FB', dot: '#005EB8', label: 'Low' },
 };
 
 const IMPACT_STYLE = {
@@ -35,9 +35,9 @@ function Chip({ style, children }) {
 
 function Card({ icon: Icon, title, children }) {
   return (
-    <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+    <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
       <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#64748B] mb-3">
-        <Icon size={13} className="text-[#0077C8]" /> {title}
+        <Icon size={13} className="text-[#005EB8]" /> {title}
       </h3>
       {children}
     </section>
@@ -91,7 +91,7 @@ function SlaClock({ analysis }) {
   const rows = slaClock(analysis, elapsed);
   if (!rows.length) return null;
   return (
-    <div className="mt-3 rounded-lg border border-[#E2E8F0] p-2.5">
+    <div className="mt-3 rounded-lg border border-[#D8DCE3] p-2.5">
       <div className="flex items-center justify-between gap-2 mb-1.5">
         <p className="flex items-center gap-1.5 text-[11px] font-semibold text-[#334155]"><Timer size={12} /> SLA clock</p>
         {startedAt
@@ -132,7 +132,7 @@ function Brief({ analysis, offline }) {
   const paragraphs = state.text.split(/\n\s*\n/).filter(Boolean);
   return (
     <section className="bg-[#F7FAFD] rounded-xl border border-[#D6E4F2] p-4">
-      <p className="text-[11px] font-bold uppercase tracking-wider text-[#0077C8] mb-2">Analyst brief</p>
+      <p className="text-[11px] font-bold uppercase tracking-wider text-[#005EB8] mb-2">Analyst brief</p>
       {state.narrating && !state.text ? (
         <div className="space-y-2 animate-pulse" aria-label="Brief loading">
           <div className="h-2.5 bg-[#D6E4F2] rounded w-full" /><div className="h-2.5 bg-[#D6E4F2] rounded w-11/12" /><div className="h-2.5 bg-[#D6E4F2] rounded w-4/5" />
@@ -173,19 +173,19 @@ export default function IncidentBrief({ alertId, incidentId, offline = false, st
   return (
     <div className="space-y-3">
       {/* Header */}
-      <header className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+      <header className="bg-white rounded-xl border border-[#D8DCE3] p-4">
         <div className="flex flex-wrap items-center gap-2 mb-1.5">
           <Chip style={{ fg: sev.fg, bg: sev.bg }}>{sev.label}</Chip>
           <Chip style={IMPACT_STYLE[a.impact]}>{IMPACT_LABEL[a.impact]}</Chip>
           <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F1F5F9] text-[#475569] capitalize">{currentStatus}</span>
           <span className="text-[10px] text-[#94A3B8]" style={MONO}>{a.id}</span>
         </div>
-        <h2 className="text-base font-bold text-[#1A1F36]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{a.what.headline}</h2>
+        <h2 className="text-base font-bold text-[#1A1F36]" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>{a.what.headline}</h2>
         <p className="text-xs text-[#64748B] mt-0.5">
           {a.componentId} · {a.facilityName} · {a.kind === 'alert' ? 'raised' : 'detected'} {timeLabel(a.detectedAt)}{a.owner ? ` · ${a.owner}` : ''}
         </p>
         {a.kind === 'alert' && currentStatus === 'open' && onAcknowledge && (
-          <button onClick={onAcknowledge} className="mt-3 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#00338D] hover:bg-[#0044b8] text-white transition-colors">
+          <button onClick={onAcknowledge} className="mt-3 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#00338D] hover:bg-[#002A73] text-white transition-colors">
             Acknowledge
           </button>
         )}
@@ -207,7 +207,7 @@ export default function IncidentBrief({ alertId, incidentId, offline = false, st
           {a.what.replay && (
             <div className="mt-2 rounded-lg bg-[#F7FAFD] border border-[#D6E4F2] p-2.5 text-xs text-[#1A1F36]">
               In <span style={MONO}>{a.what.replay.incidentId}</span> the telemetry signal preceded detection by <strong>{fmtDuration(a.what.replay.leadMinutes)}</strong>.{' '}
-              <Link href="/command-center/capacity-simulation?scene=scene4" className="text-[#0077C8] font-semibold hover:underline">Open the replay</Link>
+              <Link href="/command-center/capacity-simulation?scene=scene4" className="text-[#005EB8] font-semibold hover:underline">Open the replay</Link>
             </div>
           )}
         </Card>
@@ -318,7 +318,7 @@ export default function IncidentBrief({ alertId, incidentId, offline = false, st
             <ol className="space-y-1.5">
               {a.do.steps.map((s) => (
                 <li key={s.step} className="flex gap-2 text-xs">
-                  <span className="w-5 h-5 flex-shrink-0 rounded-full bg-[#EAF2FB] text-[#0077C8] text-[10px] font-bold flex items-center justify-center">{s.step}</span>
+                  <span className="w-5 h-5 flex-shrink-0 rounded-full bg-[#EAF2FB] text-[#005EB8] text-[10px] font-bold flex items-center justify-center">{s.step}</span>
                   <span className="min-w-0">
                     <span className="text-[#1A1F36]">{s.action}</span>
                     <span className="block text-[10px] text-[#94A3B8]">{s.owner} · within {fmtDuration(s.withinMin)}</span>
@@ -328,7 +328,7 @@ export default function IncidentBrief({ alertId, incidentId, offline = false, st
             </ol>
           ) : <p className="text-xs text-[#94A3B8]">No runbook is on file for this condition.</p>}
           {a.do.supply && (a.impact === 'outage' || a.impact === 'capacity') && (
-            <div className="mt-3 flex items-start gap-2 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] p-2.5 text-xs text-[#334155]">
+            <div className="mt-3 flex items-start gap-2 rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] p-2.5 text-xs text-[#334155]">
               <Truck size={13} className="mt-0.5 flex-shrink-0 text-[#64748B]" />
               <span>
                 Part supply: <strong className="text-[#1A1F36]">{a.do.supply.leadTimeWeeks} weeks</strong> from {a.do.supply.vendor} ({a.do.supply.origin})

@@ -178,7 +178,7 @@ export function CapacityCard({ result, narration }) {
         </Section>
       )}
       <Narration {...narration} />
-      <button className="w-full flex items-center justify-center gap-2 bg-[#00338D] hover:bg-[#0044b8] text-white text-xs font-bold py-2.5 rounded-xl transition-colors">
+      <button className="w-full flex items-center justify-center gap-2 bg-[#00338D] hover:bg-[#002A73] text-white text-xs font-bold py-2.5 rounded-xl transition-colors">
         <FileText size={13} /> Quote {fmtKw(result.deployableKw)} now
       </button>
     </>

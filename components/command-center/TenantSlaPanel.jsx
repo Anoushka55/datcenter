@@ -9,10 +9,10 @@ const MONO = { fontFamily: "'JetBrains Mono', monospace" };
 export default function TenantSlaPanel({ tenants }) {
   const exposed = tenants.filter((t) => t.exposureInrLakh > 0);
   return (
-    <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-5">
+    <div className="bg-white rounded-2xl border border-[#D8DCE3] shadow-sm p-5">
       <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
         <div>
-          <h2 className="font-bold text-[#1A1F36] text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Tenants & SLA Exposure</h2>
+          <h2 className="font-bold text-[#1A1F36] text-sm" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>Tenants & SLA Exposure</h2>
           <p className="text-[#9CA3AF] text-xs mt-0.5">{tenants.length} contracts · {exposed.length} exposed to an open outage-class alert · exposure if the affected chain drops for its typical outage; a penalty applies once an outage passes the contract threshold</p>
         </div>
       </div>

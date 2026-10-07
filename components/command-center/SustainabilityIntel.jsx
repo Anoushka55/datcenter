@@ -8,7 +8,7 @@ const MONO = { fontFamily: "'JetBrains Mono', monospace" };
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload?.length) {
     return (
-      <div className="bg-[#1A1F36] border border-white/10 rounded-lg px-3 py-2 text-xs text-white shadow-xl">
+      <div className="bg-[#00338D] border border-white/10 rounded-lg px-3 py-2 text-xs text-white shadow-xl">
         <p className="text-white/50 mb-0.5">{label}</p>
         <p className="font-bold text-[#60a5fa]">PUE {payload[0].value}</p>
       </div>
@@ -19,7 +19,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 function Stat({ icon: Icon, label, value, unit, note, noteColor = '#6B7280' }) {
   return (
-    <div className="bg-[#F4F6F9] rounded-xl p-3">
+    <div className="bg-[#F0F2F5] rounded-xl p-3">
       <p className="flex items-center gap-1 text-[10px] text-[#9CA3AF] mb-1"><Icon size={10} /> {label}</p>
       <p className="text-sm font-bold text-[#1A1F36]" style={MONO}>{value}</p>
       <p className="text-[9px] text-[#9CA3AF]">{unit}</p>
@@ -35,10 +35,10 @@ export default function SustainabilityIntel({ data }) {
   const share = renewable.pct;
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-5 h-full">
+    <div className="bg-white rounded-2xl border border-[#D8DCE3] shadow-sm p-5 h-full">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-bold text-[#1A1F36] text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Sustainability Intelligence</h2>
-        <span className="text-[10px] text-[#00704A] font-bold bg-[#00A36C]/10 px-2 py-0.5 rounded-full">From metered energy and water</span>
+        <h2 className="font-bold text-[#1A1F36] text-sm" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>Sustainability Intelligence</h2>
+        <span className="text-[10px] text-[#00704A] font-bold bg-[#00B0A0]/10 px-2 py-0.5 rounded-full">From metered energy and water</span>
       </div>
 
       <div className="space-y-4">
@@ -54,7 +54,7 @@ export default function SustainabilityIntel({ data }) {
               <XAxis dataKey="month" tick={{ fontSize: 8, fill: '#9CA3AF' }} axisLine={false} tickLine={false} interval={2} />
               <YAxis domain={[Math.floor(lo * 100 - 1) / 100, Math.ceil(hi * 100 + 1) / 100]} tick={{ fontSize: 8, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
               <ReferenceLine y={peerMedianPue} stroke="#64748B" strokeDasharray="4 2" strokeWidth={1} />
-              <Line type="monotone" dataKey="pue" stroke="#0077C8" strokeWidth={2} dot={false} isAnimationActive={false} />
+              <Line type="monotone" dataKey="pue" stroke="#005EB8" strokeWidth={2} dot={false} isAnimationActive={false} />
               <Tooltip content={<CustomTooltip />} />
             </LineChart>
           </ResponsiveContainer>
@@ -74,12 +74,12 @@ export default function SustainabilityIntel({ data }) {
 
         <div>
           <p className="text-xs font-semibold text-[#6B7280] mb-2">Energy supply, {renewable.month}</p>
-          <div className="h-4 rounded-full overflow-hidden flex bg-[#E2E8F0]" role="img" aria-label={`${share}% renewable`}>
-            <div className="h-full bg-[#00A36C]" style={{ width: `${share}%` }} />
+          <div className="h-4 rounded-full overflow-hidden flex bg-[#D8DCE3]" role="img" aria-label={`${share}% renewable`}>
+            <div className="h-full bg-[#00B0A0]" style={{ width: `${share}%` }} />
             <div className="h-full bg-[#94A3B8] border-l-2 border-white" style={{ width: `${100 - share}%` }} />
           </div>
           <div className="flex gap-3 mt-1.5 text-[10px] text-[#6B7280]">
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#00A36C]" />Renewable (PPA and on-site) {fmtNumber(renewable.renewableMwh)} MWh</span>
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#00B0A0]" />Renewable (PPA and on-site) {fmtNumber(renewable.renewableMwh)} MWh</span>
             <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#94A3B8]" />Grid {fmtNumber(renewable.gridMwh)} MWh</span>
           </div>
         </div>

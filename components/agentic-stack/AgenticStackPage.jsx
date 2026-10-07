@@ -103,7 +103,7 @@ function RAGLogo({ size = 36 }) {
 
 // ─── Animated SVG connector arrow drawn on load ────────────────────────────
 
-function FlowConnector({ delay = 0, height = 32, color = '#0077C8' }) {
+function FlowConnector({ delay = 0, height = 32, color = '#005EB8' }) {
   const pathRef = useRef(null);
 
   useEffect(() => {
@@ -181,7 +181,7 @@ function FanOutConnector({ count = 6, delay = 0 }) {
             key={i}
             data-anim="true"
             d={`M${cx} 0 Q${cx} ${H / 2} ${x} ${H}`}
-            stroke="#0077C8"
+            stroke="#005EB8"
             strokeWidth="1.5"
             strokeLinecap="round"
             fill="none"
@@ -218,7 +218,7 @@ const AGENTS = [
   },
   {
     label: 'Design',
-    color: '#0077C8',
+    color: '#005EB8',
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
     ),
@@ -248,7 +248,7 @@ const AGENTS = [
   },
   {
     label: 'Monetization',
-    color: '#00A36C',
+    color: '#00B0A0',
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
     ),
@@ -322,7 +322,7 @@ function AgentCard({ agent, isActive, onClick }) {
         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         className="cursor-pointer rounded-xl border bg-white shadow-sm overflow-hidden select-none"
         style={{
-          borderColor: isActive ? agent.color : '#E2E8F0',
+          borderColor: isActive ? agent.color : '#D8DCE3',
           boxShadow: isActive ? `0 4px 20px ${agent.color}22` : undefined,
         }}
       >
@@ -337,7 +337,7 @@ function AgentCard({ agent, isActive, onClick }) {
           </div>
           <p
             className="text-[11px] font-bold text-center text-[#1A1F36]"
-            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+            style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}
           >
             {agent.label}
           </p>
@@ -352,7 +352,7 @@ function AgentCard({ agent, isActive, onClick }) {
             animate={{ opacity: 1, y: 0, scaleY: 1 }}
             exit={{ opacity: 0, y: -4, scaleY: 0.9 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-52 bg-white rounded-xl border border-[#E2E8F0] shadow-xl p-3 z-30"
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-52 bg-white rounded-xl border border-[#D8DCE3] shadow-xl p-3 z-30"
             style={{ borderTop: `3px solid ${agent.color}` }}
           >
             <p className="text-[#1A1F36] font-bold text-xs mb-1.5">{agent.label} Agent</p>
@@ -360,7 +360,7 @@ function AgentCard({ agent, isActive, onClick }) {
             <div className="space-y-1">
               <p className="text-[9px] font-bold uppercase tracking-widest text-[#9CA3AF]">Connected Tools</p>
               {agent.tools.map(t => (
-                <span key={t} className="inline-flex items-center gap-1 mr-1 mb-1 px-1.5 py-0.5 bg-[#F4F6F9] border border-[#E2E8F0] rounded text-[9px] text-[#374151] font-medium">
+                <span key={t} className="inline-flex items-center gap-1 mr-1 mb-1 px-1.5 py-0.5 bg-[#F0F2F5] border border-[#D8DCE3] rounded text-[9px] text-[#374151] font-medium">
                   {t}
                 </span>
               ))}
@@ -382,12 +382,12 @@ function DataToolCard({ tool }) {
       onMouseLeave={() => setHovered(false)}
       whileHover={{ y: -4, boxShadow: '0 8px 28px rgba(0,0,0,0.10)' }}
       transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-      className="relative bg-white rounded-xl border border-[#E2E8F0] p-3.5 overflow-hidden cursor-default"
+      className="relative bg-white rounded-xl border border-[#D8DCE3] p-3.5 overflow-hidden cursor-default"
     >
       <div className="flex items-start gap-3">
         <tool.Logo size={36} />
         <div className="flex-1 min-w-0">
-          <p className="text-[#1A1F36] font-bold text-xs" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{tool.label}</p>
+          <p className="text-[#1A1F36] font-bold text-xs" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>{tool.label}</p>
           <p className="text-[#9CA3AF] text-[10px] mt-0.5 leading-tight">{tool.sub}</p>
           <div className="mt-2 flex items-center gap-1.5">
             <span
@@ -428,12 +428,12 @@ function DataToolCard({ tool }) {
 
 // ─── Layer Card wrapper ────────────────────────────────────────────────────────
 
-function LayerCard({ children, glowColor = '#0077C8', className = '' }) {
+function LayerCard({ children, glowColor = '#005EB8', className = '' }) {
   return (
     <motion.div
       whileHover={{ boxShadow: `0 8px 32px ${glowColor}22` }}
       transition={{ duration: 0.25 }}
-      className={`bg-white rounded-2xl border border-[#E2E8F0] shadow-sm transition-colors hover:border-[#0077C8]/30 ${className}`}
+      className={`bg-white rounded-2xl border border-[#D8DCE3] shadow-sm transition-colors hover:border-[#005EB8]/30 ${className}`}
     >
       {children}
     </motion.div>
@@ -445,19 +445,19 @@ function LayerCard({ children, glowColor = '#0077C8', className = '' }) {
 function CapabilityRow({ Logo, title, sub }) {
   return (
     <motion.div
-      whileHover={{ x: 4, backgroundColor: '#F4F6F9' }}
+      whileHover={{ x: 4, backgroundColor: '#F0F2F5' }}
       transition={{ duration: 0.18 }}
       className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-default"
     >
-      <div className="w-7 h-7 rounded-lg bg-[#F4F6F9] border border-[#E2E8F0] flex items-center justify-center flex-shrink-0">
+      <div className="w-7 h-7 rounded-lg bg-[#F0F2F5] border border-[#D8DCE3] flex items-center justify-center flex-shrink-0">
         {Logo ? <Logo size={18} /> : (
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0077C8" strokeWidth="2.5" strokeLinecap="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#005EB8" strokeWidth="2.5" strokeLinecap="round">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"/>
           </svg>
         )}
       </div>
       <div className="min-w-0">
-        <p className="text-[#1A1F36] text-[11px] font-semibold truncate" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <p className="text-[#1A1F36] text-[11px] font-semibold truncate" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
           {title}
         </p>
         <p className="text-[#9CA3AF] text-[9px]">{sub}</p>
@@ -477,7 +477,7 @@ export default function AgenticStackPage() {
 
   return (
     <CCLayout title="Agentic AI Stack">
-      <div className="relative min-h-full bg-[#F4F6F9] overflow-hidden">
+      <div className="relative min-h-full bg-[#F0F2F5] overflow-hidden">
         <div className="relative z-10 p-5">
           {/* ── Page header ── */}
           <motion.div
@@ -489,7 +489,7 @@ export default function AgenticStackPage() {
             <div>
               <h1
                 className="text-[#1A1F36] font-bold text-xl tracking-tight"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}
               >
                 Data Center Life-Cycle Intelligence Platform
               </h1>
@@ -501,8 +501,8 @@ export default function AgenticStackPage() {
               <span className="px-3 py-1 rounded-full bg-[#00338D]/10 border border-[#00338D]/20 text-[#00338D] text-[11px] font-bold uppercase tracking-wider">
                 Proprietary
               </span>
-              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00A36C]/10 border border-[#00A36C]/20 text-[#00A36C] text-[11px] font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00A36C] animate-pulse" />
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00B0A0]/10 border border-[#00B0A0]/20 text-[#00B0A0] text-[11px] font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00B0A0] animate-pulse" />
                 Live
               </span>
             </div>
@@ -523,7 +523,7 @@ export default function AgenticStackPage() {
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                       </svg>
                     </div>
-                    <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
                       User Query
                     </p>
                   </div>
@@ -545,7 +545,7 @@ export default function AgenticStackPage() {
                       </svg>
                     </div>
                     <div>
-                      <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Memory Layer</p>
+                      <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>Memory Layer</p>
                       <p className="text-[#6B7280] text-[10px] mt-0.5">Short + long-term context storage</p>
                     </div>
                   </div>
@@ -553,13 +553,13 @@ export default function AgenticStackPage() {
 
                 <LayerCard className="p-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-[#0077C8]/10 border border-[#0077C8]/20 flex items-center justify-center flex-shrink-0">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0077C8" strokeWidth="2" strokeLinecap="round">
+                    <div className="w-9 h-9 rounded-xl bg-[#005EB8]/10 border border-[#005EB8]/20 flex items-center justify-center flex-shrink-0">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#005EB8" strokeWidth="2" strokeLinecap="round">
                         <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
                       </svg>
                     </div>
                     <div>
-                      <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Planning Layer</p>
+                      <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>Planning Layer</p>
                       <p className="text-[#6B7280] text-[10px] mt-0.5">ReAct + Chain-of-Thought Reasoning</p>
                     </div>
                   </div>
@@ -568,11 +568,11 @@ export default function AgenticStackPage() {
 
               {/* Combined badge sits below both cards, outside them */}
               <div className="flex items-center py-2">
-                <div className="flex-1 h-px bg-[#0077C8]/20 ml-6" />
-                <span className="mx-3 px-3 py-1 rounded-lg bg-white border border-[#0077C8]/30 text-[#0077C8] text-[10px] font-bold tracking-widest shadow-sm flex-shrink-0">
+                <div className="flex-1 h-px bg-[#005EB8]/20 ml-6" />
+                <span className="mx-3 px-3 py-1 rounded-lg bg-white border border-[#005EB8]/30 text-[#005EB8] text-[10px] font-bold tracking-widest shadow-sm flex-shrink-0">
                   Combined
                 </span>
-                <div className="flex-1 h-px bg-[#0077C8]/20 mr-6" />
+                <div className="flex-1 h-px bg-[#005EB8]/20 mr-6" />
               </div>
 
               <FlowConnector delay={350} height={24} />
@@ -582,15 +582,15 @@ export default function AgenticStackPage() {
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
                 className="flex justify-center"
               >
-                <LayerCard className="px-8 py-4" glowColor="#0077C8">
+                <LayerCard className="px-8 py-4" glowColor="#005EB8">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#0077C8]/10 border border-[#0077C8]/25 flex items-center justify-center flex-shrink-0">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0077C8" strokeWidth="2" strokeLinecap="round">
+                    <div className="w-10 h-10 rounded-xl bg-[#005EB8]/10 border border-[#005EB8]/25 flex items-center justify-center flex-shrink-0">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#005EB8" strokeWidth="2" strokeLinecap="round">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                       </svg>
                     </div>
                     <div>
-                      <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                      <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
                         Aggregator Agent
                       </p>
                       <p className="text-[#6B7280] text-[10px]">Routes and coordinates all specialist agents</p>
@@ -665,7 +665,7 @@ export default function AgenticStackPage() {
                       <div className="flex items-center gap-4">
                         <AWSBedrockLogo size={44} />
                         <div className="flex-1">
-                          <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                          <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
                             KPMG Secure Cloud Hosting
                           </p>
                           <p className="text-[#6B7280] text-[10px] mt-0.5">
@@ -673,8 +673,8 @@ export default function AgenticStackPage() {
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="flex items-center gap-1 text-[10px] text-[#00A36C] font-semibold">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#00A36C] animate-pulse" />
+                          <span className="flex items-center gap-1 text-[10px] text-[#00B0A0] font-semibold">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#00B0A0] animate-pulse" />
                             Active
                           </span>
                         </div>
@@ -685,7 +685,7 @@ export default function AgenticStackPage() {
                       <div className="flex items-center gap-3">
                         <ClaudeLogo size={44} />
                         <div>
-                          <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                          <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
                             Generative Model
                           </p>
                           <p className="text-[#9CA3AF] text-[9px] mt-1">
@@ -701,40 +701,40 @@ export default function AgenticStackPage() {
                     {/* Arrow pointing up: from R&R back to AWS Bedrock */}
                     <div className="flex flex-col items-center gap-1">
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" rotate-0>
-                        <path d="M9 16V4" stroke="#0077C8" strokeWidth="1.6" strokeLinecap="round"/>
-                        <path d="M3 9l6-6 6 6" stroke="#0077C8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M9 16V4" stroke="#005EB8" strokeWidth="1.6" strokeLinecap="round"/>
+                        <path d="M3 9l6-6 6 6" stroke="#005EB8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                      <span className="text-[7px] text-[#0077C8]/60 font-bold uppercase tracking-wide text-center leading-tight rotate-0">loop</span>
+                      <span className="text-[7px] text-[#005EB8]/60 font-bold uppercase tracking-wide text-center leading-tight rotate-0">loop</span>
                     </div>
-                    <div className="flex-1 w-px bg-[#0077C8]/20" />
+                    <div className="flex-1 w-px bg-[#005EB8]/20" />
                     {/* Arrow pointing right: from Generative Model to R&R */}
                     <div className="flex flex-col items-center gap-1">
-                      <span className="text-[7px] text-[#0077C8]/60 font-bold uppercase tracking-wide text-center leading-tight">send</span>
+                      <span className="text-[7px] text-[#005EB8]/60 font-bold uppercase tracking-wide text-center leading-tight">send</span>
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <path d="M2 9h13" stroke="#0077C8" strokeWidth="1.6" strokeLinecap="round"/>
-                        <path d="M10 4l5 5-5 5" stroke="#0077C8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M2 9h13" stroke="#005EB8" strokeWidth="1.6" strokeLinecap="round"/>
+                        <path d="M10 4l5 5-5 5" stroke="#005EB8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
                   </div>
 
                   {/* Right column: Reflect & Retry spanning full height */}
                   <div className="w-48 flex">
-                    <LayerCard className="p-4 flex-1 flex flex-col justify-center" glowColor="#0077C8">
+                    <LayerCard className="p-4 flex-1 flex flex-col justify-center" glowColor="#005EB8">
                       <div className="flex flex-col items-center text-center gap-3">
-                        <div className="w-11 h-11 rounded-xl bg-[#0077C8]/10 border border-[#0077C8]/20 flex items-center justify-center">
-                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0077C8" strokeWidth="2" strokeLinecap="round">
+                        <div className="w-11 h-11 rounded-xl bg-[#005EB8]/10 border border-[#005EB8]/20 flex items-center justify-center">
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#005EB8" strokeWidth="2" strokeLinecap="round">
                             <path d="M21 2v6h-6M3 12a9 9 0 0115-6.7L21 8M3 22v-6h6M21 12a9 9 0 01-15 6.7L3 16"/>
                           </svg>
                         </div>
                         <div>
-                          <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                          <p className="text-[#1A1F36] font-bold text-sm" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
                             Reflect &amp; Retry
                           </p>
                           <p className="text-[#6B7280] text-[10px] mt-1 leading-relaxed">
                             Autonomous self-correction loop
                           </p>
                         </div>
-                        <span className="px-2.5 py-1 bg-[#0077C8]/10 border border-[#0077C8]/20 rounded-lg text-[10px] text-[#0077C8] font-bold">
+                        <span className="px-2.5 py-1 bg-[#005EB8]/10 border border-[#005EB8]/20 rounded-lg text-[10px] text-[#005EB8] font-bold">
                           Agent
                         </span>
                       </div>

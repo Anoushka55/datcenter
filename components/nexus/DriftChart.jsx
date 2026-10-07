@@ -8,7 +8,7 @@ import { getFacility } from '@/lib/nexus/data';
 import { monthLabel } from '@/lib/nexus/time';
 
 const C = {
-  actual: '#0077C8',
+  actual: '#005EB8',
   baseline: '#94A3B8',
   drift: '#FBE7B5',
   driftInk: '#8A6508',
@@ -71,7 +71,7 @@ function Panel({ facilityId, measure }) {
         )}
       </svg>
       {h && (
-        <div className="pointer-events-none absolute top-6 z-10 rounded-md border border-[#E2E8F0] bg-white px-2 py-1.5 text-[10.5px] shadow-md whitespace-nowrap"
+        <div className="pointer-events-none absolute top-6 z-10 rounded-md border border-[#D8DCE3] bg-white px-2 py-1.5 text-[10.5px] shadow-md whitespace-nowrap"
           style={{ left: `${(x(hover) / W) * 100}%`, transform: hover > pts.length / 2 ? 'translateX(calc(-100% - 8px))' : 'translateX(8px)' }}>
           <p className="font-semibold text-[#1A1F36]">{monthLabel(h.month)}</p>
           <p className="text-[#334155]">This year <span className="font-mono">{h.value.toFixed(dp)}</span></p>
@@ -87,7 +87,7 @@ export default function DriftChart({ facilityIds, measure = 'pue' }) {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-4 text-[11px] text-[#64748B] mb-2">
-        <span className="flex items-center gap-1.5"><span className="w-4 h-0.5 bg-[#0077C8] inline-block" /> Last 12 months</span>
+        <span className="flex items-center gap-1.5"><span className="w-4 h-0.5 bg-[#005EB8] inline-block" /> Last 12 months</span>
         <span className="flex items-center gap-1.5"><span className="w-4 border-t-2 border-dashed border-[#94A3B8] inline-block" /> Same month a year earlier</span>
         <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#FBE7B5] inline-block rounded-sm" /> Detected drift</span>
         <span className="text-[#94A3B8]">Each panel has its own scale.</span>

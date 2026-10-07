@@ -83,9 +83,9 @@ export function buildRiskDistribution(facilities) {
   const counts = { Low: 0, Medium: 0, High: 0 };
   facilities.forEach(f => { counts[f.riskFlag] = (counts[f.riskFlag] ?? 0) + 1; });
   return [
-    { name: 'Low', value: counts.Low, color: '#00A36C' },
-    { name: 'Medium', value: counts.Medium, color: '#D4A017' },
-    { name: 'High', value: counts.High, color: '#DC2626' },
+    { name: 'Low', value: counts.Low, color: '#00B0A0' },
+    { name: 'Medium', value: counts.Medium, color: '#E87722' },
+    { name: 'High', value: counts.High, color: '#C8102E' },
   ];
 }
 
@@ -115,9 +115,9 @@ export function buildHealthDistribution(facilities) {
   const counts = { healthy: 0, warning: 0, critical: 0 };
   facilities.forEach(f => { counts[f.health] = (counts[f.health] ?? 0) + 1; });
   return [
-    { name: 'Healthy', value: counts.healthy, color: '#00A36C' },
-    { name: 'Warning', value: counts.warning, color: '#D4A017' },
-    { name: 'Critical', value: counts.critical, color: '#DC2626' },
+    { name: 'Healthy', value: counts.healthy, color: '#00B0A0' },
+    { name: 'Warning', value: counts.warning, color: '#E87722' },
+    { name: 'Critical', value: counts.critical, color: '#C8102E' },
   ];
 }
 
@@ -219,7 +219,7 @@ export function buildSustainabilityLeaders(facilities) {
 export function buildEnergyMix(facilities) {
   const avgRenewable = Math.round(facilities.reduce((s, f) => s + f.renewablePct, 0) / facilities.length);
   return [
-    { name: 'Renewable', value: avgRenewable, color: '#00A36C' },
+    { name: 'Renewable', value: avgRenewable, color: '#00B0A0' },
     { name: 'Grid mix', value: 100 - avgRenewable, color: '#9CA3AF' },
   ];
 }

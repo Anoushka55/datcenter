@@ -33,7 +33,7 @@ export function QueryBar({ onSubmit, busy, left, right }) {
             aria-label="Ask about capacity"
             className="flex-1 bg-transparent text-sm text-white placeholder:text-white/30 focus:outline-none min-w-0"
           />
-          <button onClick={submit} disabled={busy || !value.trim()} className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00338D] hover:bg-[#0044b8] disabled:opacity-40 text-white text-xs font-bold rounded-xl transition-colors">
+          <button onClick={submit} disabled={busy || !value.trim()} className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00338D] hover:bg-[#002A73] disabled:opacity-40 text-white text-xs font-bold rounded-xl transition-colors">
             <Sparkles size={13} />{busy ? 'Working…' : 'Ask'}
           </button>
         </div>
@@ -158,7 +158,7 @@ export default function ControlPanel({
           </div>
         )}
         <div className="flex gap-2">
-          <button onClick={onRun} disabled={busy} className="flex-1 flex items-center justify-center gap-1.5 bg-[#00338D] hover:bg-[#0044b8] disabled:opacity-50 text-white text-xs font-bold py-2 rounded-xl"><Zap size={13} /> Run</button>
+          <button onClick={onRun} disabled={busy} className="flex-1 flex items-center justify-center gap-1.5 bg-[#00338D] hover:bg-[#002A73] disabled:opacity-50 text-white text-xs font-bold py-2 rounded-xl"><Zap size={13} /> Run</button>
           <button onClick={onBreakingPoint} disabled={busy} className="flex-1 flex items-center justify-center gap-1.5 bg-white/5 hover:bg-white/10 disabled:opacity-50 text-white text-xs font-bold py-2 rounded-xl"><Target size={13} /> Breaking point</button>
         </div>
       </div>

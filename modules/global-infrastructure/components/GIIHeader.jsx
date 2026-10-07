@@ -16,7 +16,7 @@ export default function GIIHeader({
           <Globe size={18} className="text-[#00338D]" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-[#1A1F36]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+          <h1 className="text-lg font-bold text-[#1A1F36]" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
             {title}
           </h1>
           <p className="text-xs text-[#9CA3AF]">

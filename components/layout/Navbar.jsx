@@ -65,17 +65,17 @@ export default function Navbar() {
       className="fixed top-0 left-0 right-0 z-50 h-16"
       style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
     >
-      <div className="bg-[#1A1F36]/95 border-b border-white/[0.08] h-full">
+      <div className="bg-[#00338D] border-b border-white/10 h-full">
         <div className="max-w-screen-2xl mx-auto px-6 h-full flex items-center gap-4">
 
           {/* ── Logo ── */}
           <Link href="/" className="flex items-center gap-3 flex-shrink-0 group">
             <div
               className="font-extrabold text-sm tracking-tight flex items-center gap-1.5 whitespace-nowrap"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+              style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}
             >
               <span className="text-white">KNexus</span>
-              <span style={{ color: '#0F82E0' }}>.AI</span>
+              <span style={{ color: '#9CC7EE' }}>.AI</span>
               <span className="text-white/30 font-light text-xs">·</span>
               <span className="text-white/45 font-medium text-xs tracking-wide">Data Centre Intelligence</span>
             </div>
@@ -142,7 +142,7 @@ export default function Navbar() {
                           onClick={() => setStagesOpen(false)}
                           className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/[0.07] transition-colors group"
                         >
-                          <div className="w-6 h-6 rounded-lg bg-[#00338D]/40 flex items-center justify-center flex-shrink-0 group-hover:bg-[#0077C8]/25 transition-colors">
+                          <div className="w-6 h-6 rounded-lg bg-[#00338D]/40 flex items-center justify-center flex-shrink-0 group-hover:bg-[#005EB8]/25 transition-colors">
                             <Icon size={12} className="text-white/55 group-hover:text-white/90" />
                           </div>
                           <div className="min-w-0">
@@ -193,7 +193,7 @@ export default function Navbar() {
           <div className="relative flex-shrink-0">
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}
-              className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0077C8] to-[#00338D] flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-[#0077C8]/40 transition-all"
+              className="w-8 h-8 rounded-full bg-gradient-to-br from-[#005EB8] to-[#00338D] flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-[#005EB8]/40 transition-all"
             >
               <span className="text-white text-xs font-bold">{userInitial}</span>
             </button>
@@ -206,7 +206,7 @@ export default function Navbar() {
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.15 }}
                   className="absolute top-full right-0 mt-2 w-52 rounded-xl shadow-2xl overflow-hidden"
-                  style={{ background: '#1A1F36', border: '1px solid rgba(255,255,255,0.10)' }}
+                  style={{ background: '#00338D', border: '1px solid rgba(255,255,255,0.10)' }}
                   onMouseLeave={() => setUserMenuOpen(false)}
                 >
                   {session?.user?.email && (

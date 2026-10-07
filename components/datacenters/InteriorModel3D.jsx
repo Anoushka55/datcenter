@@ -437,9 +437,9 @@ export default function InteriorModel3D({ dc, zoneHealth, onHotspotClick, onRack
       {/* Legend overlay */}
       <div className="absolute bottom-4 left-4 flex flex-col gap-1 pointer-events-none">
         {[
-          { color: '#00a36c', label: '< 70% utilisation' },
-          { color: '#d4a017', label: '70–85% utilisation' },
-          { color: '#dc2626', label: '> 85% utilisation' },
+          { color: '#00B0A0', label: '< 70% utilisation' },
+          { color: '#E87722', label: '70–85% utilisation' },
+          { color: '#C8102E', label: '> 85% utilisation' },
         ].map(({ color, label }) => (
           <div key={label} className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-sm" style={{ background: color }} />

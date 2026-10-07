@@ -11,9 +11,9 @@ import { logEvent } from '@/lib/audit-client';
 
 // Priority comes from the predictive engine; status colour always ships with its label.
 const SEV_CONFIG = {
-  high:   { label: 'High',   color: '#DC2626', bg: '#FEF2F2', border: '#FCA5A5', icon: AlertTriangle },
+  high:   { label: 'High',   color: '#C8102E', bg: '#FEF2F2', border: '#FCA5A5', icon: AlertTriangle },
   medium: { label: 'Medium', color: '#B54708', bg: '#FFFBEB', border: '#FCD34D', icon: AlertTriangle },
-  low:    { label: 'Low',    color: '#0077C8', bg: '#EFF6FF', border: '#93C5FD', icon: Info },
+  low:    { label: 'Low',    color: '#005EB8', bg: '#EFF6FF', border: '#93C5FD', icon: Info },
 };
 
 const SUGGESTIONS = [
@@ -66,7 +66,7 @@ function InsightCard({ insight, showToast }) {
               {insight.since && <span className="text-[9px] text-[#9CA3AF]">Signal since {insight.since}</span>}
               {insight.actBy && <span className="text-[9px] font-semibold text-[#1A1F36] ml-auto">Act by {insight.actBy}</span>}
             </div>
-            <h3 className="text-sm font-bold text-[#1A1F36] mb-0.5" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{insight.title}</h3>
+            <h3 className="text-sm font-bold text-[#1A1F36] mb-0.5" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>{insight.title}</h3>
             <p className="text-xs text-[#6B7280] mb-1.5">{facility}</p>
             <p className="flex items-center gap-1 text-[10px] text-[#64748B]">
               <FileText size={10} /> {insight.evidence.length} {insight.evidence.length === 1 ? 'record' : 'records'} of evidence
@@ -85,17 +85,17 @@ function InsightCard({ insight, showToast }) {
                   </li>
                 ))}
               </ul>
-              <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3 mb-3">
+              <div className="bg-[#F8FAFC] border border-[#D8DCE3] rounded-xl p-3 mb-3">
                 <p className="text-[10px] font-bold text-[#00338D] mb-0.5">Suggested action</p>
                 <p className="text-xs text-[#1A1F36]">{suggestedAction(insight)}</p>
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={queue} disabled={queued}
                   className="px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-colors"
-                  style={{ backgroundColor: queued ? '#00A36C' : sc.color }}>
+                  style={{ backgroundColor: queued ? '#00B0A0' : sc.color }}>
                   {queued ? '✓ Queued' : 'Add to operations queue'}
                 </button>
-                <Link href={detailLink(insight)} className="text-xs font-semibold text-[#0077C8] hover:underline">Open analysis →</Link>
+                <Link href={detailLink(insight)} className="text-xs font-semibold text-[#005EB8] hover:underline">Open analysis →</Link>
               </div>
             </motion.div>
           )}
@@ -143,23 +143,23 @@ function ChatInterface() {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden flex flex-col" style={{ height: '50vh' }}>
-      <div className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-[#00338D] to-[#0077C8] flex-shrink-0">
+    <div className="bg-white rounded-2xl border border-[#D8DCE3] shadow-sm overflow-hidden flex flex-col" style={{ height: '50vh' }}>
+      <div className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-[#00338D] to-[#005EB8] flex-shrink-0">
         <Sparkles size={15} className="text-white" />
-        <span className="text-sm font-bold text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>K-Nexus AI Copilot — Full Portfolio Context</span>
+        <span className="text-sm font-bold text-white" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>K-Nexus AI Copilot — Full Portfolio Context</span>
         <div className="ml-auto flex items-center gap-1.5">
           <div className="w-1.5 h-1.5 rounded-full bg-white/60 animate-pulse" />
           <span className="text-xs text-white/70">Live</span>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#F4F6F9]">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#F0F2F5]">
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[80%] px-3 py-2.5 rounded-xl text-xs leading-relaxed whitespace-pre-wrap ${
               msg.role === 'user'
                 ? 'bg-[#00338D] text-white rounded-br-sm'
-                : 'bg-white border border-[#E2E8F0] text-[#1A1F36] rounded-bl-sm shadow-sm'
+                : 'bg-white border border-[#D8DCE3] text-[#1A1F36] rounded-bl-sm shadow-sm'
             }`}>
               {msg.text}
             </div>
@@ -167,7 +167,7 @@ function ChatInterface() {
         ))}
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-white border border-[#E2E8F0] rounded-xl rounded-bl-sm px-3 py-2.5 shadow-sm">
+            <div className="bg-white border border-[#D8DCE3] rounded-xl rounded-bl-sm px-3 py-2.5 shadow-sm">
               <div className="flex gap-1">
                 {[0,1,2].map(i => (
                   <motion.span key={i} className="w-1.5 h-1.5 rounded-full bg-[#9CA3AF] block"
@@ -180,21 +180,21 @@ function ChatInterface() {
         <div ref={bottomRef} />
       </div>
 
-      <div className="px-3 py-2 bg-white border-t border-[#E2E8F0] flex gap-1.5 overflow-x-auto flex-shrink-0">
+      <div className="px-3 py-2 bg-white border-t border-[#D8DCE3] flex gap-1.5 overflow-x-auto flex-shrink-0">
         {SUGGESTIONS.map((s, i) => (
           <button key={i} onClick={() => sendMessage(s)} disabled={loading}
-            className="flex-shrink-0 px-2.5 py-1 bg-[#F4F6F9] hover:bg-[#E2E8F0] border border-[#E2E8F0] rounded-full text-[10px] text-[#6B7280] hover:text-[#1A1F36] transition-colors disabled:opacity-40">
+            className="flex-shrink-0 px-2.5 py-1 bg-[#F0F2F5] hover:bg-[#D8DCE3] border border-[#D8DCE3] rounded-full text-[10px] text-[#6B7280] hover:text-[#1A1F36] transition-colors disabled:opacity-40">
             {s}
           </button>
         ))}
       </div>
 
-      <div className="flex gap-2 px-3 py-3 border-t border-[#E2E8F0] bg-white flex-shrink-0">
+      <div className="flex gap-2 px-3 py-3 border-t border-[#D8DCE3] bg-white flex-shrink-0">
         <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
           placeholder="Ask about incidents, capacity, sustainability, tenants..."
-          className="flex-1 text-xs text-[#1A1F36] placeholder:text-[#9CA3AF] bg-[#F4F6F9] border border-[#E2E8F0] rounded-lg px-3 py-2 focus:outline-none focus:border-[#0077C8]/50 transition-colors" />
+          className="flex-1 text-xs text-[#1A1F36] placeholder:text-[#9CA3AF] bg-[#F0F2F5] border border-[#D8DCE3] rounded-lg px-3 py-2 focus:outline-none focus:border-[#005EB8]/50 transition-colors" />
         <button onClick={() => sendMessage()} disabled={!input.trim() || loading}
-          className="w-8 h-8 rounded-lg bg-[#00338D] hover:bg-[#0044b8] text-white flex items-center justify-center disabled:opacity-40 transition-colors flex-shrink-0">
+          className="w-8 h-8 rounded-lg bg-[#00338D] hover:bg-[#002A73] text-white flex items-center justify-center disabled:opacity-40 transition-colors flex-shrink-0">
           {loading ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
         </button>
       </div>
@@ -210,7 +210,7 @@ export default function AIInsightsPage() {
         <div className="p-6 space-y-6">
           <div className="flex items-center gap-2">
             <Brain size={16} className="text-[#00338D]" />
-            <h2 className="text-base font-bold text-[#1A1F36]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>AI Operations Intelligence</h2>
+            <h2 className="text-base font-bold text-[#1A1F36]" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>AI Operations Intelligence</h2>
             <span className="text-xs bg-[#00338D]/10 text-[#00338D] px-2 py-0.5 rounded-full font-bold">{insights.length} insights</span>
             <span className="text-[10px] text-[#9CA3AF] ml-auto">From the operating record as of {AS_OF}</span>
           </div>
@@ -225,8 +225,8 @@ export default function AIInsightsPage() {
 
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Sparkles size={16} className="text-[#0077C8]" />
-              <h2 className="text-base font-bold text-[#1A1F36]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Conversational AI — Ask Anything</h2>
+              <Sparkles size={16} className="text-[#005EB8]" />
+              <h2 className="text-base font-bold text-[#1A1F36]" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>Conversational AI — Ask Anything</h2>
             </div>
             <ChatInterface />
           </div>

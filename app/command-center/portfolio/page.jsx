@@ -65,7 +65,7 @@ const COLUMNS = [
 
 function Tile({ label, value, sub }) {
   return (
-    <div className="bg-white rounded-xl border border-[#E2E8F0] px-4 py-3">
+    <div className="bg-white rounded-xl border border-[#D8DCE3] px-4 py-3">
       <p className="text-[10px] font-bold uppercase tracking-widest text-[#94A3B8]">{label}</p>
       <p className="text-xl font-semibold text-[#1A1F36]" style={MONO}>{value}</p>
       {sub && <p className="text-[11px] text-[#64748B]">{sub}</p>}
@@ -103,7 +103,7 @@ function Drilldown({ f, onClose }) {
     { href: '/command-center/site-risk', label: 'Site risk' },
   ];
   return (
-    <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4 h-full">
+    <div className="bg-white rounded-2xl border border-[#D8DCE3] p-4 h-full">
       <div className="flex items-start justify-between gap-2">
         <div>
           <h3 className="text-sm font-bold text-[#1A1F36]">{f.name}</h3>
@@ -115,19 +115,19 @@ function Drilldown({ f, onClose }) {
       <div className="grid grid-cols-2 gap-2 mt-3 text-xs">
         {f.status === 'Active' ? (
           <>
-            <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] p-2"><p className="text-[10px] text-[#94A3B8]">IT load</p><p className="font-semibold" style={MONO}>{fmtUpTo(f.itLoadMw, 2)} of {fmtUpTo(f.capacityMw, 1)} MW</p></div>
-            <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] p-2"><p className="text-[10px] text-[#94A3B8]">PUE · WUE</p><p className="font-semibold" style={MONO}>{f.pue} · {f.wue}</p></div>
-            <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] p-2"><p className="text-[10px] text-[#94A3B8]">Renewable</p><p className="font-semibold" style={MONO}>{f.renewablePct}% <span className="text-[10px] text-[#94A3B8] font-normal">{f.renewableRank}</span></p></div>
-            <div className="rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] p-2"><p className="text-[10px] text-[#94A3B8]">Grid</p><p className="font-semibold" style={MONO}>{fmtNumber(f.gridHeadroomKw)} kW free</p></div>
+            <div className="rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] p-2"><p className="text-[10px] text-[#94A3B8]">IT load</p><p className="font-semibold" style={MONO}>{fmtUpTo(f.itLoadMw, 2)} of {fmtUpTo(f.capacityMw, 1)} MW</p></div>
+            <div className="rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] p-2"><p className="text-[10px] text-[#94A3B8]">PUE · WUE</p><p className="font-semibold" style={MONO}>{f.pue} · {f.wue}</p></div>
+            <div className="rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] p-2"><p className="text-[10px] text-[#94A3B8]">Renewable</p><p className="font-semibold" style={MONO}>{f.renewablePct}% <span className="text-[10px] text-[#94A3B8] font-normal">{f.renewableRank}</span></p></div>
+            <div className="rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] p-2"><p className="text-[10px] text-[#94A3B8]">Grid</p><p className="font-semibold" style={MONO}>{fmtNumber(f.gridHeadroomKw)} kW free</p></div>
           </>
         ) : (
-          <div className="col-span-2 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] p-2"><p className="text-[10px] text-[#94A3B8]">Pipeline</p><p className="font-semibold">{fmtUpTo(f.capacityMw, 1)} MW design · queue position {f.queuePosition}</p></div>
+          <div className="col-span-2 rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] p-2"><p className="text-[10px] text-[#94A3B8]">Pipeline</p><p className="font-semibold">{fmtUpTo(f.capacityMw, 1)} MW design · queue position {f.queuePosition}</p></div>
         )}
-        <div className="col-span-2 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] p-2"><p className="text-[10px] text-[#94A3B8]">Site risk</p><p className="font-semibold" style={MONO}>{fmtUpTo(f.riskScore, 1)} of 100 · {BAND[f.riskBand]} <span className="text-[10px] font-normal text-[#94A3B8]">driven by {f.riskDriver === 'hazard' ? 'natural hazard' : f.riskDriver === 'water' ? 'water stress' : 'grid'}</span></p></div>
+        <div className="col-span-2 rounded-lg bg-[#F8FAFC] border border-[#D8DCE3] p-2"><p className="text-[10px] text-[#94A3B8]">Site risk</p><p className="font-semibold" style={MONO}>{fmtUpTo(f.riskScore, 1)} of 100 · {BAND[f.riskBand]} <span className="text-[10px] font-normal text-[#94A3B8]">driven by {f.riskDriver === 'hazard' ? 'natural hazard' : f.riskDriver === 'water' ? 'water stress' : 'grid'}</span></p></div>
       </div>
       <div className="mt-3 space-y-1">
         {links.map((l) => (
-          <Link key={l.label} href={l.href} className="flex items-center justify-between text-xs text-[#0077C8] hover:underline">{l.label}<ArrowUpRight size={12} /></Link>
+          <Link key={l.label} href={l.href} className="flex items-center justify-between text-xs text-[#005EB8] hover:underline">{l.label}<ArrowUpRight size={12} /></Link>
         ))}
       </div>
     </div>
@@ -168,7 +168,7 @@ export default function NexusPortfolioPage() {
         <GIIHeader title="Nexus Portfolio" subtitle="Where the Nexus sites are, how each is running, and what the board needs to decide"
           actions={<SourceSwitch active="nexus" />} />
 
-        <div ref={exportRef} className="mt-4 space-y-4 bg-[#F4F6F9] p-0.5">
+        <div ref={exportRef} className="mt-4 space-y-4 bg-[#F0F2F5] p-0.5">
           <div className="grid grid-cols-2 lg:grid-cols-6 gap-3">
             <Tile label="Facilities" value={t.facilities} sub={`${t.operational} operating`} />
             <Tile label="Design IT capacity" value={`${fmtUpTo(t.designKw / 1000, 1)} MW`} sub={`${fmtUpTo(t.itLoadKw / 1000, 1)} MW in use`} />
@@ -180,9 +180,9 @@ export default function NexusPortfolioPage() {
 
           <section className="bg-[#F7FAFD] rounded-xl border border-[#D6E4F2] p-4">
             <div className="flex items-center justify-between gap-2 mb-2">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-[#0077C8]">Executive briefing · as of {timeLabel(summary.asOf)}</p>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-[#005EB8]">Executive briefing · as of {timeLabel(summary.asOf)}</p>
               <button onClick={doExport} disabled={!ready || exporting} data-html2canvas-ignore
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#00338D] hover:bg-[#0044b8] text-white disabled:opacity-50">
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#00338D] hover:bg-[#002A73] text-white disabled:opacity-50">
                 <FileDown size={13} /> {exporting ? 'Exporting…' : 'Export briefing (PDF)'}
               </button>
             </div>
@@ -192,7 +192,7 @@ export default function NexusPortfolioPage() {
           <div className="flex flex-col lg:flex-row gap-4" data-html2canvas-ignore>
             <div className="w-full lg:w-[68%] relative h-[420px] lg:h-[520px]">
               <WorldMap facilities={mapped} selectedFacilityId={selected?.id} onMarkerClick={(f) => setSelected(facilities.find((x) => x.id === f.id))} flyToTarget={INDIA} mode="light" />
-              <div className="absolute top-3 right-3 z-[500] bg-white/95 border border-[#E2E8F0] rounded-lg shadow-sm p-2 text-[11px]">
+              <div className="absolute top-3 right-3 z-[500] bg-white/95 border border-[#D8DCE3] rounded-lg shadow-sm p-2 text-[11px]">
                 <label className="flex items-center gap-2 font-semibold text-[#334155]">Colour by
                   <select value={overlay} onChange={(e) => setOverlay(e.target.value)} className="rounded border border-[#CBD5E1] px-1.5 py-0.5 text-[11px]">
                     {Object.entries(OVERLAYS).map(([id, o]) => <option key={id} value={id}>{o.label}</option>)}
@@ -207,14 +207,14 @@ export default function NexusPortfolioPage() {
             </div>
             <div className="w-full lg:w-[32%]">
               {selected ? <Drilldown f={selected} onClose={() => setSelected(null)} /> : (
-                <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4 h-full text-xs text-[#64748B]">
+                <div className="bg-white rounded-2xl border border-[#D8DCE3] p-4 h-full text-xs text-[#64748B]">
                   Select a facility on the map or in the table to see its figures and open its views. Marker colour follows the overlay chosen on the map.
                 </div>
               )}
             </div>
           </div>
 
-          <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+          <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
             <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] mb-3">Facilities · click a heading to sort</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-xs min-w-[860px]">

@@ -37,9 +37,9 @@ function Category({ facilityId, id, label, Icon, offline }) {
   }, [facilityId, id, offline]);
   const [bg, fg, text] = STATUS[data.status] ?? STATUS.unavailable;
   return (
-    <div className="rounded-lg border border-[#E2E8F0] p-3">
+    <div className="rounded-lg border border-[#D8DCE3] p-3">
       <div className="flex items-center justify-between gap-2 mb-1">
-        <p className="flex items-center gap-1.5 text-xs font-semibold text-[#1A1F36]"><Icon size={13} className="text-[#0077C8]" /> {label}</p>
+        <p className="flex items-center gap-1.5 text-xs font-semibold text-[#1A1F36]"><Icon size={13} className="text-[#005EB8]" /> {label}</p>
         <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ background: bg, color: fg }}>{text}{data.source ? ` · ${data.source}` : ''}</span>
       </div>
       {data.status === 'loading'
@@ -67,21 +67,21 @@ export default function LiveConditions({ facilities, offline = false }) {
     fetch(`/api/nexus/external-risk?facility=${facilityId}&offline=1`).then((r) => r.json()).then((d) => setWater(d.waterStress)).catch(() => setWater(null));
   }, [facilityId]);
   return (
-    <section className="bg-white rounded-xl border border-[#E2E8F0] p-4">
+    <section className="bg-white rounded-xl border border-[#D8DCE3] p-4">
       <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
         <div>
           <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Live external conditions</h2>
           <p className="text-[11px] text-[#94A3B8]">Two sources per category, cached; shown beside the scores, never inside them.</p>
         </div>
         <select value={facilityId} onChange={(e) => setFacilityId(e.target.value)} aria-label="Facility"
-          className="text-xs text-[#334155] bg-[#F4F6F9] border border-[#E2E8F0] rounded-lg px-3 py-1.5">
+          className="text-xs text-[#334155] bg-[#F0F2F5] border border-[#D8DCE3] rounded-lg px-3 py-1.5">
           {facilities.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
         </select>
       </div>
       <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-3">
         {CATS.map(([id, label, Icon]) => <Category key={`${facilityId}-${id}`} facilityId={facilityId} id={id} label={label} Icon={Icon} offline={offline} />)}
-        <div className="rounded-lg border border-[#E2E8F0] p-3">
-          <p className="flex items-center gap-1.5 text-xs font-semibold text-[#1A1F36] mb-1"><Droplets size={13} className="text-[#0077C8]" /> Water stress</p>
+        <div className="rounded-lg border border-[#D8DCE3] p-3">
+          <p className="flex items-center gap-1.5 text-xs font-semibold text-[#1A1F36] mb-1"><Droplets size={13} className="text-[#005EB8]" /> Water stress</p>
           <p className="text-[11px] text-[#64748B]">{water ? `${water.label} (index ${water.index}) — from the operating record` : 'Not drawing water'}</p>
         </div>
       </div>

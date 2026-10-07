@@ -344,11 +344,11 @@ export default function ExteriorModel3D({ dc, zoneHealth, onHotspotClick }) {
   return (
     <div ref={mountRef} className="w-full h-full relative">
       <div className="absolute bottom-4 left-4 flex flex-col gap-1 pointer-events-none">
-        <div className="text-[10px] text-[#0077C8] font-mono font-semibold mb-1">SECURITY STATUS</div>
+        <div className="text-[10px] text-[#005EB8] font-mono font-semibold mb-1">SECURITY STATUS</div>
         {[
-          { color: '#00a36c', label: 'All systems operational' },
-          { color: '#d4a017', label: 'Warning — review required' },
-          { color: '#dc2626', label: 'Critical — action needed' },
+          { color: '#00B0A0', label: 'All systems operational' },
+          { color: '#E87722', label: 'Warning — review required' },
+          { color: '#C8102E', label: 'Critical — action needed' },
         ].map(({ color, label }) => (
           <div key={label} className="flex items-center gap-2">
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />

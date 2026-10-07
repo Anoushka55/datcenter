@@ -16,7 +16,7 @@ const DCKnowledgeGraph = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-full flex items-center justify-center bg-[#0a0f1a]">
+      <div className="w-full h-full flex items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-[#0d9488] border-t-transparent rounded-full animate-spin" />
           <span className="text-white/30 text-xs">Loading knowledge graph…</span>
@@ -90,7 +90,7 @@ export default function KnowledgeGraphPage() {
             <div className="min-w-0">
               <p
                 className="font-extrabold text-text-primary text-sm leading-tight truncate"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}
               >
                 DC Knowledge Graph
               </p>
@@ -197,7 +197,7 @@ export default function KnowledgeGraphPage() {
                   <p className="text-[11px] font-semibold text-text-primary leading-snug">{selected.label}</p>
                   <p className="text-[10px] text-text-secondary leading-relaxed mt-1">{selected.description}</p>
                   {selected.updated && <p className="text-[9px] text-text-muted mt-1">Updated {selected.updated}</p>}
-                  {selectedLink && <Link href={selectedLink} className="inline-block mt-1.5 text-[10px] font-semibold text-[#0077C8] hover:underline">Open →</Link>}
+                  {selectedLink && <Link href={selectedLink} className="inline-block mt-1.5 text-[10px] font-semibold text-[#005EB8] hover:underline">Open →</Link>}
                 </>
               ) : (
                 <p className="text-[10px] text-text-secondary leading-relaxed">{mode === 'patterns'

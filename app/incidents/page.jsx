@@ -25,7 +25,7 @@ const RECENT_INCIDENTS = nexus.incidents
 
 function Tile({ label, value, sub }) {
   return (
-    <div className="bg-white rounded-xl border border-[#E2E8F0] px-4 py-3">
+    <div className="bg-white rounded-xl border border-[#D8DCE3] px-4 py-3">
       <p className="text-[10px] font-bold uppercase tracking-widest text-[#94A3B8]">{label}</p>
       <p className="text-2xl font-semibold text-[#1A1F36] tabular-nums" style={MONO}>{value}</p>
       {sub && <p className="text-[11px] text-[#64748B]">{sub}</p>}
@@ -37,7 +37,7 @@ function QueueItem({ active, onClick, severity, id, title, meta, chip }) {
   const sev = SEVERITY_STYLE[severity] ?? SEVERITY_STYLE.medium;
   return (
     <button onClick={onClick}
-      className={`w-full text-left rounded-lg border px-3 py-2.5 transition-colors ${active ? 'bg-[#F0F6FC] border-[#0077C8]/40' : 'bg-white border-[#E2E8F0] hover:bg-[#F8FAFC]'}`}>
+      className={`w-full text-left rounded-lg border px-3 py-2.5 transition-colors ${active ? 'bg-[#F0F6FC] border-[#005EB8]/40' : 'bg-white border-[#D8DCE3] hover:bg-[#F8FAFC]'}`}>
       <div className="flex items-center gap-2 mb-0.5">
         <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: sev.dot }} aria-hidden="true" />
         <span className="text-[10px] font-bold uppercase" style={{ color: sev.fg }}>{sev.label}</span>
@@ -83,17 +83,17 @@ export default function IncidentsPage() {
             <Tile label="Mean time to repair" value={mttr !== null ? fmtDurationShort(mttr) : '—'} sub={`${RECENT_INCIDENTS.length} incidents, last 12 months`} />
           </div>
 
-          <div className="bg-white rounded-xl border border-[#E2E8F0] p-3 flex flex-wrap gap-2 items-center">
+          <div className="bg-white rounded-xl border border-[#D8DCE3] p-3 flex flex-wrap gap-2 items-center">
             <span className="text-xs text-[#94A3B8] font-medium">Impact:</span>
             {['All', ...IMPACTS].map((k) => (
               <button key={k} onClick={() => setImpact(k)}
-                className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-colors ${impact === k ? 'bg-[#00338D] text-white' : 'bg-[#F4F6F9] text-[#6B7280] hover:bg-[#E2E8F0]'}`}>
+                className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-colors ${impact === k ? 'bg-[#00338D] text-white' : 'bg-[#F0F2F5] text-[#6B7280] hover:bg-[#D8DCE3]'}`}>
                 {k === 'All' ? 'All' : IMPACT_LABEL[k]}
               </button>
             ))}
-            <div className="w-px h-4 bg-[#E2E8F0]" />
+            <div className="w-px h-4 bg-[#D8DCE3]" />
             <select value={facility} onChange={(e) => setFacility(e.target.value)} aria-label="Facility"
-              className="text-xs text-[#6B7280] bg-[#F4F6F9] border border-[#E2E8F0] rounded-lg px-3 py-1.5 focus:outline-none">
+              className="text-xs text-[#6B7280] bg-[#F0F2F5] border border-[#D8DCE3] rounded-lg px-3 py-1.5 focus:outline-none">
               <option value="All">All facilities</option>
               {nexus.facilities.map((f) => <option key={f.facility_id} value={f.facility_id}>{f.name}</option>)}
             </select>

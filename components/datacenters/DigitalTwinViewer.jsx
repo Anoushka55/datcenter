@@ -55,13 +55,13 @@ function LegacyTwinViewer({ dc, zoneHealth, onHotspotChange, isGenerated, nexusF
   return (
     <div ref={containerRef} className="w-full h-full relative flex flex-col">
       {/* Toggle bar */}
-      <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 bg-white border-b border-[#E2E8F0]">
-        <div className="flex items-center gap-1 p-0.5 bg-[#F4F6F9] rounded-lg border border-[#E2E8F0]">
+      <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 bg-white border-b border-[#D8DCE3]">
+        <div className="flex items-center gap-1 p-0.5 bg-[#F0F2F5] rounded-lg border border-[#D8DCE3]">
           <button
             onClick={() => handleToggle('exterior')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
               view === 'exterior'
-                ? 'bg-[#0077C8] text-white shadow'
+                ? 'bg-[#005EB8] text-white shadow'
                 : 'text-[#64748b] hover:text-[#94a3b8]'
             }`}
           >
@@ -72,7 +72,7 @@ function LegacyTwinViewer({ dc, zoneHealth, onHotspotChange, isGenerated, nexusF
             onClick={() => handleToggle('interior')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
               view === 'interior'
-                ? 'bg-[#0077C8] text-white shadow'
+                ? 'bg-[#005EB8] text-white shadow'
                 : 'text-[#64748b] hover:text-[#94a3b8]'
             }`}
           >
@@ -95,7 +95,7 @@ function LegacyTwinViewer({ dc, zoneHealth, onHotspotChange, isGenerated, nexusF
         {/* DC name tag */}
         <div className="text-right">
           <div className="text-[10px] text-[#9CA3AF] font-mono uppercase tracking-widest">Digital Twin</div>
-          <div className="text-xs font-semibold text-[#0077C8]">{dc?.name}</div>
+          <div className="text-xs font-semibold text-[#005EB8]">{dc?.name}</div>
         </div>
       </div>
 
@@ -183,7 +183,7 @@ function LegacyTwinViewer({ dc, zoneHealth, onHotspotChange, isGenerated, nexusF
         {/* Hint */}
         {!activeHotspot && !activeRackId && view !== 'thermal' && (
           <div className="absolute bottom-14 left-1/2 -translate-x-1/2 pointer-events-none">
-            <div className="text-[10px] text-[#6B7280] font-mono bg-white/70 px-3 py-1 rounded-full border border-[#E2E8F0]">
+            <div className="text-[10px] text-[#6B7280] font-mono bg-white/70 px-3 py-1 rounded-full border border-[#D8DCE3]">
               {view === 'interior' ? 'Click racks or glowing markers to inspect' : 'Click glowing markers to inspect zones'}
             </div>
           </div>

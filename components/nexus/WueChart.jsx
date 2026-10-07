@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { monthLabel } from '@/lib/nexus/time';
 
-const C = { line: '#0077C8', target: '#1A1F36', median: '#94A3B8', grid: '#EEF1F5', muted: '#64748B', over: '#B54708' };
+const C = { line: '#005EB8', target: '#1A1F36', median: '#94A3B8', grid: '#EEF1F5', muted: '#64748B', over: '#B54708' };
 const W = 260, H = 118, L = 34, R = 8, T = 22, B = 18;
 
 function Panel({ site, lo, hi, median }) {
@@ -40,7 +40,7 @@ function Panel({ site, lo, hi, median }) {
         {h && <><line x1={x(hover)} x2={x(hover)} y1={T} y2={H - B} stroke={C.muted} /><circle cx={x(hover)} cy={y(h.wue)} r="4" fill={C.line} stroke="#fff" strokeWidth="2" /></>}
       </svg>
       {h && (
-        <div className="pointer-events-none absolute top-5 z-10 rounded-md border border-[#E2E8F0] bg-white px-2 py-1.5 text-[10.5px] shadow-md whitespace-nowrap"
+        <div className="pointer-events-none absolute top-5 z-10 rounded-md border border-[#D8DCE3] bg-white px-2 py-1.5 text-[10.5px] shadow-md whitespace-nowrap"
           style={{ left: `${(x(hover) / W) * 100}%`, transform: hover > m.length / 2 ? 'translateX(calc(-100% - 8px))' : 'translateX(8px)' }}>
           <p className="font-semibold text-[#1A1F36]">{monthLabel(h.month)}</p>
           <p className="text-[#334155]">WUE <span className="font-mono">{h.wue}</span> L/kWh</p>
@@ -59,7 +59,7 @@ export default function WueChart({ sites, median }) {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-4 text-[11px] text-[#64748B] mb-2">
-        <span className="flex items-center gap-1.5"><span className="w-4 h-0.5 bg-[#0077C8] inline-block" /> Measured WUE (L per IT kWh)</span>
+        <span className="flex items-center gap-1.5"><span className="w-4 h-0.5 bg-[#005EB8] inline-block" /> Measured WUE (L per IT kWh)</span>
         <span className="flex items-center gap-1.5"><span className="w-4 border-t border-dashed border-[#1A1F36] inline-block" /> Site target</span>
         <span className="flex items-center gap-1.5"><span className="w-4 border-t border-dotted border-[#94A3B8] inline-block" /> Tier III peer median {median}</span>
         <span className="text-[#94A3B8]">Shared scale across panels.</span>

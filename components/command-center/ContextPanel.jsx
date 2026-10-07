@@ -5,11 +5,11 @@ import { fmtLakh } from '@/lib/nexus/format';
 import { timeLabel } from '@/lib/nexus/time';
 
 const MONO = { fontFamily: "'JetBrains Mono', monospace" };
-const ALERT_DOT = { critical: 'bg-[#DC2626]', high: 'bg-orange-500', medium: 'bg-[#D4A017]', low: 'bg-[#0077C8]' };
+const ALERT_DOT = { critical: 'bg-[#C8102E]', high: 'bg-orange-500', medium: 'bg-[#E87722]', low: 'bg-[#005EB8]' };
 
 function Section({ title, icon: Icon, children }) {
   return (
-    <div className="border-b border-[#E2E8F0] pb-4 mb-4 last:border-0 last:mb-0 last:pb-0">
+    <div className="border-b border-[#D8DCE3] pb-4 mb-4 last:border-0 last:mb-0 last:pb-0">
       <div className="flex items-center gap-1.5 mb-2.5">
         <Icon size={12} className="text-[#9CA3AF]" />
         <h3 className="text-[10px] font-bold uppercase tracking-widest text-[#9CA3AF]">{title}</h3>
@@ -22,7 +22,7 @@ function Section({ title, icon: Icon, children }) {
 export default function ContextPanel({ context, tenants }) {
   const atRisk = tenants.filter((t) => t.exposureInrLakh > 0).slice(0, 3);
   return (
-    <aside className="hidden xl:block w-80 flex-shrink-0 bg-white border-l border-[#E2E8F0] h-full overflow-y-auto p-4">
+    <aside className="hidden xl:block w-80 flex-shrink-0 bg-white border-l border-[#D8DCE3] h-full overflow-y-auto p-4">
       <Section title="Most severe alerts" icon={AlertCircle}>
         <div className="space-y-2">
           {context.alerts.map((a) => (
@@ -41,7 +41,7 @@ export default function ContextPanel({ context, tenants }) {
         <Section title="Escalations" icon={ArrowUpRight}>
           <div className="space-y-2">
             {context.escalations.map((e) => (
-              <div key={e.id} className="bg-[#DC2626]/5 border border-[#DC2626]/10 rounded-lg px-3 py-2">
+              <div key={e.id} className="bg-[#C8102E]/5 border border-[#C8102E]/10 rounded-lg px-3 py-2">
                 <p className="text-xs text-[#1A1F36] leading-snug">{e.label}</p>
                 <p className="text-[10px] text-[#9CA3AF] mt-0.5" style={MONO}>{e.time}</p>
               </div>
@@ -53,10 +53,10 @@ export default function ContextPanel({ context, tenants }) {
       <Section title="SLA exposure" icon={AlertTriangle}>
         <div className="space-y-2">
           {atRisk.map((t) => (
-            <div key={t.contractId} className="bg-[#D4A017]/5 border border-[#D4A017]/20 rounded-lg px-3 py-2">
+            <div key={t.contractId} className="bg-[#E87722]/5 border border-[#E87722]/20 rounded-lg px-3 py-2">
               <div className="flex items-center justify-between mb-0.5 gap-2">
                 <p className="text-[11px] font-bold text-[#1A1F36] truncate">{t.name}</p>
-                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#D4A017]/20 text-[#8A6508] flex-shrink-0">AT RISK</span>
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#E87722]/20 text-[#8A6508] flex-shrink-0">AT RISK</span>
               </div>
               <p className="text-[10px] text-[#6B7280]">{t.facilityId} · SLA {t.slaUptimePct}% · {t.allowedDowntimeMinPerYear} min a year</p>
               <p className="text-[10px] mt-0.5" style={MONO}><span className="text-[#B42318]">{fmtLakh(t.exposureInrLakh)}</span> <span className="text-[#9CA3AF]">via {t.worstAlert}</span></p>
@@ -68,7 +68,7 @@ export default function ContextPanel({ context, tenants }) {
       <Section title="Maintenance due, next 45 days" icon={Calendar}>
         <div className="space-y-2">
           {context.maintenance.slice(0, 5).map((m) => (
-            <div key={m.id} className="border border-[#E2E8F0] rounded-lg px-3 py-2">
+            <div key={m.id} className="border border-[#D8DCE3] rounded-lg px-3 py-2">
               <p className="text-[10px] font-bold text-[#00338D]">{m.site} · {m.componentId}</p>
               <p className="text-xs text-[#1A1F36]">{m.task}</p>
               <p className="text-[10px] text-[#9CA3AF] mt-0.5" style={MONO}>{timeLabel(m.due)} · in {m.inDays} days</p>
@@ -81,7 +81,7 @@ export default function ContextPanel({ context, tenants }) {
       <Section title="Site hazards" icon={CloudLightning}>
         <div className="space-y-2">
           {context.hazards.map((h) => (
-            <div key={h.id} className={`rounded-lg px-3 py-2 border ${h.severity === 'critical' ? 'bg-[#DC2626]/5 border-[#DC2626]/20' : 'bg-[#D4A017]/5 border-[#D4A017]/20'}`}>
+            <div key={h.id} className={`rounded-lg px-3 py-2 border ${h.severity === 'critical' ? 'bg-[#C8102E]/5 border-[#C8102E]/20' : 'bg-[#E87722]/5 border-[#E87722]/20'}`}>
               <p className="text-[10px] font-bold" style={{ color: h.severity === 'critical' ? '#B42318' : '#8A6508' }}>{h.site} · {h.type}</p>
               <p className="text-[11px] text-[#334155] leading-snug mt-0.5">{h.description}</p>
             </div>
