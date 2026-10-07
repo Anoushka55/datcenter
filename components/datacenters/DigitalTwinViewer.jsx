@@ -11,8 +11,15 @@ const InteriorModel3D = dynamic(() => import('./InteriorModel3D'), { ssr: false 
 const ThermalHeatmapView = dynamic(() => import('../thermal/ThermalHeatmapView'), { ssr: false });
 // Facilities in the Nexus dataset show the dataset-driven twin inside.
 const NexusTwinPanel = dynamic(() => import('../nexus/NexusTwinPanel'), { ssr: false });
+// Facilities with a full dataset layout get the twin studio: outer, inner and heatmap views.
+const TwinStudio = dynamic(() => import('../nexus/TwinStudio'), { ssr: false });
 
-export default function DigitalTwinViewer({ dc, zoneHealth, onHotspotChange, isGenerated, nexusFacilityId = null }) {
+export default function DigitalTwinViewer(props) {
+  if (props.nexusFacilityId) return <TwinStudio facilityId={props.nexusFacilityId} />;
+  return <LegacyTwinViewer {...props} />;
+}
+
+function LegacyTwinViewer({ dc, zoneHealth, onHotspotChange, isGenerated, nexusFacilityId = null }) {
   const [view, setView] = useState('exterior');
   const [activeHotspot, setActiveHotspot] = useState(null);
   const [activeRackId, setActiveRackId] = useState(null);

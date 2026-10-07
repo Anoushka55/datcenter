@@ -259,7 +259,7 @@ export default function NexusCapacityPage() {
 
   return (
     <div ref={rootRef} className="w-full h-full relative overflow-hidden bg-[#070d18]" data-testid="nexus-page">
-      <NexusTwin facilityId={FACILITY} view={view} runKey={runKey} insetLeft={insetLeft} insetRight={insetRight} onRackClick={(rack) => { onRow(rack.row_id); setSelectedRack(rack.rack_id); }} />
+      <NexusTwin facilityId={FACILITY} view={view} runKey={runKey} insetLeft={insetLeft} insetRight={insetRight} infoCards={false} fullscreenAt="top-right" onRackClick={(rack) => { onRow(rack.row_id); setSelectedRack(rack.rack_id); }} />
 
       {selectedRack && <RackDetail rackId={selectedRack} left={insetLeft + 16} onClose={() => setSelectedRack(null)} />}
 
