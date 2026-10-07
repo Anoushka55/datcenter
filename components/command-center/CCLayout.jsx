@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { LENSES } from '@/lib/platform-registry';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Building2, Server, Cpu, Users, Leaf, Brain,
@@ -10,6 +11,9 @@ import {
   Package, Shield, Plug, Globe, Gauge, Radar, Droplets, ShieldAlert, FileCheck2, Map, Network, Scale, SunMedium,
 } from 'lucide-react';
 import AICopilotPanel from './AICopilotPanel';
+
+// Lens names and routes come from the platform registry, shared with AI Stack and Services.
+const lensOf = (id) => LENSES.find((l) => l.id === id);
 
 const NAV_GROUPS = [
   {
@@ -43,13 +47,13 @@ const NAV_GROUPS = [
   {
     label: 'V3 Features',
     items: [
-      { id: 'capacity-sim', label: 'Capacity Simulation', icon: Gauge, href: '/command-center/capacity-simulation' },
-      { id: 'predictive',   label: 'Predictive Risk',     icon: Radar, href: '/command-center/predictive' },
-      { id: 'water',        label: 'Water Intelligence',  icon: Droplets, href: '/command-center/water' },
-      { id: 'clean-energy', label: 'Clean Energy (24/7)', icon: SunMedium, href: '/command-center/clean-energy' },
-      { id: 'site-risk',    label: 'Site & Supply Risk',  icon: ShieldAlert, href: '/command-center/site-risk' },
-      { id: 'esg',          label: 'ESG Disclosure',      icon: FileCheck2, href: '/command-center/esg' },
-      { id: 'compliance',   label: 'Policy & Compliance', icon: Scale, href: '/command-center/compliance' },
+      { id: 'capacity-sim', label: lensOf('capacity').label, icon: Gauge, href: lensOf('capacity').href },
+      { id: 'predictive', label: lensOf('predictive').label, icon: Radar, href: lensOf('predictive').href },
+      { id: 'water', label: lensOf('water').label, icon: Droplets, href: lensOf('water').href },
+      { id: 'clean-energy', label: lensOf('clean-energy').label, icon: SunMedium, href: lensOf('clean-energy').href },
+      { id: 'site-risk', label: lensOf('site-risk').label, icon: ShieldAlert, href: lensOf('site-risk').href },
+      { id: 'esg', label: lensOf('esg').label, icon: FileCheck2, href: lensOf('esg').href },
+      { id: 'compliance', label: lensOf('policy').label, icon: Scale, href: lensOf('policy').href },
       { id: 'patterns',     label: 'Pattern Memory',      icon: Network, href: '/wiki?mode=patterns' },
       { id: 'deployments',  label: 'Loading Bay',   icon: Package, href: '/deployments' },
       { id: 'scenarios',    label: 'Scenarios',     icon: Shield,  href: '/scenarios' },
