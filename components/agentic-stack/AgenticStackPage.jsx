@@ -13,6 +13,7 @@ import {
 import CCLayout from '@/components/command-center/CCLayout';
 import { LENSES, ENGINES, TOOLS, STATUS, countBy } from '@/lib/platform-registry';
 import { nexus } from '@/lib/nexus/data';
+import StatusBadge from '@/components/shared/StatusBadge';
 
 const LENS_ICON = { gauge: Gauge, radar: Radar, droplet: Droplets, sun: SunMedium, shield: ShieldAlert, 'file-check': FileCheck2, scale: Scale };
 const FONT = { fontFamily: "'Inter', 'Segoe UI', sans-serif" };
@@ -64,14 +65,7 @@ function KnowledgeGraphLogo({ size = 36 }) {
 }
 const TOOL_LOGO = { tavily: TavilyLogo, exa: ExaLogo, peeringdb: PeeringDBLogo, 'knowledge-graph': KnowledgeGraphLogo };
 
-function Badge({ status }) {
-  const s = STATUS[status];
-  return (
-    <span className="inline-flex items-center gap-1.5 text-[10.5px] font-semibold" style={{ color: s.color }} title={s.note}>
-      <span className="w-1.5 h-1.5 rounded-full" style={{ background: s.color }} />{s.label}
-    </span>
-  );
-}
+const Badge = ({ status }) => <StatusBadge status={status} variant="dot" />;
 
 function Connector({ height = 28, delay = 0 }) {
   const ref = useRef(null);
