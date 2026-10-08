@@ -295,7 +295,7 @@ export default function LandingPage() {
               transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
             >
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/d/db/KPMG_blue_logo.svg"
+                src="/kpmg-logo-navy.svg"
                 alt="KPMG"
                 className="h-16 w-auto mb-4 mx-auto"
               />
