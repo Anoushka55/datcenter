@@ -910,5 +910,17 @@
     "findings": "Cleaned and tested",
     "outcome": "Passed",
     "cost_inr_lakh": 0.5
+  },
+  {
+    "maintenance_id": "MNT-0101",
+    "component_id": "TX-1",
+    "facility_id": "MUM-1",
+    "service_date": "2026-08-28",
+    "next_due": "2026-11-28",
+    "service_type": "Oil analysis (DGA)",
+    "performed_by": "Vendor B Facilities",
+    "findings": "Dissolved gas analysis: acetylene 3 ppm (0.5 ppm in February) and ethylene rising; top-oil 8 C above last year at like load. Oil treatment and internal inspection advised within 3 months.",
+    "outcome": "Advisory raised",
+    "cost_inr_lakh": 1.8
   }
 ]

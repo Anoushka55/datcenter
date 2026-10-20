@@ -110,5 +110,19 @@
     "tenants_affected": 0,
     "cost_inr_lakh": 2.9,
     "note": "Water supply dependency - supports the Beat 6 argument."
+  },
+  {
+    "incident_id": "INC-2025-0611",
+    "facility_id": "MUM-2",
+    "component_id": "TX-A",
+    "severity": "critical",
+    "detected_at": "2025-06-11 14:20",
+    "resolved_at": "2025-06-11 21:12",
+    "description": "Transformer TX-A tripped on Buchholz relay; site ran on TX-B and generators",
+    "root_cause": "Insulation breakdown - dissolved gas (acetylene) trend not acted on",
+    "duration_min": 412,
+    "tenants_affected": 3,
+    "cost_inr_lakh": 41.5,
+    "note": "Oil sample four months earlier showed acetylene rising; no follow-up was scheduled."
   }
 ]

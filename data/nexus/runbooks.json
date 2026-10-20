@@ -429,6 +429,50 @@
     "within_min": 10080
   },
   {
+    "runbook_id": "RB-TX-DGA",
+    "component_type": "transformer",
+    "failure_mode": "Insulation degradation (dissolved gas)",
+    "impact": "outage",
+    "match_terms": "Dissolved gas|acetylene|top-oil",
+    "step": 1,
+    "action": "Repeat the oil sample within 7 days to confirm the gas trend",
+    "owner_team": "Electrical",
+    "within_min": 10080
+  },
+  {
+    "runbook_id": "RB-TX-DGA",
+    "component_type": "transformer",
+    "failure_mode": "Insulation degradation (dissolved gas)",
+    "impact": "outage",
+    "match_terms": "Dissolved gas|acetylene|top-oil",
+    "step": 2,
+    "action": "Keep the peer transformer able to carry the full load alone (2N)",
+    "owner_team": "Electrical",
+    "within_min": 1440
+  },
+  {
+    "runbook_id": "RB-TX-DGA",
+    "component_type": "transformer",
+    "failure_mode": "Insulation degradation (dissolved gas)",
+    "impact": "outage",
+    "match_terms": "Dissolved gas|acetylene|top-oil",
+    "step": 3,
+    "action": "Plan an outage window for oil treatment and internal inspection",
+    "owner_team": "Electrical",
+    "within_min": 20160
+  },
+  {
+    "runbook_id": "RB-TX-DGA",
+    "component_type": "transformer",
+    "failure_mode": "Insulation degradation (dissolved gas)",
+    "impact": "outage",
+    "match_terms": "Dissolved gas|acetylene|top-oil",
+    "step": 4,
+    "action": "Order long-lead spares now (34-week transformer lead time)",
+    "owner_team": "Leadership",
+    "within_min": 10080
+  },
+  {
     "runbook_id": "RB-ROW-CAP",
     "component_type": "rack_row",
     "failure_mode": "Row at full occupancy",

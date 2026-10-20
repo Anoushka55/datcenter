@@ -8,14 +8,14 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
   Gauge, Radar, Droplets, SunMedium, ShieldAlert, FileCheck2, Scale, Cog, Database, MessageSquareText,
-  Route as RouteIcon, ArrowUpRight, Bell, Landmark, Lock,
+  Route as RouteIcon, ArrowUpRight, Bell, Landmark, Lock, Shuffle,
 } from 'lucide-react';
 import CCLayout from '@/components/command-center/CCLayout';
 import { LENSES, ENGINES, TOOLS, STATUS, countBy } from '@/lib/platform-registry';
 import { nexus } from '@/lib/nexus/data';
 import StatusBadge from '@/components/shared/StatusBadge';
 
-const LENS_ICON = { gauge: Gauge, radar: Radar, droplet: Droplets, sun: SunMedium, shield: ShieldAlert, 'file-check': FileCheck2, scale: Scale };
+const LENS_ICON = { gauge: Gauge, radar: Radar, droplet: Droplets, sun: SunMedium, shield: ShieldAlert, 'file-check': FileCheck2, scale: Scale, shuffle: Shuffle };
 const FONT = { fontFamily: "'Inter', 'Segoe UI', sans-serif" };
 
 // ── tool marks (generic glyphs; no vendor artwork) ────────────────────────

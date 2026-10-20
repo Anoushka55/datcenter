@@ -440,7 +440,7 @@
     "freshwater_litres": 8184864,
     "source": "Municipal + treated recycle",
     "local_water_stress": "Extremely high",
-    "stress_index": 81,
+    "stress_index": 86,
     "peak_demand_lpm": 264.6
   },
   {
@@ -452,7 +452,7 @@
     "freshwater_litres": 7446247,
     "source": "Municipal + treated recycle",
     "local_water_stress": "Extremely high",
-    "stress_index": 81,
+    "stress_index": 86,
     "peak_demand_lpm": 266.5
   },
   {
@@ -464,7 +464,7 @@
     "freshwater_litres": 8067357,
     "source": "Municipal + treated recycle",
     "local_water_stress": "Extremely high",
-    "stress_index": 81,
+    "stress_index": 86,
     "peak_demand_lpm": 260.8
   },
   {
@@ -476,7 +476,7 @@
     "freshwater_litres": 8101747,
     "source": "Municipal + treated recycle",
     "local_water_stress": "Extremely high",
-    "stress_index": 81,
+    "stress_index": 86,
     "peak_demand_lpm": 301.5
   },
   {
@@ -488,7 +488,7 @@
     "freshwater_litres": 8237282,
     "source": "Municipal + treated recycle",
     "local_water_stress": "Extremely high",
-    "stress_index": 81,
+    "stress_index": 86,
     "peak_demand_lpm": 301.3
   },
   {
@@ -500,7 +500,7 @@
     "freshwater_litres": 8015047,
     "source": "Municipal + treated recycle",
     "local_water_stress": "Extremely high",
-    "stress_index": 81,
+    "stress_index": 86,
     "peak_demand_lpm": 291.2
   },
   {
@@ -512,7 +512,7 @@
     "freshwater_litres": 8511046,
     "source": "Municipal + treated recycle",
     "local_water_stress": "Extremely high",
-    "stress_index": 81,
+    "stress_index": 86,
     "peak_demand_lpm": 284.8
   },
   {
@@ -524,7 +524,7 @@
     "freshwater_litres": 8613045,
     "source": "Municipal + treated recycle",
     "local_water_stress": "Extremely high",
-    "stress_index": 81,
+    "stress_index": 86,
     "peak_demand_lpm": 285.8
   },
   {
@@ -536,7 +536,7 @@
     "freshwater_litres": 8412454,
     "source": "Municipal + treated recycle",
     "local_water_stress": "Extremely high",
-    "stress_index": 81,
+    "stress_index": 86,
     "peak_demand_lpm": 293.3
   }
 ]

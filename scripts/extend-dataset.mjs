@@ -99,6 +99,12 @@ const RUNBOOKS = [
     ['Redirect planned deployments to sites with grid headroom', 'Capacity planning', 1440],
     ['File a load enhancement application with the utility', 'Leadership', 10080],
   ]],
+  ['RB-TX-DGA', 'transformer', 'Insulation degradation (dissolved gas)', 'outage', 'Dissolved gas|acetylene|top-oil', [
+    ['Repeat the oil sample within 7 days to confirm the gas trend', 'Electrical', 10080],
+    ['Keep the peer transformer able to carry the full load alone (2N)', 'Electrical', 1440],
+    ['Plan an outage window for oil treatment and internal inspection', 'Electrical', 20160],
+    ['Order long-lead spares now (34-week transformer lead time)', 'Leadership', 10080],
+  ]],
   ['RB-ROW-CAP', 'rack_row', 'Row at full occupancy', 'capacity', 'rack occupancy', [
     ['Review stranded capacity elsewhere in the facility', 'Capacity planning', 1440],
     ['Run the density cascade before approving any upgrade', 'Capacity planning', 4320],
@@ -117,7 +123,7 @@ const SITE_RISK = [
   ['MUM-2', 'III', 4, 3, 2, 5, 23, 'Low-lying plot; same 2005 and 2021 events as MUM-1'],
   ['CHN-1', 'III', 4, 4, 4, 4, 27, 'December 2015 Chennai floods; Cyclone Michaung, December 2023'],
   ['HYD-1', 'II', 3, 1, 4, 2, 11, 'October 2020 Hyderabad floods'],
-  ['NCR-1', 'IV', 2, 1, 5, 7, 34, 'May 2024 north India heatwave and peak-demand curtailment'],
+  ['NCR-1', 'IV', 3, 1, 5, 7, 34, 'May 2024 north India heatwave and peak-demand curtailment; July 2023 Yamuna and Hindon floods in Noida'],
   ['BLR-1', 'II', 3, 1, 2, null, null, 'September 2022 Bengaluru flooding; site not yet energised'],
 ];
 
@@ -481,6 +487,48 @@ for (const row of dataRows(waterSheet)) {
   wa(row, 'freshwater_litres').value = total - treated;
   wa(row, 'peak_demand_lpm').value = round(total / (hours * 60) * (PEAKING[month.slice(5)] ?? 1.14), 1);
 }
+
+// Basin stress for NCR-1: Gautam Buddh Nagar (Noida) groundwater is assessed
+// over-exploited by the CGWB, and Delhi NCR draws on a Yamuna basin under
+// extreme stress. It is rated above Chennai, not below it.
+const STRESS_RESTATED = { 'NCR-1': 86 };
+for (const row of dataRows(waterSheet)) {
+  const v = STRESS_RESTATED[wa(row, 'facility_id').value];
+  if (v != null) { wa(row, 'stress_index').value = v; wa(row, 'local_water_stress').value = 'Extremely high'; }
+}
+
+// ── Transformer evidence: a dissolved-gas advisory on TX-1, and the incident
+// that shows what this failure mode costs when it is missed (MUM-2, 2025).
+function appendRecords(ws, idName, records) {
+  const cell = cellsByHeader(ws);
+  const rows = dataRows(ws);
+  const ids = new Set(rows.map((r) => cell(r, idName).value));
+  let at = rows.at(-1).number;
+  for (const rec of records) {
+    if (ids.has(rec[idName])) continue;
+    at += 1;
+    const row = ws.insertRow(at, []);
+    for (const [k, v] of Object.entries(rec)) {
+      const c = cell(row, k);
+      c.value = v;
+      c.style = typeof v === 'number' ? (Number.isInteger(v) ? numberStyle : decimalStyle) : textStyle;
+    }
+  }
+}
+appendRecords(wb.getWorksheet('19_maintenance'), 'maintenance_id', [{
+  maintenance_id: 'MNT-0101', component_id: 'TX-1', facility_id: 'MUM-1', service_date: '2026-08-28', next_due: '2026-11-28',
+  service_type: 'Oil analysis (DGA)', performed_by: 'Vendor B Facilities',
+  findings: 'Dissolved gas analysis: acetylene 3 ppm (0.5 ppm in February) and ethylene rising; top-oil 8 C above last year at like load. Oil treatment and internal inspection advised within 3 months.',
+  outcome: 'Advisory raised', cost_inr_lakh: 1.8,
+}]);
+appendRecords(wb.getWorksheet('11_incidents'), 'incident_id', [{
+  incident_id: 'INC-2025-0611', facility_id: 'MUM-2', component_id: 'TX-A', severity: 'critical',
+  detected_at: '2025-06-11 14:20', resolved_at: '2025-06-11 21:12',
+  description: 'Transformer TX-A tripped on Buchholz relay; site ran on TX-B and generators',
+  root_cause: 'Insulation breakdown - dissolved gas (acetylene) trend not acted on',
+  duration_min: 412, tenants_affected: 3, cost_inr_lakh: 41.5,
+  note: 'Oil sample four months earlier showed acetylene rising; no follow-up was scheduled.',
+}]);
 
 const ledgerNotes = [
   [energy, 'Restated from 22_timeseries: total_kwh = IT load x hours x PUE. Renewable share and tariff per 01_facilities.'],

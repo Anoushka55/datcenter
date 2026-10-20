@@ -38,8 +38,8 @@ export default function DecisionQuickStarts() {
 
   return (
     <div>
-      <p className="text-[9px] text-[#9CA3AF] font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5">
-        Quick starts
+      <p className="text-[14px] font-bold text-[#17233F] mb-3">
+        What are you looking to explore?
       </p>
 
       <AnimatePresence mode="wait">
@@ -57,17 +57,17 @@ export default function DecisionQuickStarts() {
                 <button
                   key={qs.id}
                   onClick={() => setActive(qs.decision_type)}
-                  className="w-full text-left px-3 py-2.5 rounded-xl border border-[#E8EDF5] bg-[#F8FAFF] hover:bg-[#EEF4FF] hover:border-[#00338D]/25 transition-all group"
+                  className="w-full text-left px-3 py-3 rounded-xl border border-[#E7ECF5] bg-white hover:bg-[#F7FAFF] hover:border-[#BBD0EE] transition-all group"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-[#00338D]/10 flex items-center justify-center flex-shrink-0">
-                      <Icon size={13} className="text-[#00338D]" />
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-[#EEF3FD] flex items-center justify-center flex-shrink-0">
+                      <Icon size={15} className="text-[#2F5EA8]" strokeWidth={1.9} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-[#1A1F36] leading-snug">{qs.title}</p>
-                      <p className="text-[10px] text-[#6B7280] leading-snug">{qs.subtitle}</p>
+                      <p className="text-[13px] font-bold text-[#17233F] leading-snug">{qs.title}</p>
+                      <p className="text-[11.5px] text-[#8B95A9] leading-snug mt-0.5">{qs.subtitle}</p>
                     </div>
-                    <ArrowRight size={11} className="text-[#CBD5E1] group-hover:text-[#005EB8] flex-shrink-0 transition-colors" />
+                    <ArrowRight size={14} className="text-[#C3CDDE] group-hover:text-[#2F5EA8] group-hover:translate-x-0.5 flex-shrink-0 transition-all" />
                   </div>
                 </button>
               );

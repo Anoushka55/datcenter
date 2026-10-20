@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LogOut, User, BookOpen, LayoutDashboard, ChevronDown,
-  TrendingUp, Package, Wrench, Shield, Activity, DollarSign, Globe, Route, Building2,
+  TrendingUp, Package, Wrench, Shield, Activity, DollarSign, Globe, Route, Layers,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef } from 'react';
@@ -22,9 +22,10 @@ function NavLink({ href, children, active }) {
   return (
     <Link
       href={href}
-      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
-        active ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'
+      className={`px-3.5 py-2 rounded-xl text-sm transition-colors whitespace-nowrap ${
+        active ? 'text-white font-semibold' : 'text-white/65 font-medium hover:text-white hover:bg-white/5'
       }`}
+      style={active ? { background: '#2B57A8' } : undefined}
     >
       {children}
     </Link>
@@ -71,17 +72,19 @@ export default function Navbar() {
           {/* ── Logo ── */}
           <Link href="/" className="flex items-center gap-3 flex-shrink-0 group">
             <div
-              className="font-extrabold text-sm tracking-tight flex items-center gap-1.5 whitespace-nowrap"
+              className="flex items-center gap-3 whitespace-nowrap"
               style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}
             >
-              <span className="text-white">KNexus</span>
-              <span style={{ color: '#9CC7EE' }}>.AI</span>
-              <span className="text-white/30 font-light text-xs">·</span>
-              <span className="text-white/45 font-medium text-xs tracking-wide">Data Centre Intelligence</span>
+              <span className="font-extrabold text-[17px] tracking-tight">
+                <span className="text-white">K-Nexus</span>
+                <span style={{ color: '#8FC0F0' }}>.AI</span>
+              </span>
+              <span className="w-px h-5 bg-white/20" />
+              <span className="text-white/60 font-normal text-[13px] tracking-wide">Data Centre Intelligence</span>
             </div>
           </Link>
 
-          <div className="w-px h-7 bg-white/10 mx-1 flex-shrink-0" />
+          <div className="flex-1" />
 
           {/* ── Nav links ── */}
           <div className="flex items-center gap-0.5">
@@ -102,9 +105,10 @@ export default function Navbar() {
               onMouseLeave={closeStages}
             >
               <button
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  isStageActive ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm transition-colors ${
+                  isStageActive ? 'text-white font-semibold' : 'text-white/65 font-medium hover:text-white hover:bg-white/5'
                 }`}
+                style={isStageActive ? { background: '#2B57A8' } : undefined}
               >
                 Lifecycle Stages
                 <ChevronDown
@@ -159,12 +163,7 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            <NavLink href="/asset-portfolio/global-cockpit" active={pathname?.startsWith('/asset-portfolio')}>
-              <span className="flex items-center gap-1.5">
-                <Building2 size={12} />
-                Asset Portfolio
-              </span>
-            </NavLink>
+            {/* Asset Portfolio is hidden from the navigation; the route still works. */}
 
             <NavLink href="/command-center" active={pathname?.startsWith('/command-center')}>
               Command Centre
@@ -181,13 +180,19 @@ export default function Navbar() {
               </span>
             </NavLink>
 
-            <NavLink href="/eai" active={pathname?.startsWith('/eai')}>
-              EAI Platform
-            </NavLink>
-
           </div>
 
           <div className="flex-1" />
+
+          {/* ── EAI Platform ── */}
+          <Link
+            href="/eai"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-colors flex-shrink-0 mr-3"
+            style={{ background: pathname?.startsWith('/eai') ? '#4277D4' : '#2B57A8' }}
+          >
+            <Layers size={14} />
+            EAI Platform
+          </Link>
 
           {/* ── Avatar + user menu ── */}
           <div className="relative flex-shrink-0">

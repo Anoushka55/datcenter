@@ -8,7 +8,7 @@ import {
   LayoutDashboard, Building2, Server, Cpu, Users, Leaf, Brain,
   AlertTriangle, Wrench, FileText, Settings, Bell, ChevronLeft,
   ChevronRight, Search, Sparkles, Layers, Home,
-  Package, Shield, Plug, Globe, Gauge, Radar, Droplets, ShieldAlert, FileCheck2, Map, Network, Scale, SunMedium,
+  Package, Shield, Plug, Globe, Gauge, Radar, Droplets, ShieldAlert, FileCheck2, Map, Network, Scale, SunMedium, Shuffle,
 } from 'lucide-react';
 import AICopilotPanel from './AICopilotPanel';
 
@@ -54,6 +54,7 @@ const NAV_GROUPS = [
       { id: 'site-risk', label: lensOf('site-risk').label, icon: ShieldAlert, href: lensOf('site-risk').href },
       { id: 'esg', label: lensOf('esg').label, icon: FileCheck2, href: lensOf('esg').href },
       { id: 'compliance', label: lensOf('policy').label, icon: Scale, href: lensOf('policy').href },
+      { id: 'switchover', label: lensOf('switchover').label, icon: Shuffle, href: lensOf('switchover').href },
       { id: 'patterns',     label: 'Pattern Memory',      icon: Network, href: '/wiki?mode=patterns' },
       { id: 'deployments',  label: 'Loading Bay',   icon: Package, href: '/deployments' },
       { id: 'scenarios',    label: 'Scenarios',     icon: Shield,  href: '/scenarios' },

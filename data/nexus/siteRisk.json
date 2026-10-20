@@ -42,12 +42,12 @@
   {
     "facility_id": "NCR-1",
     "seismic_zone": "IV",
-    "flood_exposure": 2,
+    "flood_exposure": 3,
     "cyclone_exposure": 1,
     "heat_exposure": 5,
     "grid_trips_12m": 7,
     "avg_trip_min": 34,
-    "reference_event": "May 2024 north India heatwave and peak-demand curtailment"
+    "reference_event": "May 2024 north India heatwave and peak-demand curtailment; July 2023 Yamuna and Hindon floods in Noida"
   },
   {
     "facility_id": "BLR-1",

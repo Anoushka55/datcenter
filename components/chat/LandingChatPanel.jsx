@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import {
-  Sparkles, Send, ChevronRight, X, Paperclip, FileText,
+  Sparkles, Send, ChevronRight, X, Paperclip, FileText, Maximize2, Minimize2,
   LayoutDashboard, FileSearch, Download, Zap, Building2,
   TrendingUp, Wrench, DollarSign, Package, Shield, Activity,
 } from 'lucide-react';
@@ -253,7 +253,7 @@ function IdleStatePanel() {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function LandingChatPanel() {
+export default function LandingChatPanel({ onToggleExpand, expanded = false }) {
   const router = useRouter();
 
   const [selectedPersona, setSelectedPersona] = useState(null);
@@ -462,30 +462,43 @@ export default function LandingChatPanel() {
       {/* ── Header ── */}
       <div className="px-5 py-4 border-b border-[#F0F2F5] flex-shrink-0">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-9 h-9 rounded-xl bg-[#00338D] flex items-center justify-center flex-shrink-0">
-            <Sparkles size={16} className="text-white" />
+          <div className="w-10 h-10 rounded-xl bg-[#EEF3FD] flex items-center justify-center flex-shrink-0">
+            <Sparkles size={17} className="text-[#2F5EA8]" />
           </div>
-          <div>
-            <p className="text-[#1A1F36] font-bold text-sm leading-none" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
+          <div className="min-w-0">
+            <p className="text-[#17233F] font-bold text-[15px] leading-none" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
               K-Nexus Guide
             </p>
-            <p className="text-[#9CA3AF] text-[10px] mt-0.5">Datacenter lifecycle advisor</p>
+            <p className="text-[#8B95A9] text-[12px] mt-1">Datacenter lifecycle advisor</p>
           </div>
+          {onToggleExpand && (
+            <button
+              onClick={onToggleExpand}
+              aria-label={expanded ? 'Collapse guide' : 'Expand guide'}
+              className="ml-auto w-7 h-7 rounded-lg flex items-center justify-center text-[#9BAAC6] hover:text-[#2F5EA8] hover:bg-[#F2F6FD] transition-colors flex-shrink-0"
+            >
+              {expanded ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+            </button>
+          )}
         </div>
 
         {/* Persona selector */}
-        <div className="grid grid-cols-4 gap-1.5">
+        <p className="text-[#9BA6BC] text-[10px] font-bold uppercase tracking-[1.3px] mb-2">Who are you?</p>
+        <div className="grid grid-cols-4 gap-2">
           {PERSONAS.map(p => {
             const active = selectedPersona?.key === p.key;
             return (
               <button
                 key={p.key}
                 onClick={() => handlePersonaSelect(p)}
-                className="flex flex-col items-center gap-1 px-2 py-2 rounded-xl text-center transition-all duration-150"
-                style={{ background: active ? p.bg : 'transparent', border: `1px solid ${active ? p.border : 'rgba(0,0,0,0.07)'}` }}
+                className="flex flex-col items-center gap-1.5 px-2 py-2.5 rounded-xl text-center transition-all duration-150 hover:border-[#BBD0EE]"
+                style={{
+                  background: active ? '#EEF3FD' : '#FFFFFF',
+                  border: `1px solid ${active ? '#9EBDEA' : '#E7ECF5'}`,
+                }}
               >
-                <p.Icon size={14} style={{ color: active ? p.color : '#9CA3AF' }} />
-                <span className="text-[10px] font-bold leading-none" style={{ color: active ? p.color : '#9CA3AF' }}>
+                <p.Icon size={16} style={{ color: active ? '#2F5EA8' : '#97A3B8' }} strokeWidth={1.9} />
+                <span className="text-[11.5px] font-semibold leading-none" style={{ color: active ? '#1D3E80' : '#6C788F' }}>
                   {p.label}
                 </span>
               </button>
@@ -496,7 +509,7 @@ export default function LandingChatPanel() {
 
       {/* ── Messages area (flex-1 = takes remaining height, internal scroll) ── */}
       <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-0">
-        {messages.map((msg, i) => (
+        {!isIdle && messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[88%] px-3.5 py-2.5 rounded-2xl text-xs space-y-1 ${
               msg.role === 'user' ? 'bg-[#00338D] text-white rounded-br-sm' : 'bg-[#F0F2F5] text-[#374151] rounded-bl-sm'
@@ -672,22 +685,26 @@ export default function LandingChatPanel() {
             <input ref={fileInputRef} type="file" accept={ACCEPT} multiple className="hidden"
               onChange={e => { if (e.target.files) addFiles(e.target.files); e.target.value = ''; }} />
 
-            <div className="flex-1 bg-[#F0F2F5] rounded-xl px-3.5 py-2.5 flex items-end gap-2">
+            <div
+              className="flex-1 rounded-2xl pl-3.5 pr-2 py-2 flex items-end gap-2.5"
+              style={{ background: '#F7F9FD', border: '1px solid #E7ECF5' }}
+            >
+              <Sparkles size={15} className="text-[#9BAAC6] flex-shrink-0 mb-2" />
               <textarea
                 ref={inputRef}
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 disabled={!!cockpitLaunch}
-                placeholder="Describe your goal or ask a question…"
+                placeholder="Ask K-Nexus anything…"
                 rows={1}
-                className="flex-1 bg-transparent text-xs text-[#1A1F36] placeholder-[#9CA3AF] outline-none resize-none leading-5"
+                className="flex-1 bg-transparent text-[13px] text-[#1A1F36] placeholder-[#9BA6BC] outline-none resize-none leading-6 py-1"
                 style={{ maxHeight: '80px', overflowY: 'auto' }}
                 onInput={e => { e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 80) + 'px'; }}
               />
               <button onClick={() => sendMessage()} disabled={!input.trim() || loading}
-                className="w-7 h-7 rounded-lg bg-[#00338D] text-white flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#002A73] transition-colors flex-shrink-0">
-                <Send size={12} />
+                className="w-8 h-8 rounded-full bg-[#2F5EA8] text-white flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#1D3E80] transition-colors flex-shrink-0">
+                <Send size={14} />
               </button>
             </div>
           </div>
