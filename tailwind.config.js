@@ -14,7 +14,7 @@ module.exports = {
         blue: '#005EB8',
         teal: '#00B0A0',
         crimson: '#C8102E',
-        'accent-light': '#1A8FE3',
+        'accent-light': '#0091DA',
         success: '#00B0A0',
         amber: '#E87722',
         danger: '#C8102E',

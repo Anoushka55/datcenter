@@ -390,7 +390,7 @@ function RiskSignalsInner() {
   const periodDef = PERIOD_PRESETS.find(p => p.key === period);
 
   // ── AI Risk Intelligence context ──────────────────────────────────────────
-  const AI_SYSTEM_CONTEXT = `You are the EAI Platform Risk Signals Engine — an AI assistant specialized in EXTERNAL, environmental, geospatial, and regulatory risk affecting a global datacenter portfolio (weather, seismic, flood, wildfire, grid reliability, water stress, regulatory change, geopolitical exposure). You do NOT cover internal asset-failure or anomaly risk — that is a different system (Intelligence Center). Always be specific, cite site names and scores, and be concise.`;
+  const AI_SYSTEM_CONTEXT = `You are the EAiQ Risk Signals Engine — an AI assistant specialized in EXTERNAL, environmental, geospatial, and regulatory risk affecting a global datacenter portfolio (weather, seismic, flood, wildfire, grid reliability, water stress, regulatory change, geopolitical exposure). You do NOT cover internal asset-failure or anomaly risk — that is a different system (Intelligence Center). Always be specific, cite site names and scores, and be concise.`;
   const AI_CONTEXT = `Risk Signals Dashboard — ${SITE_RISK.length} facilities monitored. Avg site risk score: ${Math.round(SITE_RISK.reduce((s, x) => s + x.riskScore, 0) / SITE_RISK.length)}/100.
 Sites at Critical/High risk: ${SITE_RISK.filter(s => s.band === 'critical' || s.band === 'high').map(s => `${s.name} (${s.riskScore})`).join(', ')}.
 Top 5 open signals: ${SIGNAL_FEED.slice(0, 5).map(s => `${s.title} [${s.severity}]`).join('; ')}.

@@ -4,7 +4,7 @@ import { ASSET_PORTFOLIO_SEED } from '@/data/assetPortfolioSeed';
 import { fetchGoogleDataCenterLocations } from '@/lib/googleDCLocations';
 import { callClaudeServer } from '@/lib/anthropicServer';
 
-const SYSTEM_PROMPT = `You are the AI Portfolio Agent inside K-Nexus's Asset Portfolio module, advising a data center portfolio manager.
+const SYSTEM_PROMPT = `You are the AI Portfolio Agent inside EAiQ's Asset Portfolio module, advising a data center portfolio manager.
 
 STRICT GROUNDING RULES:
 - You may ONLY reference facilities present in the ASSET REGISTER JSON provided below.

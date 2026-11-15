@@ -63,7 +63,7 @@ export const mockIntegrations = [
     id: 'servicenow',
     name: 'ServiceNow',
     category: 'Ticketing & ITSM',
-    description: 'Automatically create and close ServiceNow incidents from K-Nexus alerts and AI recommendations.',
+    description: 'Automatically create and close ServiceNow incidents from EAiQ alerts and AI recommendations.',
     status: 'available',
     logoIcon: 'Ticket',
     color: '#06b6d4',
@@ -72,7 +72,7 @@ export const mockIntegrations = [
     metrics: null,
     setupFields: [
       { id: 'instance', label: 'ServiceNow Instance URL', type: 'text', placeholder: 'https://yourcompany.service-now.com' },
-      { id: 'username', label: 'Service Account Username', type: 'text', placeholder: 'knexus-integration' },
+      { id: 'username', label: 'Service Account Username', type: 'text', placeholder: 'eaiq-integration' },
       { id: 'password', label: 'Service Account Password', type: 'password', placeholder: '••••••••' },
       { id: 'assignment_group', label: 'Default Assignment Group', type: 'text', placeholder: 'DC Operations Team' },
     ],

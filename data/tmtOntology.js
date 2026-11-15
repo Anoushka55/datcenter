@@ -525,7 +525,7 @@ export const DC_NODES = [
     type: 'decision',
     connections: 3,
     businessIntent:
-      'Stage 01 of the K-Nexus lifecycle: market sizing, site feasibility, demand forecast, and business case development. Output is a go/no-go decision with indicative IRR and capital requirements.',
+      'Stage 01 of the EAiQ lifecycle: market sizing, site feasibility, demand forecast, and business case development. Output is a go/no-go decision with indicative IRR and capital requirements.',
     defaultGrain: 'project_id',
     dimensions: ['Market Size ($M)', 'Demand Forecast (MW)', 'Feasibility Score', 'IRR Target %'],
   },
@@ -536,7 +536,7 @@ export const DC_NODES = [
     type: 'decision',
     connections: 4,
     businessIntent:
-      'Stage 03 of the K-Nexus lifecycle: engineering design, vendor procurement, and physical construction. Critical path management; EPC contractor selection and lead-time risk mitigation are key.',
+      'Stage 03 of the EAiQ lifecycle: engineering design, vendor procurement, and physical construction. Critical path management; EPC contractor selection and lead-time risk mitigation are key.',
     defaultGrain: 'project_id',
     dimensions: ['CAPEX ($M)', 'Build Timeline (months)', 'EPC Contractor', 'Commissioning Date'],
   },
@@ -547,7 +547,7 @@ export const DC_NODES = [
     type: 'decision',
     connections: 3,
     businessIntent:
-      'Stage 06 of the K-Nexus lifecycle: optimising revenue mix, cross-sell of managed services, and yield management across the tenant portfolio to maximise EBITDA margin.',
+      'Stage 06 of the EAiQ lifecycle: optimising revenue mix, cross-sell of managed services, and yield management across the tenant portfolio to maximise EBITDA margin.',
     defaultGrain: 'facility_id · quarter',
     dimensions: ['Revenue ($M)', 'EBITDA Margin %', 'Occupancy %', 'Managed Services Attach Rate %'],
   },

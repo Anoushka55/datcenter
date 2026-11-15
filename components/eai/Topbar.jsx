@@ -65,7 +65,7 @@ export default function EAITopbar({ unreadCount = 12, sidebarHidden = false, onT
         </button>
       </div>
 
-      {/* Home — back to main K-Nexus.AI site */}
+      {/* Home — back to main EAiQ site */}
       <Link href="/" title="Home" style={BTN}
         onMouseEnter={e => { e.currentTarget.style.color = '#1A1F36'; e.currentTarget.style.background = '#F4F6F9'; }}
         onMouseLeave={e => { e.currentTarget.style.color = '#6B7280'; e.currentTarget.style.background = '#F8FAFC'; }}>

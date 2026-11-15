@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 
 // Shared right-side detail drawer — the one "show me more without leaving
-// the page" pattern reused across every EAI Platform widget/page. Renders a
+// the page" pattern reused across every EAiQ widget/page. Renders a
 // backdrop + slide-in panel with a header (icon/title/subtitle/close) and a
 // scrollable body; `footer` is an optional pinned action row (e.g. a
 // "Go to Operations Hub" link).

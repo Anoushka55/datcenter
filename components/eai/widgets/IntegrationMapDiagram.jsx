@@ -42,7 +42,7 @@ export default function IntegrationMapDiagram({ nodes = [], onViewFullMap }) {
           ))}
         </svg>
 
-        {/* Center — EAI Platform */}
+        {/* Center — EAiQ */}
         <div style={{
           position: 'absolute',
           left: '50%', top: '50%',
@@ -60,7 +60,7 @@ export default function IntegrationMapDiagram({ nodes = [], onViewFullMap }) {
           }}>
             {/* White icon/text on the brand-gradient hub node — intentional, kept for contrast */}
             <Network size={16} style={{ color: '#fff' }} />
-            <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', letterSpacing: '-0.01em' }}>EAI Platform</span>
+            <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', letterSpacing: '-0.01em' }}>EAiQ</span>
           </div>
         </div>
 

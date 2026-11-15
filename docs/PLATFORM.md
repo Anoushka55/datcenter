@@ -1,4 +1,4 @@
-# K-Nexus platform: access, audit and operations
+# EAiQ platform: access, audit and operations
 
 What is built in code, and the steps that need an account or a decision.
 

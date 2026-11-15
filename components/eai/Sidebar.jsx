@@ -37,8 +37,8 @@ export default function EAISidebar({ collapsed = false, onToggle, onHide }) {
     <aside style={{
       width: W, minWidth: W, maxWidth: W,
       height: '100vh',
-      background: '#0D1428',
-      borderRight: '1px solid rgba(255,255,255,0.06)',
+      background: '#00338D',
+      borderRight: '1px solid rgba(255,255,255,0.12)',
       display: 'flex',
       flexDirection: 'column',
       transition: 'width 0.28s ease, min-width 0.28s ease, max-width 0.28s ease',
@@ -50,21 +50,15 @@ export default function EAISidebar({ collapsed = false, onToggle, onHide }) {
       <div style={{
         display: 'flex', alignItems: 'center', gap: 10,
         padding: collapsed ? '14px 12px' : '14px 16px',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        borderBottom: '1px solid rgba(255,255,255,0.12)',
         flexShrink: 0,
       }}>
-        <div style={{
-          width: 30, height: 30, borderRadius: 10, flexShrink: 0,
-          background: 'linear-gradient(135deg, #00338D, #0077C8)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <Zap size={14} color="#fff" />
-        </div>
+        <img src="/eaiq-mark.svg" alt="EAiQ" style={{ width: 30, height: 30, flexShrink: 0 }} />
         {!collapsed && (
           <>
             <div style={{ minWidth: 0, overflow: 'hidden', flex: 1 }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' }}>EAI Platform</p>
-              <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', marginTop: 1, whiteSpace: 'nowrap' }}>Enterprise Asset Intelligence</p>
+              <p style={{ fontSize: 12, fontWeight: 800, color: '#fff', whiteSpace: 'nowrap', letterSpacing: '-0.01em' }}>EA<span style={{ color: '#0091DA' }}>i</span>Q</p>
+              <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.60)', marginTop: 1, whiteSpace: 'nowrap' }}>Enterprise Asset Intelligence</p>
             </div>
             <button
               onClick={onHide}
@@ -73,11 +67,11 @@ export default function EAISidebar({ collapsed = false, onToggle, onHide }) {
                 width: 22, height: 22, borderRadius: 6, flexShrink: 0,
                 background: 'transparent', border: '1px solid transparent',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', color: 'rgba(255,255,255,0.25)',
+                cursor: 'pointer', color: 'rgba(255,255,255,0.55)',
                 transition: 'all 0.12s',
               }}
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = 'rgba(255,255,255,0.70)'; e.currentTarget.style.border = '1px solid rgba(255,255,255,0.12)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.25)'; e.currentTarget.style.border = '1px solid transparent'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.55)'; e.currentTarget.style.border = '1px solid transparent'; }}
             >
               <X size={12} />
             </button>
@@ -99,22 +93,22 @@ export default function EAISidebar({ collapsed = false, onToggle, onHide }) {
                 display: 'flex', alignItems: 'center', gap: 10,
                 padding: collapsed ? '8px 10px' : '7px 10px',
                 borderRadius: 8,
-                background: isActive ? 'rgba(0,119,200,0.18)' : 'transparent',
-                border: isActive ? '1px solid rgba(0,119,200,0.28)' : '1px solid transparent',
-                color: isActive ? '#fff' : 'rgba(255,255,255,0.45)',
+                background: isActive ? '#005EB8' : 'transparent',
+                border: isActive ? '1px solid #0091DA' : '1px solid transparent',
+                color: isActive ? '#fff' : 'rgba(255,255,255,0.72)',
                 textDecoration: 'none',
                 transition: 'all 0.12s',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
               }}
-              onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+              onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
               onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
             >
-              <Icon size={15} style={{ flexShrink: 0, color: isActive ? '#0077C8' : 'inherit' }} />
+              <Icon size={15} style={{ flexShrink: 0, color: isActive ? '#fff' : 'inherit' }} />
               {!collapsed && (
                 <>
                   <span style={{ fontSize: 12, fontWeight: 600, flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>{mod.label}</span>
-                  {isActive && <div style={{ width: 4, height: 16, borderRadius: 2, background: '#0077C8', flexShrink: 0 }} />}
+                  {isActive && <div style={{ width: 4, height: 16, borderRadius: 2, background: '#0091DA', flexShrink: 0 }} />}
                 </>
               )}
             </Link>
@@ -124,17 +118,17 @@ export default function EAISidebar({ collapsed = false, onToggle, onHide }) {
 
       {/* ── Quick Access ─────────────────────────────────────────────────── */}
       {!collapsed && (
-        <div style={{ flexShrink: 0, padding: '8px 8px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          <p style={{ fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.20)', textTransform: 'uppercase', letterSpacing: '0.12em', padding: '0 8px', marginBottom: 4 }}>Quick Access</p>
+        <div style={{ flexShrink: 0, padding: '8px 8px', borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+          <p style={{ fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.50)', textTransform: 'uppercase', letterSpacing: '0.12em', padding: '0 8px', marginBottom: 4 }}>Quick Access</p>
           {QUICK_ACCESS.map(qa => (
             <Link key={qa.label} href={qa.href} style={{
               display: 'flex', alignItems: 'center', gap: 6,
               padding: '5px 8px', borderRadius: 6,
-              color: 'rgba(255,255,255,0.30)', textDecoration: 'none', fontSize: 10,
+              color: 'rgba(255,255,255,0.62)', textDecoration: 'none', fontSize: 10,
               transition: 'color 0.12s',
             }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.60)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.30)')}>
+              onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.62)')}>
               <ArrowRight size={9} style={{ flexShrink: 0 }} />
               <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{qa.label}</span>
             </Link>
@@ -143,15 +137,15 @@ export default function EAISidebar({ collapsed = false, onToggle, onHide }) {
       )}
 
       {/* ── System Status + Collapse ─────────────────────────────────────── */}
-      <div style={{ flexShrink: 0, padding: '10px 8px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ flexShrink: 0, padding: '10px 8px', borderTop: '1px solid rgba(255,255,255,0.12)', display: 'flex', flexDirection: 'column', gap: 8 }}>
         {!collapsed && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 6px' }}>
             <span style={{ position: 'relative', display: 'inline-block', flexShrink: 0 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#00A36C', display: 'block' }} />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#009A44', display: 'block' }} />
             </span>
             <div>
-              <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.40)', lineHeight: 1 }}>All Systems Operational</p>
-              <p style={{ fontSize: 8, color: 'rgba(255,255,255,0.20)', marginTop: 2 }}>Last updated: 1 min ago</p>
+              <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.75)', lineHeight: 1 }}>All Systems Operational</p>
+              <p style={{ fontSize: 8, color: 'rgba(255,255,255,0.50)', marginTop: 2 }}>Last updated: 1 min ago</p>
             </div>
           </div>
         )}
@@ -162,12 +156,12 @@ export default function EAISidebar({ collapsed = false, onToggle, onHide }) {
             padding: collapsed ? '7px 10px' : '6px 8px',
             justifyContent: collapsed ? 'center' : 'flex-start',
             borderRadius: 6, border: 'none', background: 'transparent', cursor: 'pointer',
-            color: 'rgba(255,255,255,0.30)', fontSize: 10, fontWeight: 600,
+            color: 'rgba(255,255,255,0.62)', fontSize: 10, fontWeight: 600,
             transition: 'color 0.12s',
             width: '100%',
           }}
-          onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.60)')}
-          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.30)')}
+          onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.62)')}
         >
           {collapsed ? <ChevronRight size={14} /> : <><ChevronLeft size={14} /><span>&lt;&lt; Collapse</span></>}
         </button>

@@ -353,9 +353,9 @@ export default function LandingPage() {
               transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/kpmg-logo-navy.svg" alt="KPMG" className="h-16 w-auto mb-4 mx-auto" />
+              <img src="/eaiq-logo.svg" alt="EAiQ" className="h-16 w-auto mb-4 mx-auto" />
               <div className="text-[#00338D] text-xs tracking-[6px] uppercase font-semibold">
-                Data Centre Lifecycle Intelligence
+                Enterprise Asset Intelligence
               </div>
             </motion.div>
           </motion.div>
@@ -391,19 +391,18 @@ export default function LandingPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <p className="text-[#7E97C6] text-[12px] font-semibold uppercase tracking-[2.5px] mb-5">
-                Global Datacenter Intelligence
+                Enterprise Asset Intelligence · Built on Google Cloud
               </p>
 
               <h1 className="text-[#17307A] font-extrabold leading-[1.1] tracking-[-0.5px] text-[40px] xl:text-[46px]">
-                Datacenters across
+                One intelligent view
                 <br />
-                the world,{' '}
-                <span className="text-[#5A8AD8]">at your fingertips</span>
+                of every asset{' '}
+                <span className="text-[#0091DA]">you run</span>
               </h1>
 
-              <p className="text-[#5B6880] text-[16px] xl:text-[17px] leading-[1.65] mt-6 max-w-[430px]">
-                Explore capacity, sites, power, sustainability and investment across
-                the world&rsquo;s datacenter network.
+              <p className="text-[#5B6880] text-[14px] xl:text-[15px] leading-[1.65] mt-6 max-w-[500px]">
+                EAiQ joins power, cooling, facility, IT, applications and business services in one view, so you can see risk early, decide with evidence and change with confidence. Every number is computed from your own data, and Gemini explains it in plain language.
               </p>
 
               <button
@@ -465,7 +464,7 @@ export default function LandingPage() {
               </div>
             </motion.div>
 
-            {/* Right — K-Nexus Guide. Expanding only restyles this wrapper, so
+            {/* Right — EAiQ Guide. Expanding only restyles this wrapper, so
                 the panel keeps its conversation. */}
             <motion.div
               className={guideExpanded ? 'fixed inset-0 z-[60] p-6 lg:p-12' : 'flex-shrink-0 self-center'}
@@ -529,7 +528,7 @@ export default function LandingPage() {
         <DatacenterNewsSection />
         <div className="mt-12 text-center">
           <p className="text-[#CBD5E1] text-xs">
-            © KPMG 2026 · KNexus.AI Data Centre Intelligence · Strictly Confidential
+            © KPMG 2026 · EAiQ Enterprise Asset Intelligence · Strictly Confidential
           </p>
         </div>
       </div>

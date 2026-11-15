@@ -84,7 +84,7 @@ const CAT_DOTS = {
 };
 
 // ─── AI Assistant context ─────────────────────────────────────────────────────
-const AI_SYSTEM_CONTEXT = `You are the EAI Platform Intelligence Engine — an AI assistant for enterprise datacenter portfolio management.
+const AI_SYSTEM_CONTEXT = `You are the EAiQ Intelligence Engine — an AI assistant for enterprise datacenter portfolio management.
 You help operations managers, facility teams, and executives understand their asset portfolio, risk scores, predictive analytics, capacity forecasts, and cost optimization opportunities.
 Always be specific, data-driven, and concise. Reference specific facilities, asset counts, and metrics where relevant.`;
 

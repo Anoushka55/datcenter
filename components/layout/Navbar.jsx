@@ -75,12 +75,10 @@ export default function Navbar() {
               className="flex items-center gap-3 whitespace-nowrap"
               style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}
             >
-              <span className="font-extrabold text-[17px] tracking-tight">
-                <span className="text-white">K-Nexus</span>
-                <span style={{ color: '#8FC0F0' }}>.AI</span>
-              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/eaiq-logo-white.svg" alt="EAiQ" className="h-8 w-auto" />
               <span className="w-px h-5 bg-white/20" />
-              <span className="text-white/60 font-normal text-[13px] tracking-wide">Data Centre Intelligence</span>
+              <span className="text-white/60 font-normal text-[13px] tracking-wide">Enterprise Asset Intelligence</span>
             </div>
           </Link>
 
@@ -184,14 +182,14 @@ export default function Navbar() {
 
           <div className="flex-1" />
 
-          {/* ── EAI Platform ── */}
+          {/* ── EAiQ ── */}
           <Link
             href="/eai"
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-colors flex-shrink-0 mr-3"
             style={{ background: pathname?.startsWith('/eai') ? '#4277D4' : '#2B57A8' }}
           >
             <Layers size={14} />
-            EAI Platform
+            EAiQ
           </Link>
 
           {/* ── Avatar + user menu ── */}

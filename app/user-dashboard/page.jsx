@@ -116,7 +116,7 @@ function generatePDFForHistory(reportType, reportName) {
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
-    doc.text('K-NEXUS', margin, 12);
+    doc.text('EAiQ', margin, 12);
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.text('Datacenter Lifecycle Intelligence Platform', margin, 18);
@@ -145,9 +145,9 @@ function generatePDFForHistory(reportType, reportName) {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7);
     doc.setTextColor(150, 160, 175);
-    doc.text('CONFIDENTIAL — K-Nexus Datacenter Intelligence Platform', margin, 288);
-    doc.text('Powered by K-Nexus Intelligence Platform  |  kpmg.com/knexus', w - margin, 288, { align: 'right' });
-    doc.save(`KNexus_${reportType}_${new Date().toISOString().slice(0, 10)}.pdf`);
+    doc.text('CONFIDENTIAL — EAiQ Datacenter Intelligence Platform', margin, 288);
+    doc.text('Powered by EAiQ Intelligence Platform', w - margin, 288, { align: 'right' });
+    doc.save(`EAiQ_${reportType}_${new Date().toISOString().slice(0, 10)}.pdf`);
   });
 }
 
@@ -363,7 +363,7 @@ export default function UserDashboardPage() {
                   </div>
                   <p className="text-sm text-[#6B7280] flex items-center gap-1.5">
                     <Calendar size={13} className="flex-shrink-0" />
-                    K-Nexus Member since {joinDate}
+                    EAiQ Member since {joinDate}
                   </p>
                 </div>
                 <div className="flex gap-2 flex-shrink-0">

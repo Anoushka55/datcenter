@@ -26,7 +26,7 @@ function generatePDF(report, showToast, { dateFrom, dateTo } = {}) {
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
-    doc.text('K-NEXUS', margin, 12);
+    doc.text('EAiQ', margin, 12);
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.text('Datacenter Lifecycle Intelligence Platform', margin, 18);
@@ -145,10 +145,10 @@ function generatePDF(report, showToast, { dateFrom, dateTo } = {}) {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7);
     doc.setTextColor(150, 160, 175);
-    doc.text('CONFIDENTIAL — K-Nexus Datacenter Intelligence Platform', margin, 288);
-    doc.text('Powered by K-Nexus Intelligence Platform  |  kpmg.com/knexus', w - margin, 288, { align: 'right' });
+    doc.text('CONFIDENTIAL — EAiQ Datacenter Intelligence Platform', margin, 288);
+    doc.text('Powered by EAiQ Intelligence Platform', w - margin, 288, { align: 'right' });
 
-    const fileName = `KNexus_${report.id}_${new Date().toISOString().slice(0,10)}.pdf`;
+    const fileName = `EAiQ_${report.id}_${new Date().toISOString().slice(0,10)}.pdf`;
     doc.save(fileName);
     showToast('Report downloaded successfully');
     fetch('/api/user-reports', {

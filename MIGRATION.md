@@ -1,4 +1,4 @@
-# K-Nexus Migration Guide: Vite → Next.js + RAG
+# EAiQ Migration Guide: Vite → Next.js + RAG
 
 ## What changed & why
 

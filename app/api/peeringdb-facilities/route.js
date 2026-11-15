@@ -3,7 +3,7 @@ export const revalidate = 3600;
 const PEERINGDB_API = 'https://www.peeringdb.com/api';
 const PAGE_SIZE = 500;
 const HEADERS = {
-  'User-Agent': 'K-Nexus Intelligence Platform',
+  'User-Agent': 'EAiQ Intelligence Platform',
   'Accept': 'application/json',
 };
 

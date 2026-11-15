@@ -16,7 +16,7 @@ import { recordUsage } from '@/lib/usage-server';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 
-const BASE_SYSTEM_PROMPT = `You are the KPMG Datacenter Intelligence Engine — a senior AI advisor embedded in the K-Nexus platform.
+const BASE_SYSTEM_PROMPT = `You are the KPMG Datacenter Intelligence Engine — a senior AI advisor embedded in the EAiQ platform.
 
 FORMATTING RULES (strictly follow):
 - Use plain section headers like "Executive Summary", "Market Analysis", "Key Risks" — no ## or ### symbols in output

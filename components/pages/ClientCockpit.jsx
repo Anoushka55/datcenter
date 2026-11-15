@@ -1969,7 +1969,7 @@ Cockpit data for ${data.clientName}:
 - Target vision: ${data.strategicRoadmap?.targetVision}
 ${activeModal ? `\nUser is currently viewing: ${activeModal.type} modal` : ''}` : '';
 
-      const systemPrompt = `You are a KPMG datacenter advisory co-pilot embedded in the K-Nexus platform.
+      const systemPrompt = `You are a KPMG datacenter advisory co-pilot embedded in the EAiQ platform.
 You are assisting a KPMG advisor viewing a client intelligence cockpit${data ? ` for ${data.clientName}` : ''}.
 Answer concisely, referencing specific numbers and data points from the cockpit.
 Keep responses under 3 sentences unless detail is explicitly requested.
@@ -2312,7 +2312,7 @@ export default function ClientCockpit() {
                 </span>
               )}
             </div>
-            <p className="text-white/50 text-[10px]">K-Nexus AI · Live Client Intelligence · Strictly Confidential</p>
+            <p className="text-white/50 text-[10px]">EAiQ · Live Client Intelligence · Strictly Confidential</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -2338,7 +2338,7 @@ export default function ClientCockpit() {
           </div>
           <span className="text-[#D8DCE3]">·</span>
           <span className="text-[10px] text-[#9CA3AF]">
-            Powered by K-Nexus · {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+            Powered by EAiQ · {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
           </span>
           {data.opportunityFunnel?.totalMarketSize && (
             <>

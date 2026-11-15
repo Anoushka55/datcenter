@@ -1,4 +1,4 @@
-// Multi-turn conversational API for the K-Nexus operations copilot. The system
+// Multi-turn conversational API for the EAiQ operations copilot. The system
 // prompt is the Nexus operating record, built from the dataset per request.
 import { copilotSystemPrompt } from '@/lib/nexus/copilot-context';
 import { recordUsage } from '@/lib/usage-server';

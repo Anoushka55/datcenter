@@ -70,7 +70,7 @@ const PERSONAS = [
   },
 ];
 
-const BASE_SYSTEM = `You are the K-Nexus Guide — a friendly, concise AI assistant on the KPMG K-Nexus Datacenter Intelligence Platform.
+const BASE_SYSTEM = `You are the EAiQ Guide — a friendly, concise AI assistant on the KPMG EAiQ Datacenter Intelligence Platform.
 
 Your job: understand what the user wants to accomplish, then recommend the most relevant stage(s) to start with.
 
@@ -142,8 +142,8 @@ async function exportAssessmentPDF(clientName, reportType, reportContent) {
     flush(); return sections;
   }
 
-  const allSections = [`<div class="section"><div class="badge">K-NEXUS · ${reportLabel.toUpperCase()}</div></div>`, ...markdownToSections(reportContent),
-    `<div class="section footer-row"><span>K-Nexus Intelligence Platform</span><span>${clientName} — ${reportLabel}</span><span>${date}</span></div>`];
+  const allSections = [`<div class="section"><div class="badge">EAiQ · ${reportLabel.toUpperCase()}</div></div>`, ...markdownToSections(reportContent),
+    `<div class="section footer-row"><span>EAiQ Intelligence Platform</span><span>${clientName} — ${reportLabel}</span><span>${date}</span></div>`];
   const waitFrame = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
   const measureEl = document.createElement('div');
@@ -174,7 +174,7 @@ async function exportAssessmentPDF(clientName, reportType, reportContent) {
 
   const coverCanvas = await capture(`<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,Helvetica,sans-serif;}</style>
     <div style="background:linear-gradient(135deg,#00338D 0%,#005EB8 100%);color:white;width:${PAGE_W}px;height:${PAGE_H}px;padding:60px ${PAD}px;">
-      <div style="font-size:32px;font-weight:900;letter-spacing:4px;margin-bottom:8px;">K-Nexus.AI</div>
+      <div style="font-size:32px;font-weight:900;letter-spacing:4px;margin-bottom:8px;">EAiQ</div>
       <div style="font-size:11px;letter-spacing:3px;opacity:0.6;text-transform:uppercase;margin-bottom:48px;">Datacenter Lifecycle Intelligence</div>
       <div style="font-size:36px;font-weight:800;margin-bottom:16px;">${clientName}</div>
       <div style="font-size:16px;opacity:0.75;margin-bottom:8px;">${reportLabel}</div>
@@ -187,7 +187,7 @@ async function exportAssessmentPDF(clientName, reportType, reportContent) {
     const canvas = await capture(`<style>${CONTENT_CSS}</style><div style="position:relative;width:${PAGE_W}px;height:${PAGE_H}px;background:white;padding:${PAD}px;padding-bottom:80px;">${pages[i].htmls.join('')}<div class="page-num">${i+2}</div></div>`);
     pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pdfW, pdfH);
   }
-  pdf.save(`KNexus_${clientName.replace(/[^a-zA-Z0-9]/g,'_')}_${reportType === 'quick' ? 'Quick' : 'Detailed'}_Assessment.pdf`);
+  pdf.save(`EAiQ_${clientName.replace(/[^a-zA-Z0-9]/g,'_')}_${reportType === 'quick' ? 'Quick' : 'Detailed'}_Assessment.pdf`);
 }
 
 // ── Text renderer ─────────────────────────────────────────────────────────────
@@ -258,7 +258,7 @@ export default function LandingChatPanel({ onToggleExpand, expanded = false }) {
 
   const [selectedPersona, setSelectedPersona] = useState(null);
   const [messages, setMessages] = useState([
-    { role: 'assistant', text: "Hi! I'm your K-Nexus Guide. Select a persona above to get a tailored experience, or just describe what you're trying to accomplish." },
+    { role: 'assistant', text: "Hi! I'm your EAiQ Guide. Select a persona above to get a tailored experience, or just describe what you're trying to accomplish." },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -409,7 +409,7 @@ export default function LandingChatPanel({ onToggleExpand, expanded = false }) {
         }
       }
     } catch (err) {
-      console.error('[K-Nexus Guide] chat request failed:', err);
+      console.error('[EAiQ Guide] chat request failed:', err);
       shouldScrollRef.current = true;
       setMessages(prev => [...prev, { role: 'assistant', text: `Sorry, I hit an error: ${err.message}` }]);
     } finally { setLoading(false); }
@@ -467,7 +467,7 @@ export default function LandingChatPanel({ onToggleExpand, expanded = false }) {
           </div>
           <div className="min-w-0">
             <p className="text-[#17233F] font-bold text-[15px] leading-none" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
-              K-Nexus Guide
+              EAiQ Guide
             </p>
             <p className="text-[#8B95A9] text-[12px] mt-1">Datacenter lifecycle advisor</p>
           </div>
@@ -696,7 +696,7 @@ export default function LandingChatPanel({ onToggleExpand, expanded = false }) {
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 disabled={!!cockpitLaunch}
-                placeholder="Ask K-Nexus anything…"
+                placeholder="Ask EAiQ anything…"
                 rows={1}
                 className="flex-1 bg-transparent text-[13px] text-[#1A1F36] placeholder-[#9BA6BC] outline-none resize-none leading-6 py-1"
                 style={{ maxHeight: '80px', overflowY: 'auto' }}

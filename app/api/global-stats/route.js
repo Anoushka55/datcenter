@@ -24,11 +24,11 @@ export async function GET() {
     // Fetch global facility count from PeeringDB
     const [facRes, ixRes] = await Promise.allSettled([
       fetch(`${PEERINGDB_API}/fac?depth=0&limit=1`, {
-        headers: { 'User-Agent': 'K-Nexus Intelligence Platform', 'Accept': 'application/json' },
+        headers: { 'User-Agent': 'EAiQ Intelligence Platform', 'Accept': 'application/json' },
         next: { revalidate: 3600 },
       }),
       fetch(`${PEERINGDB_API}/ix?depth=0&limit=1`, {
-        headers: { 'User-Agent': 'K-Nexus Intelligence Platform', 'Accept': 'application/json' },
+        headers: { 'User-Agent': 'EAiQ Intelligence Platform', 'Accept': 'application/json' },
         next: { revalidate: 3600 },
       }),
     ]);

@@ -17,7 +17,7 @@ async function fetchPeeringDBFacility(name, city) {
       `${PEERINGDB_API}/fac?city=${encodeURIComponent(city)}&depth=2`,
       {
         headers: {
-          'User-Agent': 'K-Nexus Datacenter Intelligence Platform',
+          'User-Agent': 'EAiQ Datacenter Intelligence Platform',
           'Accept': 'application/json',
         },
         next: { revalidate: 3600 }, // cache 1 hour

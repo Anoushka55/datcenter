@@ -1,4 +1,4 @@
-// Central mock data for K-Nexus Command Center — all pages
+// Central mock data for EAiQ Command Center — all pages
 
 export const mockDatacenters = [
   { id: 'mum-1', name: 'Mumbai DC-1', city: 'Mumbai', country: 'India', region: 'APAC', healthScore: 97, status: 'healthy', activeIncidents: 0, totalCapacityMW: 80, utilizationPercent: 71, totalRacks: 1200, usedRacks: 852, tenantCount: 8, pue: 1.42, tier: 'Tier III', manager: 'Priya Sharma', nocLead: 'Rajesh Kumar' },
@@ -222,12 +222,12 @@ export const mockAIInsights = [
 ];
 
 export const mockUsers = [
-  { id: 'u1', name: 'Arjun Mehta', role: 'Facility Director', permission: 'Admin', status: 'Active', initials: 'AM', email: 'arjun.mehta@k-nexus.com' },
-  { id: 'u2', name: 'Priya Sharma', role: 'NOC Manager', permission: 'Editor', status: 'Active', initials: 'PS', email: 'priya.sharma@k-nexus.com' },
-  { id: 'u3', name: 'Vikram Iyer', role: 'Operations Engineer', permission: 'Viewer', status: 'Active', initials: 'VI', email: 'vikram.iyer@k-nexus.com' },
-  { id: 'u4', name: 'David Chen', role: 'Regional Manager — APAC', permission: 'Editor', status: 'Active', initials: 'DC', email: 'david.chen@k-nexus.com' },
-  { id: 'u5', name: 'James Wright', role: 'Security Operations Lead', permission: 'Viewer', status: 'Active', initials: 'JW', email: 'james.wright@k-nexus.com' },
-  { id: 'u6', name: 'Ahmed Al-Rashid', role: 'Facilities Manager — ME', permission: 'Editor', status: 'Active', initials: 'AA', email: 'ahmed.alrashid@k-nexus.com' },
+  { id: 'u1', name: 'Arjun Mehta', role: 'Facility Director', permission: 'Admin', status: 'Active', initials: 'AM', email: 'arjun.mehta@eaiq.com' },
+  { id: 'u2', name: 'Priya Sharma', role: 'NOC Manager', permission: 'Editor', status: 'Active', initials: 'PS', email: 'priya.sharma@eaiq.com' },
+  { id: 'u3', name: 'Vikram Iyer', role: 'Operations Engineer', permission: 'Viewer', status: 'Active', initials: 'VI', email: 'vikram.iyer@eaiq.com' },
+  { id: 'u4', name: 'David Chen', role: 'Regional Manager — APAC', permission: 'Editor', status: 'Active', initials: 'DC', email: 'david.chen@eaiq.com' },
+  { id: 'u5', name: 'James Wright', role: 'Security Operations Lead', permission: 'Viewer', status: 'Active', initials: 'JW', email: 'james.wright@eaiq.com' },
+  { id: 'u6', name: 'Ahmed Al-Rashid', role: 'Facilities Manager — ME', permission: 'Editor', status: 'Active', initials: 'AA', email: 'ahmed.alrashid@eaiq.com' },
 ];
 
 export const mockKPIDetails = {

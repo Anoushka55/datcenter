@@ -1,4 +1,4 @@
--- K-Nexus platform hardening: roles, audit trail, engagement persistence,
+-- EAiQ platform hardening: roles, audit trail, engagement persistence,
 -- model cost telemetry, and the persistent knowledge graph with embeddings.
 -- Apply in the Supabase SQL editor (or `supabase db push`). Idempotent.
 
