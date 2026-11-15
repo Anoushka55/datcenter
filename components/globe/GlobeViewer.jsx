@@ -72,7 +72,7 @@ function GlobeMesh() {
   );
 }
 
-function LabelOverlay({ labelCanvasRef, hubs, selectedId }) {
+function LabelOverlay({ labelCanvasRef, hubs, selectedId, lightBackground }) {
   const { camera, size } = useThree();
 
   useFrame(() => {
@@ -168,9 +168,13 @@ function LabelOverlay({ labelCanvasRef, hubs, selectedId }) {
       ctx.font         = `${isSelected ? 'bold' : 'bold'} ${isSelected ? 10 : 9}px "DM Sans", system-ui, sans-serif`;
       ctx.textAlign    = dx >= 0 ? 'left' : 'right';
       ctx.textBaseline = 'middle';
-      ctx.shadowColor  = 'rgba(1, 13, 32, 0.95)';
+      // On a light page the labels can spill past the globe's edge, so they
+      // switch to KPMG Blue on a white halo to stay readable either side.
+      ctx.shadowColor  = lightBackground ? 'rgba(255, 255, 255, 1)' : 'rgba(1, 13, 32, 0.95)';
       ctx.shadowBlur   = 5;
-      ctx.fillStyle    = isSelected ? 'rgba(0, 185, 255, 1.0)' : 'rgba(255, 255, 255, 0.90)';
+      ctx.fillStyle    = isSelected
+        ? (lightBackground ? '#005EB8' : 'rgba(0, 185, 255, 1.0)')
+        : (lightBackground ? '#00338D' : 'rgba(255, 255, 255, 0.90)');
       ctx.fillText(hub.city || hub.name, ex + dx * 3, ey);
       ctx.shadowBlur   = 0;
     });
@@ -278,7 +282,7 @@ function PeeringMarkers({ facilities, onMarkerClick }) {
 }
 
 // Camera fly-to and auto-rotate controller
-function SceneController({ cameraControlsRef, selectedId, selectedCountry, datacenters }) {
+function SceneController({ cameraControlsRef, selectedId, selectedCountry, datacenters, allowZoom }) {
   const initialized = useRef(false);
   const lastSelectedId = useRef(null);
   const lastCountry = useRef(null);
@@ -293,6 +297,9 @@ function SceneController({ cameraControlsRef, selectedId, selectedCountry, datac
       try {
         controls.mouseButtons.right = 0;
         controls.mouseButtons.middle = 0;
+        // Leave the mouse wheel to the page when the globe sits in a
+        // scrolling layout, otherwise hovering it traps the scroll.
+        if (!allowZoom) controls.mouseButtons.wheel = 0;
       } catch {}
 
       let resumeTimeout;
@@ -337,7 +344,7 @@ function SceneController({ cameraControlsRef, selectedId, selectedCountry, datac
   return null;
 }
 
-function Scene({ labelCanvasRef, datacenters, peeringFacilities, selectedId, selectedCountry, onMarkerClick, setHoveredDC, setHoverPos, getMarkerColor }) {
+function Scene({ labelCanvasRef, datacenters, peeringFacilities, selectedId, selectedCountry, onMarkerClick, setHoveredDC, setHoverPos, getMarkerColor, allowZoom, lightBackground }) {
   const { camera } = useThree();
   const cameraControlsRef = useRef(null);
 
@@ -368,7 +375,7 @@ function Scene({ labelCanvasRef, datacenters, peeringFacilities, selectedId, sel
         <GlobeMesh />
       </Suspense>
 
-      <LabelOverlay labelCanvasRef={labelCanvasRef} hubs={hubs} selectedId={selectedId} />
+      <LabelOverlay labelCanvasRef={labelCanvasRef} hubs={hubs} selectedId={selectedId} lightBackground={lightBackground} />
 
       {datacenters && (
         <DCMarkers
@@ -390,6 +397,7 @@ function Scene({ labelCanvasRef, datacenters, peeringFacilities, selectedId, sel
         selectedId={selectedId}
         selectedCountry={selectedCountry}
         datacenters={datacenters}
+        allowZoom={allowZoom}
       />
 
       <CameraControls
@@ -411,6 +419,8 @@ export default function GlobeViewer({
   onMarkerClick = null,
   showLink = true,
   getMarkerColor = null,
+  allowZoom = true,
+  lightBackground = false,
 }) {
   const labelCanvasRef = useRef(null);
   const [hoveredDC, setHoveredDC] = useState(null);
@@ -442,6 +452,8 @@ export default function GlobeViewer({
             onMarkerClick={onMarkerClick}
             setHoveredDC={setHoveredDC}
             setHoverPos={setHoverPos}
+            allowZoom={allowZoom}
+            lightBackground={lightBackground}
           />
         </Canvas>
 

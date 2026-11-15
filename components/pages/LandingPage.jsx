@@ -12,40 +12,17 @@ import useAppStore from '@/store/appStore';
 import { loadDatacenters, calculateGlobalStats } from '@/lib/datacenter-data';
 import { LENSES } from '@/lib/platform-registry';
 
-// Globe loaded client-side only (requires WebGL)
-const DottedGlobe = dynamic(() => import('@/components/globe/DottedGlobe'), { ssr: false });
+// Same 3D Earth as the Global Dashboard, loaded client-side only (WebGL).
+const GlobeViewer = dynamic(() => import('@/components/globe/GlobeViewer'), { ssr: false });
 
-// Metros called out around the globe. Positions are tuned to the face the
-// globe opens on; capacity and site counts come from the dataset, not typed.
+// Metros called out around the globe. The globe rotates, so the cards sit on
+// its rim rather than over a fixed face; figures come from the dataset.
 const HUB_CARDS = [
-  { city: 'Frankfurt',    top: '6%',  left: '-2%'  },
-  { city: 'Tokyo',        top: '12%', left: '62%'  },
-  { city: 'Mumbai',       top: '38%', left: '56%'  },
-  { city: 'Singapore',    top: '60%', left: '66%'  },
-  { city: 'Johannesburg', top: '76%', left: '4%'   },
-];
-
-const GLOBE_MARKERS = [
-  { location: [50.11, 8.68],    size: 0.055 }, // Frankfurt
-  { location: [35.63, 139.74],  size: 0.055 }, // Tokyo
-  { location: [19.08, 72.90],   size: 0.065 }, // Mumbai
-  { location: [1.30, 103.79],   size: 0.07  }, // Singapore
-  { location: [-26.11, 28.06],  size: 0.045 }, // Johannesburg
-  { location: [39.04, -77.49],  size: 0.06  }, // Ashburn
-  { location: [53.36, -6.31],   size: 0.045 }, // Dublin
-  { location: [-33.87, 151.21], size: 0.05  }, // Sydney
-  { location: [25.20, 55.27],   size: 0.04  }, // Dubai
-  { location: [37.57, 126.98],  size: 0.045 }, // Seoul
-];
-
-// Thin great-circle links between the called-out metros.
-const GLOBE_ARCS = [
-  { from: [50.11, 8.68],   to: [19.08, 72.90] },   // Frankfurt → Mumbai
-  { from: [19.08, 72.90],  to: [1.30, 103.79] },   // Mumbai → Singapore
-  { from: [1.30, 103.79],  to: [35.63, 139.74] },  // Singapore → Tokyo
-  { from: [50.11, 8.68],   to: [-26.11, 28.06] },  // Frankfurt → Johannesburg
-  { from: [53.36, -6.31],  to: [39.04, -77.49] },  // Dublin → Ashburn
-  { from: [25.20, 55.27],  to: [1.30, 103.79] },   // Dubai → Singapore
+  { city: 'Frankfurt',    top: '2%',  left: '-6%' },
+  { city: 'Tokyo',        top: '6%',  left: '74%' },
+  { city: 'Mumbai',       top: '44%', left: '82%' },
+  { city: 'Singapore',    top: '82%', left: '70%' },
+  { city: 'Johannesburg', top: '80%', left: '-4%' },
 ];
 
 const CAPABILITIES = [
@@ -72,7 +49,7 @@ function useGlobalFigures() {
           byCity[key].mw += dc.capacity_mw ?? 0;
           byCity[key].sites += 1;
         }
-        setFigures({ stats, byCity });
+        setFigures({ stats, byCity, datacenters: data.datacenters });
       })
       .catch(() => {});
     return () => { alive = false; };
@@ -444,7 +421,15 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div className="relative w-full" style={{ maxWidth: 620 }}>
-                <DottedGlobe markers={GLOBE_MARKERS} arcs={GLOBE_ARCS} className="w-full" />
+                <div className="w-full" style={{ aspectRatio: '1 / 1' }}>
+                  <GlobeViewer
+                    datacenters={figures?.datacenters ?? null}
+                    showLink={false}
+                    allowZoom={false}
+                    lightBackground
+                    className="w-full h-full"
+                  />
+                </div>
 
                 {contentVisible && HUB_CARDS.map((hub, i) => {
                   const agg = figures?.byCity?.[hub.city];

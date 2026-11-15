@@ -121,36 +121,36 @@ function DCListItem({ dc, selected, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left px-4 py-3 border-b border-white/[0.04] transition-all relative ${
+      className={`w-full text-left px-4 py-3 border-b border-white/[0.10] transition-all relative ${
         selected
-          ? 'bg-[#005EB8]/12 border-l-2 border-l-[#005EB8]'
-          : 'hover:bg-white/[0.04] border-l-2 border-l-transparent'
+          ? 'bg-[#005EB8] border-l-2 border-l-[#0091DA]'
+          : 'hover:bg-white/[0.08] border-l-2 border-l-transparent'
       }`}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <div className="text-white/85 text-xs font-semibold truncate leading-tight" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
+          <div className="text-white text-xs font-semibold truncate leading-tight" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
             {dc.name}
           </div>
-          <div className="text-white/35 text-[10px] mt-0.5 truncate">{dc.city} · {dc.country}</div>
+          <div className="text-white/65 text-[10px] mt-0.5 truncate">{dc.city} · {dc.country}</div>
         </div>
         <div className="flex-shrink-0 text-right">
-          <div className="text-[#005EB8] text-xs font-mono font-bold">{dc.capacity_mw}MW</div>
-          <div className="text-white/30 text-[9px] mt-0.5">{dc.tier_rating}</div>
+          <div className="text-[#ACEAFF] text-xs font-mono font-bold">{dc.capacity_mw}MW</div>
+          <div className="text-white/60 text-[9px] mt-0.5">{dc.tier_rating}</div>
         </div>
       </div>
       {dc.renewable_energy_pct != null && (
         <div className="mt-2 flex items-center gap-2">
-          <div className="h-1 flex-1 rounded-full bg-white/[0.06] overflow-hidden">
+          <div className="h-1 flex-1 rounded-full bg-white/[0.15] overflow-hidden">
             <div
               className="h-full rounded-full"
               style={{
                 width: `${dc.renewable_energy_pct}%`,
-                background: 'linear-gradient(90deg, rgba(0,163,108,0.5), #00B0A0)',
+                background: 'linear-gradient(90deg, #43B02A, #009A44)',
               }}
             />
           </div>
-          <span className="text-white/25 text-[9px] flex-shrink-0">{dc.renewable_energy_pct}%</span>
+          <span className="text-white/60 text-[9px] flex-shrink-0">{dc.renewable_energy_pct}%</span>
         </div>
       )}
     </button>
@@ -321,31 +321,31 @@ export default function GlobalDashboard() {
         {/* ── Left sidebar ── */}
         <aside
           className="w-72 xl:w-80 flex-shrink-0 flex flex-col overflow-hidden border-r"
-          style={{ background: '#0A1628', borderColor: 'rgba(255,255,255,0.055)' }}
+          style={{ background: '#00338D', borderColor: 'rgba(255,255,255,0.12)' }}
         >
           {/* Search */}
-          <div className="p-3 border-b flex-shrink-0" style={{ borderColor: 'rgba(255,255,255,0.055)' }}>
+          <div className="p-3 border-b flex-shrink-0" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
             <div className="relative">
-              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/25 pointer-events-none" />
+              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 placeholder="Search facilities..."
-                className="w-full pl-8 pr-3 py-2 rounded-xl text-xs text-white/80 placeholder:text-white/25 focus:outline-none transition-all"
+                className="w-full pl-8 pr-3 py-2 rounded-xl text-xs text-white placeholder:text-white/55 focus:outline-none transition-all"
                 style={{
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: 'rgba(255,255,255,0.08)',
+                  border: '1px solid rgba(255,255,255,0.18)',
                 }}
-                onFocus={e => { e.target.style.borderColor = 'rgba(0,119,200,0.5)'; e.target.style.background = 'rgba(255,255,255,0.07)'; }}
-                onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }}
+                onFocus={e => { e.target.style.borderColor = '#0091DA'; e.target.style.background = 'rgba(255,255,255,0.12)'; }}
+                onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.18)'; e.target.style.background = 'rgba(255,255,255,0.08)'; }}
               />
             </div>
           </div>
 
           {/* Country filter pills */}
-          <div className="p-3 border-b flex-shrink-0" style={{ borderColor: 'rgba(255,255,255,0.055)' }}>
-            <div className="text-white/25 text-[9px] uppercase tracking-widest mb-2 font-semibold px-0.5">
+          <div className="p-3 border-b flex-shrink-0" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
+            <div className="text-white/60 text-[9px] uppercase tracking-widest mb-2 font-semibold px-0.5">
               Filter by Region
             </div>
             <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto">
@@ -360,10 +360,10 @@ export default function GlobalDashboard() {
                     onClick={() => { setSelectedCountry(c); setSelectedDatacenter(null); setSelectedPeeringFacility(null); }}
                     className="px-2 py-0.5 rounded-full text-[10px] font-semibold transition-all whitespace-nowrap"
                     style={isSelected
-                      ? { background: '#005EB8', color: '#fff', boxShadow: '0 0 12px rgba(0,119,200,0.4)' }
+                      ? { background: '#fff', color: '#00338D' }
                       : hasLocal
-                      ? { background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.60)', border: '1px solid rgba(255,255,255,0.09)' }
-                      : { background: 'rgba(255,255,255,0.025)', color: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.05)' }
+                      ? { background: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.90)', border: '1px solid rgba(255,255,255,0.18)' }
+                      : { background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.50)', border: '1px solid rgba(255,255,255,0.10)' }
                     }
                   >
                     {c !== 'All' && flagEmoji(c)}{c}
@@ -379,7 +379,7 @@ export default function GlobalDashboard() {
           {/* DC list */}
           <div className="flex-1 overflow-y-auto">
             {filteredDCs.length === 0 ? (
-              <div className="p-6 text-center text-white/25 text-xs">No facilities match your filter.</div>
+              <div className="p-6 text-center text-white/60 text-xs">No facilities match your filter.</div>
             ) : (
               filteredDCs.map(dc => (
                 <DCListItem
@@ -397,27 +397,27 @@ export default function GlobalDashboard() {
           </div>
 
           {/* Bottom peering count */}
-          <div className="p-3 border-t flex-shrink-0" style={{ borderColor: 'rgba(255,255,255,0.055)' }}>
-            <p className="text-white/20 text-[9px] text-center">
+          <div className="p-3 border-t flex-shrink-0" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
+            <p className="text-white/55 text-[9px] text-center">
               +{peeringFacilities.length.toLocaleString()} PeeringDB facilities on globe
             </p>
           </div>
         </aside>
 
         {/* ── Globe section ── */}
-        <main className="flex-1 relative overflow-hidden bg-[#060E1F]" style={{ minHeight: 0 }}>
+        <main className="flex-1 relative overflow-hidden bg-white" style={{ minHeight: 0 }}>
 
           {/* Floating stat badge */}
           <div className="absolute top-4 left-4 z-10 pointer-events-none">
             <div
               className="flex items-center gap-2 rounded-xl px-3.5 py-2"
-              style={{ background: 'rgba(10,22,40,0.80)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.07)' }}
+              style={{ background: '#fff', border: '1px solid #E4EAF4', boxShadow: '0 4px 14px -6px rgba(0,51,141,0.25)' }}
             >
-              <div className="w-2 h-2 rounded-full bg-[#00B0A0] animate-pulse" />
-              <span className="text-white/75 text-xs font-semibold">
+              <div className="w-2 h-2 rounded-full bg-[#009A44] animate-pulse" />
+              <span className="text-[#00338D] text-xs font-semibold">
                 {filteredDCs.length} curated
                 {peeringFacilities.length > 0 && (
-                  <span className="text-white/35 font-normal"> · {totalPinsOnMap.toLocaleString()} total</span>
+                  <span className="text-[#6B7A99] font-normal"> · {totalPinsOnMap.toLocaleString()} total</span>
                 )}
               </span>
             </div>
@@ -440,6 +440,7 @@ export default function GlobalDashboard() {
               }
             }}
             showLink={false}
+            lightBackground
             className="w-full h-full"
           />
 
