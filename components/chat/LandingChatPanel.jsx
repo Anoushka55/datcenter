@@ -13,6 +13,7 @@ import { writeToWiki } from '@/lib/wiki';
 import { researchClientLight } from '@/lib/research';
 import DecisionQuickStarts from '@/components/decision-cockpit/DecisionQuickStarts';
 import TransitionOverlay from '@/components/cockpit/TransitionOverlay';
+import MatcherDebug, { useMatcherDebug } from '@/components/cockpit/MatcherDebug';
 import { matchCockpit, isCockpitShortcut } from '@/lib/cockpit/trigger';
 import { COCKPITS, DEFAULT_COCKPIT, cockpitPath } from '@/data/cockpit';
 
@@ -281,8 +282,9 @@ export default function LandingChatPanel({ onToggleExpand, expanded = false }) {
   const shouldScrollRef = useRef(false);
   // Presentation cockpit launched from the Guide (static, no model call).
   const [cockpitLaunch, setCockpitLaunch] = useState(null);
-  // Prefetch the route so launching makes no requests.
-  useEffect(() => { router.prefetch(cockpitPath(DEFAULT_COCKPIT)); }, [router]);
+  // Prefetch every cockpit route so launching makes no requests.
+  useEffect(() => { Object.keys(COCKPITS).forEach((slug) => router.prefetch(cockpitPath(slug))); }, [router]);
+  const showMatcher = useMatcherDebug();
 
   const isIdle = messages.length <= 1 && botPhase === 'chat' && !loading;
 
@@ -711,6 +713,7 @@ export default function LandingChatPanel({ onToggleExpand, expanded = false }) {
           {attachedFiles.length > 0 && (
             <p className="text-[9px] text-[#9CA3AF] mt-1.5 pl-10">{attachedFiles.length} file(s) will be sent with your next message</p>
           )}
+          {showMatcher && <MatcherDebug text={input} />}
         </div>
       )}
     </div>

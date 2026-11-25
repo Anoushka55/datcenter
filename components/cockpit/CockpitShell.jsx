@@ -46,21 +46,21 @@ function useFit() {
   return fit;
 }
 
-export default function CockpitShell({ client, active = 'overview', onNavigate, children }) {
+export default function CockpitShell({ client, active = 'overview', onNavigate, nav = NAV, tagline = 'Live Client Intelligence', topBar = true, sidebar = true, children }) {
   const fit = useFit();
   return (
     <div className="fixed inset-0 overflow-hidden" style={{ background: C.shell }}>
     <div className="flex flex-col overflow-hidden origin-top-left"
       style={{ fontFamily: FONT, background: C.pageBg, visibility: fit ? 'visible' : 'hidden', width: fit?.width ?? DESIGN.width, height: fit?.height ?? DESIGN.height, transform: `scale(${fit?.scale ?? 1})` }}>
-      {/* Top bar */}
-      <div className="flex-shrink-0 h-16 flex items-center justify-between px-6" style={{ background: `linear-gradient(90deg, ${C.shellDeep} 0%, ${C.shell} 60%, #12325A 100%)`, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+      {/* Top bar (a cockpit with its own brand row in a hero can turn it off) */}
+      {topBar && <div className="flex-shrink-0 h-16 flex items-center justify-between px-6" style={{ background: `linear-gradient(90deg, ${C.shellDeep} 0%, ${C.shell} 60%, #12325A 100%)`, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div className="flex items-center gap-5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={KPMG_MARK} alt="KPMG" style={{ height: 31, width: 'auto' }} />
           <span className="w-px h-6" style={{ background: 'rgba(255,255,255,0.25)' }} />
           <img src="/eaiq-logo-white.svg" alt="EAiQ" style={{ height: 28, width: 'auto' }} />
           <span className="w-px h-5" style={{ background: 'rgba(255,255,255,0.25)' }} />
-          <span style={{ color: C.onDarkDim, fontSize: 13 }}>Live Client Intelligence</span>
+          <span style={{ color: C.onDarkDim, fontSize: 13 }}>{tagline}</span>
         </div>
         <div className="flex items-center gap-4">
           <span className="rounded-lg px-5 py-2" style={{ border: '1px solid rgba(255,255,255,0.45)', color: C.onDark, fontSize: 14, fontWeight: 500 }}>{client.persona}</span>
@@ -70,13 +70,13 @@ export default function CockpitShell({ client, active = 'overview', onNavigate, 
           </span>
           <span className="w-10 h-10 rounded-full flex items-center justify-center" style={{ border: '1px solid rgba(255,255,255,0.45)', color: C.onDark, fontSize: 15, fontWeight: 600 }}>{client.initial}</span>
         </div>
-      </div>
+      </div>}
 
       <div className="flex-1 flex min-h-0">
-        {/* Sidebar */}
-        <nav className="flex-shrink-0 w-[220px] flex flex-col justify-between py-5 px-3" style={{ background: `linear-gradient(180deg, ${C.shell} 0%, ${C.shellDeep} 100%)` }}>
+        {/* Sidebar (a cockpit whose cards are its navigation can turn it off) */}
+        {sidebar && <nav className="flex-shrink-0 w-[220px] flex flex-col justify-between py-5 px-3" style={{ background: `linear-gradient(180deg, ${C.shell} 0%, ${C.shellDeep} 100%)` }}>
           <ul className="space-y-1.5">
-            {NAV.map(({ id, label, Icon }) => {
+            {nav.map(({ id, label, Icon }) => {
               const on = id === active;
               return (
                 <li key={id}>
@@ -91,7 +91,7 @@ export default function CockpitShell({ client, active = 'overview', onNavigate, 
             })}
           </ul>
           <p className="px-3.5" style={{ color: C.muted, fontSize: 11, lineHeight: 1.4 }}>KPMG<br />Confidential</p>
-        </nav>
+        </nav>}
 
         <main className="flex-1 min-w-0 overflow-hidden">{children}</main>
       </div>
