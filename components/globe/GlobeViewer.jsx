@@ -49,7 +49,12 @@ function latLngToVector3(lat, lng, r) {
   );
 }
 
-function GlobeMesh() {
+// On light pages the photographic Earth reads almost black, so it gets a
+// lighter, bluer treatment there: the texture lifts itself and a translucent
+// blue wash softens the oceans. A soft CSS glow behind the canvas (see
+// GlobeViewer) blends the edge into the page.
+// Dark-background pages keep the original look.
+function GlobeMesh({ light = false }) {
   const [earthTex, bumpTex] = useTexture([EARTH_TEXTURE, BUMP_TEXTURE]);
 
   useMemo(() => {
@@ -59,12 +64,19 @@ function GlobeMesh() {
 
   const sphereGeo = useMemo(() => new THREE.SphereGeometry(RADIUS, 64, 64), []);
   const wfGeo     = useMemo(() => new THREE.SphereGeometry(RADIUS * 1.002, 32, 16), []);
+  const washGeo   = useMemo(() => new THREE.SphereGeometry(RADIUS * 1.004, 64, 64), []);
 
   return (
     <group>
       <mesh geometry={sphereGeo}>
-        <meshStandardMaterial map={earthTex} bumpMap={bumpTex} bumpScale={0.05} roughness={0.7} metalness={0} />
+        <meshStandardMaterial map={earthTex} bumpMap={bumpTex} bumpScale={0.05} roughness={0.7} metalness={0}
+          {...(light ? { emissive: '#ffffff', emissiveMap: earthTex, emissiveIntensity: 0.55 } : {})} />
       </mesh>
+      {light && (
+        <mesh geometry={washGeo}>
+          <meshBasicMaterial color="#8DB8F2" transparent opacity={0.26} depthWrite={false} />
+        </mesh>
+      )}
       <mesh geometry={wfGeo}>
         <meshBasicMaterial color="#4a9eff" wireframe transparent opacity={0.08} />
       </mesh>
@@ -367,12 +379,12 @@ function Scene({ labelCanvasRef, datacenters, peeringFacilities, selectedId, sel
 
   return (
     <>
-      <ambientLight intensity={0.6} />
+      <ambientLight intensity={lightBackground ? 1.0 : 0.6} />
       <directionalLight position={[RADIUS * 5, RADIUS * 2, RADIUS * 5]} intensity={1.5} color="#ffffff" />
       <directionalLight position={[-RADIUS * 3, RADIUS, -RADIUS * 2]} intensity={0.45} color="#88ccff" />
 
       <Suspense fallback={null}>
-        <GlobeMesh />
+        <GlobeMesh light={lightBackground} />
       </Suspense>
 
       <LabelOverlay labelCanvasRef={labelCanvasRef} hubs={hubs} selectedId={selectedId} lightBackground={lightBackground} />
@@ -435,7 +447,9 @@ export default function GlobeViewer({
       className={`flex flex-col items-center select-none ${className}`}
       style={showLink ? {} : { height: '100%', display: 'flex', flexDirection: 'column' }}
     >
-      <div className="w-full" style={containerStyle}>
+      <div className="w-full" style={lightBackground
+        ? { ...containerStyle, background: 'radial-gradient(circle closest-side, rgba(141,184,242,0.32) 62%, rgba(141,184,242,0.12) 76%, rgba(141,184,242,0) 92%)' }
+        : containerStyle}>
         <Canvas
           gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
           dpr={[1, 2]}

@@ -306,14 +306,14 @@ export default function LandingPage() {
   }, [figures]);
 
   return (
-    <div className="min-h-screen bg-white relative overflow-x-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
+    <div className="min-h-screen bg-[#EEF1F5] relative overflow-x-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
 
       {/* ── KPMG intro loader ── */}
       <AnimatePresence>
         {(phase === 'logo' || phase === 'shrink') && (
           <motion.div
             className="fixed inset-0 flex items-center justify-center z-40 pointer-events-none"
-            style={{ background: 'white' }}
+            style={{ background: '#EEF1F5' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -344,7 +344,7 @@ export default function LandingPage() {
         className="relative"
         style={{
           paddingTop: 64,
-          background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 60%, #F7F9FD 100%)',
+          background: 'linear-gradient(180deg, #F2F4F7 0%, #EFF2F6 60%, #EEF1F5 100%)',
         }}
       >
         {/* soft wash behind the globe */}
@@ -483,7 +483,7 @@ export default function LandingPage() {
         {/* ── Capability strip ── */}
         <motion.div
           className="relative z-10 border-t"
-          style={{ borderColor: '#E9EEF6', background: 'rgba(255,255,255,0.72)' }}
+          style={{ borderColor: '#DFE4EC', background: 'rgba(255,255,255,0.55)' }}
           initial={{ opacity: 0 }}
           animate={{ opacity: contentVisible ? 1 : 0 }}
           transition={{ duration: 0.6, delay: 0.45 }}
@@ -509,7 +509,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── News — below the fold ── */}
-      <div className="relative z-10 px-10 pb-16 bg-white">
+      <div className="relative z-10 px-10 pb-16 bg-[#EEF1F5]">
         <DatacenterNewsSection />
         <div className="mt-12 text-center">
           <p className="text-[#CBD5E1] text-xs">

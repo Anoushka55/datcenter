@@ -74,35 +74,35 @@ function StatCard({ icon: Icon, label, value, suffix = '', prefix = '', decimals
       transition={{ delay: index * 0.05, duration: 0.4 }}
       className="relative rounded-xl p-3.5 flex items-center gap-3 overflow-hidden"
       style={{
-        background: 'rgba(255,255,255,0.045)',
-        backdropFilter: 'blur(16px)',
-        border: '1px solid rgba(255,255,255,0.07)',
+        background: '#fff',
+        border: '1px solid #E4EAF4',
+        boxShadow: '0 2px 10px -6px rgba(0,51,141,0.25)',
       }}
     >
       {/* Top accent line */}
       <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: `linear-gradient(90deg, transparent, ${color}55, transparent)` }}
+        className="absolute top-0 left-0 right-0 h-[3px]"
+        style={{ background: color }}
       />
       <div
         className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-        style={{ background: `${color}18`, boxShadow: `0 0 14px ${color}28` }}
+        style={{ background: `${color}14` }}
       >
         <Icon size={17} style={{ color }} />
       </div>
       <div className="min-w-0">
-        <div className="text-white text-lg leading-none mb-0.5">
+        <div className="text-[#00338D] text-lg font-bold leading-none mb-0.5">
           <CountUpNumber target={Number(value)} suffix={suffix} prefix={prefix} decimals={decimals} />
         </div>
-        <div className="text-white/40 text-[10px] leading-tight">{label}</div>
-        {sublabel && <div className="text-white/22 text-[9px] mt-0.5">{sublabel}</div>}
+        <div className="text-[#3D4B66] text-[10px] font-semibold leading-tight">{label}</div>
+        {sublabel && <div className="text-[#8592AD] text-[9px] mt-0.5">{sublabel}</div>}
       </div>
       {trendValue !== null && (
         <div className="ml-auto text-right flex-shrink-0">
-          <span className={`text-[10px] font-bold ${trendValue >= 0 ? 'text-[#00B0A0]' : 'text-red-400'}`}>
+          <span className={`text-[10px] font-bold ${trendValue >= 0 ? 'text-[#009A44]' : 'text-[#BC204B]'}`}>
             {trendValue >= 0 ? '↑' : '↓'}{Math.abs(trendValue)}%
           </span>
-          <div className="text-white/20 text-[8px] mt-0.5">YoY</div>
+          <div className="text-[#8592AD] text-[8px] mt-0.5">YoY</div>
         </div>
       )}
     </motion.div>
@@ -111,8 +111,8 @@ function StatCard({ icon: Icon, label, value, suffix = '', prefix = '', decimals
 
 function LiveBadge() {
   return (
-    <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-[#00B0A0]/15 text-[#00B0A0] border border-[#00B0A0]/25 font-semibold">
-      <span className="w-1.5 h-1.5 rounded-full bg-[#00B0A0] animate-pulse inline-block" />LIVE DATA
+    <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-[#009A44]/10 text-[#009A44] border border-[#009A44]/30 font-semibold">
+      <span className="w-1.5 h-1.5 rounded-full bg-[#009A44] animate-pulse inline-block" />LIVE DATA
     </span>
   );
 }
@@ -261,10 +261,10 @@ export default function GlobalDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#060E1F] flex items-center justify-center pt-16">
+      <div className="min-h-screen bg-[#F5F7FB] flex items-center justify-center pt-16">
         <div className="text-center">
           <LoadingDots color="#005EB8" size={12} />
-          <p className="text-white/40 text-sm mt-4">Loading global datacenter intelligence...</p>
+          <p className="text-[#6B7A99] text-sm mt-4">Loading global datacenter intelligence...</p>
         </div>
       </div>
     );
@@ -282,22 +282,22 @@ export default function GlobalDashboard() {
   const totalPinsOnMap = filteredDCs.length + peeringFacilities.length;
 
   return (
-    <div className="min-h-screen bg-[#060E1F] pt-16 flex flex-col" style={{ height: '100vh' }}>
+    <div className="min-h-screen bg-[#EEF1F5] pt-16 flex flex-col" style={{ height: '100vh' }}>
 
       {/* ── Top bar ── */}
       <div
         className="flex-shrink-0 border-b px-6 py-3"
-        style={{ background: '#070F22', borderColor: 'rgba(255,255,255,0.055)' }}
+        style={{ background: '#F2F4F7', borderColor: '#DFE4EC' }}
       >
         <div className="max-w-screen-2xl mx-auto">
           <div className="flex items-center gap-3 mb-3">
-            <Link href="/" className="text-white/30 hover:text-white/70 transition-colors flex items-center gap-1.5 text-xs">
+            <Link href="/" className="text-[#6B7A99] hover:text-[#00338D] transition-colors flex items-center gap-1.5 text-xs">
               <ArrowLeft size={14} />Back
             </Link>
-            <div className="w-px h-3.5 bg-white/10" />
+            <div className="w-px h-3.5 bg-[#D5DDEA]" />
             <div className="flex items-center gap-2">
               <Globe size={16} className="text-[#005EB8]" />
-              <h1 className="text-white font-bold text-base" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
+              <h1 className="text-[#00338D] font-bold text-base" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
                 Global Datacenter Dashboard
               </h1>
             </div>
@@ -306,11 +306,11 @@ export default function GlobalDashboard() {
 
           <div className="grid grid-cols-3 md:grid-cols-6 gap-2.5">
             <StatCard index={0} icon={Server}    label="Curated Facilities"  value={displayStats.curatedFacilities}    color="#005EB8" sublabel="KPMG monitored"   trendValue={8} />
-            <StatCard index={1} icon={Building2} label="Global Coverage"     value={displayStats.globalFacilities}     color="#0055A4" sublabel="PeeringDB network" />
-            <StatCard index={2} icon={Globe}     label="Markets Covered"     value={displayStats.globalMarkets || 25}  color="#00B0A0" sublabel="Active regions"    trendValue={4} />
-            <StatCard index={3} icon={Network}   label="Internet Exchanges"  value={displayStats.globalExchanges}      color="#E87722" sublabel="Global IX points"  />
-            <StatCard index={4} icon={Activity}  label="Average PUE"         value={displayStats.avgPUE} decimals={2}  color="#005EB8" sublabel="Curated portfolio" />
-            <StatCard index={5} icon={Leaf}      label="Avg Renewable"       value={displayStats.avgRenewable} suffix="%" color="#00B0A0" sublabel="Curated portfolio" trendValue={2} />
+            <StatCard index={1} icon={Building2} label="Global Coverage"     value={displayStats.globalFacilities}     color="#0091DA" sublabel="PeeringDB network" />
+            <StatCard index={2} icon={Globe}     label="Markets Covered"     value={displayStats.globalMarkets || 25}  color="#00A3A1" sublabel="Active regions"    trendValue={4} />
+            <StatCard index={3} icon={Network}   label="Internet Exchanges"  value={displayStats.globalExchanges}      color="#483698" sublabel="Global IX points"  />
+            <StatCard index={4} icon={Activity}  label="Average PUE"         value={displayStats.avgPUE} decimals={2}  color="#00338D" sublabel="Curated portfolio" />
+            <StatCard index={5} icon={Leaf}      label="Avg Renewable"       value={displayStats.avgRenewable} suffix="%" color="#009A44" sublabel="Curated portfolio" trendValue={2} />
           </div>
         </div>
       </div>
@@ -405,7 +405,7 @@ export default function GlobalDashboard() {
         </aside>
 
         {/* ── Globe section ── */}
-        <main className="flex-1 relative overflow-hidden bg-white" style={{ minHeight: 0 }}>
+        <main className="flex-1 relative overflow-hidden bg-[#EEF1F5]" style={{ minHeight: 0 }}>
 
           {/* Floating stat badge */}
           <div className="absolute top-4 left-4 z-10 pointer-events-none">
